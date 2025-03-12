@@ -103,7 +103,7 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
   // Load or update the map image when the path changes
   useEffect(() => {
     const img = new Image();
-    img.src = `src/assets/${mapData.id}.jpg`;
+    img.src = `./assets/${mapData.id}.jpg`;
 
     img.onload = () => {
       setMapImage(img);
