@@ -6,24 +6,24 @@ import CalculatorPage from "./components/CalculatorPage";
 import AdminPage from "./components/AdminPage";
 import "./App.css";
 
-import bankData from "./data/bank.json";
-import oregonData from "./data/oregon.json";
 import consulateData from "./data/consulate.json";
-import chaletData from "./data/chalet.json";
-import coastlineData from "./data/bank.json";
 import clubhouseData from "./data/clubhouse.json";
+import bankData from "./data/bank.json";
 import kafeData from "./data/kafe.json";
+import chaletData from "./data/chalet.json";
+import oregonData from "./data/oregon.json";
+import coastlineData from "./data/bank.json";
 import borderData from "./data/border.json";
 
 // Default maps data
 const DEFAULT_MAPS: MapData[] = [
-  bankData,
-  oregonData,
   consulateData,
-  chaletData,
-  coastlineData,
   clubhouseData,
+  bankData,
   kafeData,
+  chaletData,
+  oregonData,
+  coastlineData,
   borderData,
 ];
 
