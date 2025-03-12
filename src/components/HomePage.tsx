@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { MapData, AppPage } from "../types";
 import ImprovementChecklist from "./ImprovementChecklist";
 import "./ImprovementChecklist.css";
+import checklistData from "../data/checklist.json";
 
 interface HomePageProps {
   maps: MapData[];
@@ -23,19 +24,10 @@ const HomePage: React.FC<HomePageProps> = ({
 
   // Load completion stats from localStorage
   useEffect(() => {
-    const savedChecklist = localStorage.getItem("r6s-improvement-checklist");
-    if (savedChecklist) {
-      try {
-        const checklist = JSON.parse(savedChecklist);
-        const completed = checklist.filter(
-          (item: any) => item.completed,
-        ).length;
-        const total = checklist.length;
-        setCompletionStats({ completed, total });
-      } catch (error) {
-        console.error("Error parsing saved checklist for stats:", error);
-      }
-    }
+    const checklist = checklistData;
+    const completed = checklist.filter((item: any) => item.completed).length;
+    const total = checklist.length;
+    setCompletionStats({ completed, total });
   }, []);
 
   // Recalculate stats when checklist is closed (to reflect any changes)

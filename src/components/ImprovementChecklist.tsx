@@ -1,5 +1,6 @@
 // src/components/ImprovementChecklist.tsx
 import React, { useState, useEffect } from "react";
+import checklistData from "../data/checklist.json";
 
 interface ChecklistItem {
   id: string;
@@ -127,134 +128,7 @@ const ImprovementChecklist: React.FC<ImprovementChecklistProps> = ({
 };
 
 // Default checklist items
-const getDefaultChecklist = (): ChecklistItem[] => [
-  // Core Features - Already Implemented
-  {
-    id: "core-1",
-    description: "Map image loading with grid overlay",
-    completed: true,
-    category: "core",
-  },
-  {
-    id: "core-4",
-    description: "Line of sight calculation between operators",
-    completed: true,
-    category: "core",
-  },
-
-  // Player Mode - Already Implemented
-  {
-    id: "player-1",
-    description: "Blue and orange player placement",
-    completed: true,
-    category: "player",
-  },
-  {
-    id: "player-2",
-    description: "Line of sight visualization",
-    completed: true,
-    category: "player",
-  },
-
-  // Player Mode - Future Improvements
-  {
-    id: "player-3",
-    description: "Multiple operators per team",
-    completed: false,
-    category: "player",
-  },
-  {
-    id: "player-6",
-    description: "Distance measurement between operators",
-    completed: false,
-    category: "player",
-  },
-  {
-    id: "player-7",
-    description: "Toggle destructible wall sections",
-    completed: false,
-    category: "player",
-  },
-  {
-    id: "player-8",
-    description: "Smoke placement and visualization",
-    completed: false,
-    category: "player",
-  },
-
-  // Maps - Already Implemented
-  {
-    id: "maps-1",
-    description: "Load presets for official maps",
-    completed: true,
-    category: "maps",
-  },
-  {
-    id: "maps-2",
-    description: "Bank map with walls",
-    completed: true,
-    category: "maps",
-  },
-
-  // Maps - Future Improvements
-  {
-    id: "maps-7",
-    description: "Chalet map with walls",
-    completed: false,
-    category: "maps",
-  },
-  {
-    id: "maps-8",
-    description: "Clubhouse map with walls",
-    completed: false,
-    category: "maps",
-  },
-  {
-    id: "maps-9",
-    description: "Coastline map with walls",
-    completed: false,
-    category: "maps",
-  },
-  {
-    id: "maps-10",
-    description: "Consulate map with walls",
-    completed: false,
-    category: "maps",
-  },
-  {
-    id: "maps-11",
-    description: "Kafe map with walls",
-    completed: false,
-    category: "maps",
-  },
-  {
-    id: "maps-12",
-    description: "Oregon map with walls",
-    completed: false,
-    category: "maps",
-  },
-  {
-    id: "maps-13",
-    description: "Border map with walls",
-    completed: false,
-    category: "maps",
-  },
-
-  // Interface - Already Implemented
-  {
-    id: "interface-2",
-    description: "Map selection screen",
-    completed: true,
-    category: "interface",
-  },
-
-  // Interface - Future Improvements
-  {
-    id: "interface-3",
-    description: "Mobile-responsive design",
-    completed: false,
-    category: "interface",
-  },
-];
+const getDefaultChecklist = (): ChecklistItem[] =>
+  checklistData as ChecklistItem[];
 
 export default ImprovementChecklist;
