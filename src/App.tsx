@@ -30,11 +30,24 @@ const App: React.FC = () => {
   // State for wall drawing
   const [wallStart, setWallStart] = useState<Position | null>(null);
 
+  // State for current wall properties
+  const [currentWallProps, setCurrentWallProps] = useState({
+    thickness: 0.2, // Default thickness
+    offset: 0, // Default centered
+    startExtension: 0, // Default no extension
+    endExtension: 0, // Default no extension
+  });
+
   // State for line of sight result
   const [hasLos, setHasLos] = useState<boolean | null>(null);
 
   // State for active team selection
   const [activeTeam, setActiveTeam] = useState<"blue" | "orange" | null>(null);
+
+  // State for selected wall (for editing)
+  const [selectedWallIndex, setSelectedWallIndex] = useState<number | null>(
+    null,
+  );
 
   // Handle canvas click - this is passed to GameCanvas
   const handleCanvasClick = (
@@ -55,6 +68,10 @@ const App: React.FC = () => {
         const newWall: Wall = {
           start: wallStart,
           end: intersectionPos,
+          thickness: currentWallProps.thickness,
+          offset: currentWallProps.offset,
+          startExtension: currentWallProps.startExtension,
+          endExtension: currentWallProps.endExtension,
         };
 
         // Don't add walls with same start and end
@@ -109,6 +126,19 @@ const App: React.FC = () => {
     setHasLos(result);
   };
 
+  // Update a wall's properties
+  const updateWall = (index: number, props: Partial<Wall>) => {
+    if (index < 0 || index >= mapData.walls.length) return;
+
+    const updatedWalls = [...mapData.walls];
+    updatedWalls[index] = { ...updatedWalls[index], ...props };
+
+    setMapData({
+      ...mapData,
+      walls: updatedWalls,
+    });
+  };
+
   return (
     <div className="app">
       <h1>Rainbow Six: Siege Line of Sight Calculator</h1>
@@ -123,6 +153,7 @@ const App: React.FC = () => {
                 setIsAdminMode(!isAdminMode);
                 setActiveTeam(null);
                 setWallStart(null);
+                setSelectedWallIndex(null);
               }}
             />
             Admin Mode
@@ -136,6 +167,11 @@ const App: React.FC = () => {
             wallStart={wallStart}
             setWallStart={setWallStart}
             imageDimensions={imageDimensions}
+            currentWallProps={currentWallProps}
+            setCurrentWallProps={setCurrentWallProps}
+            selectedWallIndex={selectedWallIndex}
+            setSelectedWallIndex={setSelectedWallIndex}
+            updateWall={updateWall}
           />
         ) : (
           <PlayerControls
@@ -158,6 +194,8 @@ const App: React.FC = () => {
         wallStart={wallStart}
         onCanvasClick={handleCanvasClick}
         setImageDimensions={setImageDimensions}
+        selectedWallIndex={selectedWallIndex}
+        setSelectedWallIndex={setSelectedWallIndex}
       />
     </div>
   );

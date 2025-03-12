@@ -45,7 +45,108 @@ export function getCellCenter(position: Position): Position {
 }
 
 /**
- * Check if there's a clear line of sight between two positions
+ * Get the normalized direction vector
+ */
+function getNormalizedDirection(start: Position, end: Position): Position {
+  const dx = end.x - start.x;
+  const dy = end.y - start.y;
+  const length = Math.sqrt(dx * dx + dy * dy);
+
+  if (length === 0) return { x: 0, y: 0 };
+
+  return {
+    x: dx / length,
+    y: dy / length,
+  };
+}
+
+/**
+ * Get the perpendicular vector
+ */
+function getPerpendicularVector(direction: Position): Position {
+  return {
+    x: -direction.y,
+    y: direction.x,
+  };
+}
+
+/**
+ * Convert a wall to its four corner points
+ */
+function getWallCorners(wall: Wall): [Position, Position, Position, Position] {
+  // Get the direction vector of the wall
+  const direction = getNormalizedDirection(wall.start, wall.end);
+
+  // Get perpendicular vector for thickness and offset
+  const perpendicular = getPerpendicularVector(direction);
+
+  // Apply extensions to start and end
+  const extendedStart = {
+    x: wall.start.x - direction.x * wall.startExtension,
+    y: wall.start.y - direction.y * wall.startExtension,
+  };
+
+  const extendedEnd = {
+    x: wall.end.x + direction.x * wall.endExtension,
+    y: wall.end.y + direction.y * wall.endExtension,
+  };
+
+  // Apply offset
+  const offsetX = perpendicular.x * wall.offset;
+  const offsetY = perpendicular.y * wall.offset;
+
+  // Calculate half thickness
+  const halfThickness = wall.thickness / 2;
+
+  // Calculate corners
+  const topLeft = {
+    x: extendedStart.x + offsetX - perpendicular.x * halfThickness,
+    y: extendedStart.y + offsetY - perpendicular.y * halfThickness,
+  };
+
+  const topRight = {
+    x: extendedEnd.x + offsetX - perpendicular.x * halfThickness,
+    y: extendedEnd.y + offsetY - perpendicular.y * halfThickness,
+  };
+
+  const bottomRight = {
+    x: extendedEnd.x + offsetX + perpendicular.x * halfThickness,
+    y: extendedEnd.y + offsetY + perpendicular.y * halfThickness,
+  };
+
+  const bottomLeft = {
+    x: extendedStart.x + offsetX + perpendicular.x * halfThickness,
+    y: extendedStart.y + offsetY + perpendicular.y * halfThickness,
+  };
+
+  return [topLeft, topRight, bottomRight, bottomLeft];
+}
+
+/**
+ * Check if a line intersects a polygon
+ */
+function doesLineIntersectPolygon(
+  lineStart: Position,
+  lineEnd: Position,
+  polygonPoints: Position[],
+): boolean {
+  // Check intersection with each edge of the polygon
+  for (let i = 0; i < polygonPoints.length; i++) {
+    const j = (i + 1) % polygonPoints.length;
+
+    if (
+      doLinesIntersect(lineStart, lineEnd, polygonPoints[i], polygonPoints[j])
+    ) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+/**
+ * Check if there's a clear line of sight between two positions,
+ * considering wall thickness, offset, and extensions
  */
 export function hasLineOfSight(
   pos1: Position,
@@ -58,7 +159,11 @@ export function hasLineOfSight(
 
   // Check each wall to see if it blocks the line of sight
   for (const wall of walls) {
-    if (doLinesIntersect(center1, center2, wall.start, wall.end)) {
+    // Get the four corners of the wall
+    const corners = getWallCorners(wall);
+
+    // Check if the line intersects with the wall polygon
+    if (doesLineIntersectPolygon(center1, center2, corners)) {
       return false;
     }
   }

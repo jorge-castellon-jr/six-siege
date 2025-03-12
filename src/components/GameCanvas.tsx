@@ -1,6 +1,6 @@
 // src/components/GameCanvas.tsx
 import React, { useState, useEffect, useRef } from "react";
-import { Position, Player, MapData } from "../types";
+import { Position, Player, MapData, Wall } from "../types";
 
 interface GameCanvasProps {
   mapData: MapData;
@@ -16,6 +16,8 @@ interface GameCanvasProps {
     },
   ) => void;
   setImageDimensions?: (dimensions: { width: number; height: number }) => void;
+  selectedWallIndex: number | null;
+  setSelectedWallIndex: React.Dispatch<React.SetStateAction<number | null>>;
 }
 
 const GameCanvas: React.FC<GameCanvasProps> = ({
@@ -27,12 +29,15 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
   wallStart,
   onCanvasClick,
   setImageDimensions,
+  selectedWallIndex,
+  setSelectedWallIndex,
 }) => {
   // State for zoom level
   const [zoomLevel, setZoomLevel] = useState<number>(1);
   const [panOffset, setPanOffset] = useState<Position>({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [dragStart, setDragStart] = useState<Position>({ x: 0, y: 0 });
+  const [mousePosition, setMousePosition] = useState<Position | null>(null);
 
   // State for image
   const [mapImage, setMapImage] = useState<HTMLImageElement | null>(null);
@@ -80,6 +85,28 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
 
     // Otherwise calculate it based on grid dimensions
     return calculateCellSize();
+  };
+
+  // Utility function to calculate a normalized direction vector
+  const getNormalizedDirection = (start: Position, end: Position): Position => {
+    const dx = end.x - start.x;
+    const dy = end.y - start.y;
+    const length = Math.sqrt(dx * dx + dy * dy);
+
+    if (length === 0) return { x: 0, y: 0 };
+
+    return {
+      x: dx / length,
+      y: dy / length,
+    };
+  };
+
+  // Utility function to calculate a perpendicular vector
+  const getPerpendicularVector = (direction: Position): Position => {
+    return {
+      x: -direction.y,
+      y: direction.x,
+    };
   };
 
   // Load or update the map image when the path changes
@@ -156,7 +183,200 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
     zoomLevel,
     panOffset,
     mapImage,
+    selectedWallIndex,
+    mousePosition,
   ]);
+
+  // Draw a wall with thickness, offset and extensions
+  const drawWall = (
+    ctx: CanvasRenderingContext2D,
+    wall: Wall,
+    startX: number,
+    startY: number,
+    cellSize: number,
+    isSelected: boolean = false,
+  ) => {
+    // Get wall endpoints in canvas coordinates
+    const x1 = startX + wall.start.x * cellSize;
+    const y1 = startY + wall.start.y * cellSize;
+    const x2 = startX + wall.end.x * cellSize;
+    const y2 = startY + wall.end.y * cellSize;
+
+    // Calculate direction vector
+    const direction = getNormalizedDirection(
+      { x: x1, y: y1 },
+      { x: x2, y: y2 },
+    );
+
+    // Calculate perpendicular vector for offset and thickness
+    const perpendicular = getPerpendicularVector(direction);
+
+    // Apply wall extensions
+    const extendedStart = {
+      x: x1 - direction.x * wall.startExtension * cellSize,
+      y: y1 - direction.y * wall.startExtension * cellSize,
+    };
+
+    const extendedEnd = {
+      x: x2 + direction.x * wall.endExtension * cellSize,
+      y: y2 + direction.y * wall.endExtension * cellSize,
+    };
+
+    // Apply wall offset
+    const offsetX = perpendicular.x * wall.offset * cellSize;
+    const offsetY = perpendicular.y * wall.offset * cellSize;
+
+    // Calculate half thickness for the wall edges
+    const halfThickness = (wall.thickness * cellSize) / 2;
+
+    // Calculate the four corners of the wall
+    const topLeft = {
+      x: extendedStart.x + offsetX - perpendicular.x * halfThickness,
+      y: extendedStart.y + offsetY - perpendicular.y * halfThickness,
+    };
+
+    const topRight = {
+      x: extendedEnd.x + offsetX - perpendicular.x * halfThickness,
+      y: extendedEnd.y + offsetY - perpendicular.y * halfThickness,
+    };
+
+    const bottomRight = {
+      x: extendedEnd.x + offsetX + perpendicular.x * halfThickness,
+      y: extendedEnd.y + offsetY + perpendicular.y * halfThickness,
+    };
+
+    const bottomLeft = {
+      x: extendedStart.x + offsetX + perpendicular.x * halfThickness,
+      y: extendedStart.y + offsetY + perpendicular.y * halfThickness,
+    };
+
+    // Draw the wall as a filled polygon
+    ctx.beginPath();
+    ctx.moveTo(topLeft.x, topLeft.y);
+    ctx.lineTo(topRight.x, topRight.y);
+    ctx.lineTo(bottomRight.x, bottomRight.y);
+    ctx.lineTo(bottomLeft.x, bottomLeft.y);
+    ctx.closePath();
+
+    // Fill with color
+    ctx.fillStyle = isSelected ? "#ff9800" : "#ff5252";
+    ctx.fill();
+
+    // Add outline
+    ctx.strokeStyle = isSelected ? "#ffc107" : "#b71c1c";
+    ctx.lineWidth = 1 / zoomLevel;
+    ctx.stroke();
+
+    // If selected, draw the endpoints as circles
+    if (isSelected) {
+      // Draw start point
+      ctx.beginPath();
+      ctx.arc(x1, y1, 5 / zoomLevel, 0, Math.PI * 2);
+      ctx.fillStyle = "#4CAF50";
+      ctx.fill();
+
+      // Draw end point
+      ctx.beginPath();
+      ctx.arc(x2, y2, 5 / zoomLevel, 0, Math.PI * 2);
+      ctx.fillStyle = "#2196F3";
+      ctx.fill();
+    }
+  };
+
+  // Check if a point is inside a wall (for selection)
+  const isPointInWall = (
+    point: Position,
+    wall: Wall,
+    startX: number,
+    startY: number,
+    cellSize: number,
+  ): boolean => {
+    // Get wall endpoints in canvas coordinates
+    const x1 = startX + wall.start.x * cellSize;
+    const y1 = startY + wall.start.y * cellSize;
+    const x2 = startX + wall.end.x * cellSize;
+    const y2 = startY + wall.end.y * cellSize;
+
+    // Calculate direction vector
+    const direction = getNormalizedDirection(
+      { x: x1, y: y1 },
+      { x: x2, y: y2 },
+    );
+
+    // Calculate perpendicular vector for offset and thickness
+    const perpendicular = getPerpendicularVector(direction);
+
+    // Apply wall extensions
+    const extendedStart = {
+      x: x1 - direction.x * wall.startExtension * cellSize,
+      y: y1 - direction.y * wall.startExtension * cellSize,
+    };
+
+    const extendedEnd = {
+      x: x2 + direction.x * wall.endExtension * cellSize,
+      y: y2 + direction.y * wall.endExtension * cellSize,
+    };
+
+    // Apply wall offset
+    const offsetX = perpendicular.x * wall.offset * cellSize;
+    const offsetY = perpendicular.y * wall.offset * cellSize;
+
+    // Calculate half thickness for the wall edges
+    const halfThickness = (wall.thickness * cellSize) / 2;
+
+    // Calculate the four corners of the wall
+    const topLeft = {
+      x: extendedStart.x + offsetX - perpendicular.x * halfThickness,
+      y: extendedStart.y + offsetY - perpendicular.y * halfThickness,
+    };
+
+    const topRight = {
+      x: extendedEnd.x + offsetX - perpendicular.x * halfThickness,
+      y: extendedEnd.y + offsetY - perpendicular.y * halfThickness,
+    };
+
+    const bottomRight = {
+      x: extendedEnd.x + offsetX + perpendicular.x * halfThickness,
+      y: extendedEnd.y + offsetY + perpendicular.y * halfThickness,
+    };
+
+    const bottomLeft = {
+      x: extendedStart.x + offsetX + perpendicular.x * halfThickness,
+      y: extendedStart.y + offsetY + perpendicular.y * halfThickness,
+    };
+
+    // Function to check if a point is inside a triangle
+    const isPointInTriangle = (
+      p: Position,
+      a: Position,
+      b: Position,
+      c: Position,
+    ): boolean => {
+      const area =
+        0.5 *
+        Math.abs(a.x * (b.y - c.y) + b.x * (c.y - a.y) + c.x * (a.y - b.y));
+
+      const area1 =
+        0.5 *
+        Math.abs(p.x * (b.y - c.y) + b.x * (c.y - p.y) + c.x * (p.y - b.y));
+
+      const area2 =
+        0.5 *
+        Math.abs(a.x * (p.y - c.y) + p.x * (c.y - a.y) + c.x * (a.y - p.y));
+
+      const area3 =
+        0.5 *
+        Math.abs(a.x * (b.y - p.y) + b.x * (p.y - a.y) + p.x * (a.y - b.y));
+
+      return Math.abs(area - (area1 + area2 + area3)) < 0.01;
+    };
+
+    // Check if the point is inside either of the two triangles that make up the wall
+    return (
+      isPointInTriangle(point, topLeft, topRight, bottomRight) ||
+      isPointInTriangle(point, topLeft, bottomRight, bottomLeft)
+    );
+  };
 
   // Render the canvas content
   const renderCanvas = () => {
@@ -220,21 +440,17 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
       ctx.stroke();
     }
 
-    // Draw walls between grid intersections
-    ctx.strokeStyle = "#ff5252";
-    ctx.lineWidth = 3 / zoomLevel; // Adjust line width for zoom
-
-    for (const wall of mapData.walls) {
-      const x1 = startX + wall.start.x * cellSize;
-      const y1 = startY + wall.start.y * cellSize;
-      const x2 = startX + wall.end.x * cellSize;
-      const y2 = startY + wall.end.y * cellSize;
-
-      ctx.beginPath();
-      ctx.moveTo(x1, y1);
-      ctx.lineTo(x2, y2);
-      ctx.stroke();
-    }
+    // Draw walls with new properties
+    mapData.walls.forEach((wall, index) => {
+      drawWall(
+        ctx,
+        wall,
+        startX,
+        startY,
+        cellSize,
+        index === selectedWallIndex,
+      );
+    });
 
     // Draw temporary wall being created (also at grid intersection)
     if (isAdminMode && wallStart) {
@@ -245,6 +461,19 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
       ctx.arc(mouseX, mouseY, 5 / zoomLevel, 0, Math.PI * 2);
       ctx.fillStyle = "#ffeb3b";
       ctx.fill();
+
+      // Draw line to mouse position if available
+      if (mousePosition) {
+        const mX = (mousePosition.x - panOffset.x) / zoomLevel;
+        const mY = (mousePosition.y - panOffset.y) / zoomLevel;
+
+        ctx.beginPath();
+        ctx.moveTo(mouseX, mouseY);
+        ctx.lineTo(mX, mY);
+        ctx.strokeStyle = "#ffeb3b";
+        ctx.lineWidth = 2 / zoomLevel;
+        ctx.stroke();
+      }
     }
 
     // Draw players
@@ -389,6 +618,51 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
     return { x: gridX, y: gridY };
   };
 
+  // Check if a mouse click hits a wall
+  const getWallIndexAtPoint = (
+    clientX: number,
+    clientY: number,
+  ): number | null => {
+    if (!canvasRef.current || !isAdminMode) return null;
+
+    const canvas = canvasRef.current;
+    const rect = canvas.getBoundingClientRect();
+
+    // Calculate actual position considering zoom and pan
+    const mouseX = clientX - rect.left;
+    const mouseY = clientY - rect.top;
+
+    // Convert screen coordinates to canvas coordinates
+    const canvasX = (mouseX / rect.width) * canvas.width;
+    const canvasY = (mouseY / rect.height) * canvas.height;
+
+    // Apply zoom and pan transformation
+    const transformedX = (canvasX - panOffset.x) / zoomLevel;
+    const transformedY = (canvasY - panOffset.y) / zoomLevel;
+
+    const { gridOffset } = mapData;
+    const cellSize = getCellSize();
+    const startX = gridOffset.x;
+    const startY = gridOffset.y;
+
+    // Check each wall from last to first (for correct layering/selection)
+    for (let i = mapData.walls.length - 1; i >= 0; i--) {
+      if (
+        isPointInWall(
+          { x: transformedX, y: transformedY },
+          mapData.walls[i],
+          startX,
+          startY,
+          cellSize,
+        )
+      ) {
+        return i;
+      }
+    }
+
+    return null;
+  };
+
   // Handle canvas mouse events for panning
   const handleMouseDown = (event: React.MouseEvent<HTMLCanvasElement>) => {
     if (event.button === 1 || (event.button === 0 && event.altKey)) {
@@ -403,6 +677,12 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
   };
 
   const handleMouseMove = (event: React.MouseEvent<HTMLCanvasElement>) => {
+    // Update mouse position for temporary wall preview
+    setMousePosition({
+      x: event.clientX,
+      y: event.clientY,
+    });
+
     if (isDragging) {
       const dx = event.clientX - dragStart.x;
       const dy = event.clientY - dragStart.y;
@@ -425,6 +705,7 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
 
   const handleMouseLeave = () => {
     setIsDragging(false);
+    setMousePosition(null);
   };
 
   // Handle zoom in/out
@@ -445,26 +726,38 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
   const handleCanvasClick = (event: React.MouseEvent<HTMLCanvasElement>) => {
     if (isDragging) return;
 
-    // If in admin mode, handle wall placement
+    // If in admin mode, handle wall placement or selection
     if (isAdminMode) {
+      // Check if we clicked on an existing wall
+      const clickedWallIndex = getWallIndexAtPoint(
+        event.clientX,
+        event.clientY,
+      );
+
+      if (clickedWallIndex !== null && wallStart === null) {
+        // Select the wall
+        setSelectedWallIndex(
+          clickedWallIndex === selectedWallIndex ? null : clickedWallIndex,
+        );
+        return;
+      }
+
+      // If we didn't click on a wall, or if we're in the middle of creating a wall,
+      // proceed with wall creation
       const intersectionPos = getGridIntersectionFromMouse(
         event.clientX,
         event.clientY,
       );
 
+      // Deselect any selected wall when starting a new wall
       if (wallStart === null) {
-        // Start new wall at the grid intersection
-        onCanvasClick({
-          ...event,
-          gridIntersection: intersectionPos,
-        });
-      } else {
-        // Complete wall between intersections
-        onCanvasClick({
-          ...event,
-          gridIntersection: intersectionPos,
-        });
+        setSelectedWallIndex(null);
       }
+
+      onCanvasClick({
+        ...event,
+        gridIntersection: intersectionPos,
+      });
     } else {
       // If in player mode, handle player placement
       const gridPosition = getGridPositionFromMouse(

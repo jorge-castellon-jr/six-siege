@@ -8,6 +8,23 @@ interface AdminPanelProps {
   wallStart: Position | null;
   setWallStart: React.Dispatch<React.SetStateAction<Position | null>>;
   imageDimensions: { width: number; height: number };
+  currentWallProps: {
+    thickness: number;
+    offset: number;
+    startExtension: number;
+    endExtension: number;
+  };
+  setCurrentWallProps: React.Dispatch<
+    React.SetStateAction<{
+      thickness: number;
+      offset: number;
+      startExtension: number;
+      endExtension: number;
+    }>
+  >;
+  selectedWallIndex: number | null;
+  setSelectedWallIndex: React.Dispatch<React.SetStateAction<number | null>>;
+  updateWall: (index: number, props: Partial<Wall>) => void;
 }
 
 const AdminPanel: React.FC<AdminPanelProps> = ({
@@ -16,6 +33,11 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
   wallStart,
   setWallStart,
   imageDimensions,
+  currentWallProps,
+  setCurrentWallProps,
+  selectedWallIndex,
+  setSelectedWallIndex,
+  updateWall,
 }) => {
   const mapImageInputRef = useRef<HTMLInputElement>(null);
   const mapDataInputRef = useRef<HTMLInputElement>(null);
@@ -101,6 +123,24 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
     });
   };
 
+  // Handle wall property changes for new walls
+  const handleWallPropChange = (
+    property: "thickness" | "offset" | "startExtension" | "endExtension",
+    value: number,
+  ) => {
+    setCurrentWallProps((prev) => ({
+      ...prev,
+      [property]: value,
+    }));
+
+    // If a wall is selected, also update its properties
+    if (selectedWallIndex !== null) {
+      updateWall(selectedWallIndex, {
+        [property]: value,
+      } as Partial<Wall>);
+    }
+  };
+
   // Save map data to JSON
   const saveMapData = () => {
     // Create a copy of mapData that includes the calculated cell size
@@ -141,8 +181,22 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
           data.imagePath = "";
         }
 
-        setMapData(data);
+        // Ensure all walls have the new properties
+        const updatedWalls = data.walls.map((wall) => ({
+          start: wall.start,
+          end: wall.end,
+          thickness: wall.thickness ?? 0.2,
+          offset: wall.offset ?? 0,
+          startExtension: wall.startExtension ?? 0,
+          endExtension: wall.endExtension ?? 0,
+        }));
+
+        setMapData({
+          ...data,
+          walls: updatedWalls,
+        });
         setWallStart(null);
+        setSelectedWallIndex(null);
       } catch (err) {
         console.error("Error parsing JSON:", err);
         alert("Failed to load map data. Invalid JSON format.");
@@ -163,6 +217,25 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
       ...mapData,
       walls: mapData.walls.slice(0, -1),
     });
+
+    if (selectedWallIndex === mapData.walls.length - 1) {
+      setSelectedWallIndex(null);
+    }
+  };
+
+  // Remove selected wall
+  const removeSelectedWall = () => {
+    if (selectedWallIndex === null) return;
+
+    const updatedWalls = [...mapData.walls];
+    updatedWalls.splice(selectedWallIndex, 1);
+
+    setMapData({
+      ...mapData,
+      walls: updatedWalls,
+    });
+
+    setSelectedWallIndex(null);
   };
 
   return (
@@ -290,7 +363,87 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
       </div>
 
       <div className="control-group">
-        <h3>Wall Controls</h3>
+        <h3>Wall Properties</h3>
+        <div className="grid-controls">
+          <div className="input-group">
+            <label>Thickness:</label>
+            <input
+              type="number"
+              value={currentWallProps.thickness}
+              onChange={(e) =>
+                handleWallPropChange(
+                  "thickness",
+                  parseFloat(e.target.value) || 0.2,
+                )
+              }
+              min="0.05"
+              max="1"
+              step="0.05"
+            />
+          </div>
+
+          <div className="input-group">
+            <label>Offset:</label>
+            <input
+              type="number"
+              value={currentWallProps.offset}
+              onChange={(e) =>
+                handleWallPropChange("offset", parseFloat(e.target.value) || 0)
+              }
+              min="-1"
+              max="1"
+              step="0.1"
+            />
+          </div>
+        </div>
+
+        <div className="grid-controls">
+          <div className="input-group">
+            <label>Start Extension:</label>
+            <input
+              type="number"
+              value={currentWallProps.startExtension}
+              onChange={(e) =>
+                handleWallPropChange(
+                  "startExtension",
+                  parseFloat(e.target.value) || 0,
+                )
+              }
+              min="0"
+              max="1"
+              step="0.1"
+            />
+          </div>
+
+          <div className="input-group">
+            <label>End Extension:</label>
+            <input
+              type="number"
+              value={currentWallProps.endExtension}
+              onChange={(e) =>
+                handleWallPropChange(
+                  "endExtension",
+                  parseFloat(e.target.value) || 0,
+                )
+              }
+              min="0"
+              max="1"
+              step="0.1"
+            />
+          </div>
+        </div>
+
+        <div className="instructions">
+          {selectedWallIndex !== null
+            ? `Editing Wall #${selectedWallIndex + 1} - Click elsewhere to deselect`
+            : wallStart
+              ? "Click to place the end point of the wall"
+              : "Click to place the start point of a wall"}
+        </div>
+      </div>
+
+      <div className="control-group">
+        <h3>Wall Actions</h3>
         <div className="action-buttons">
           <button onClick={saveMapData}>Save Map Data</button>
           <label className="file-input">
@@ -303,13 +456,24 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
               style={{ display: "none" }}
             />
           </label>
-          <button onClick={removeLastWall}>Undo Wall</button>
-          <button onClick={() => setMapData({ ...mapData, walls: [] })}>
-            Clear Walls
+          <button onClick={removeLastWall}>Undo Last Wall</button>
+          {selectedWallIndex !== null && (
+            <button onClick={removeSelectedWall}>Delete Selected Wall</button>
+          )}
+          <button
+            onClick={() => {
+              setMapData({ ...mapData, walls: [] });
+              setSelectedWallIndex(null);
+            }}
+          >
+            Clear All Walls
           </button>
         </div>
         <div className="instructions">
-          Click two points to create a wall between them.
+          <div>Click two points to create a wall between them.</div>
+          <div>
+            Click on an existing wall to select and edit its properties.
+          </div>
           <div className="zoom-info">
             Pan: <kbd>Middle-click</kbd> or <kbd>Alt + Left-click</kbd> and drag
           </div>
