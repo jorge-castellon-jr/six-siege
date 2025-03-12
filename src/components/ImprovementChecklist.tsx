@@ -115,6 +115,7 @@ const ImprovementChecklist: React.FC<ImprovementChecklistProps> = ({
                 type="checkbox"
                 checked={item.completed}
                 id={`checkbox-${item.id}`}
+                readOnly
               />
               <label htmlFor={`checkbox-${item.id}`}>{item.description}</label>
             </div>
