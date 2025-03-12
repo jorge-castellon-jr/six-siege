@@ -1,4 +1,7 @@
 // src/types.ts
+// Existing types
+export type AppPage = "home" | "calculator" | "admin";
+
 export interface Position {
   x: number;
   y: number;
@@ -19,10 +22,10 @@ export interface GridOffset {
 export interface Wall {
   start: Position;
   end: Position;
-  thickness: number; // Wall thickness in grid units
-  offset: number; // Offset from center line (positive = right/down, negative = left/up)
-  startExtension: number; // Extension beyond start point
-  endExtension: number; // Extension beyond end point
+  thickness: number;
+  offset: number;
+  startExtension: number;
+  endExtension: number;
 }
 
 export interface Player {
@@ -32,10 +35,24 @@ export interface Player {
 
 export interface MapData {
   id: string;
-  name: string; // Display name of the map
-  walls: Wall[]; // Wall data
-  gridSize: GridSize; // Grid dimensions
-  gridOffset: GridOffset; // Grid position offsets
+  name: string;
+  walls: Wall[];
+  gridSize: GridSize;
+  gridOffset: GridOffset;
+  cellSize?: number;
 }
 
-export type AppPage = "home" | "calculator" | "admin";
+// New types for the improvement checklist
+export interface ChecklistItem {
+  id: string;
+  description: string;
+  completed: boolean;
+  category: ChecklistCategory;
+}
+
+export type ChecklistCategory =
+  | "core"
+  | "admin"
+  | "player"
+  | "maps"
+  | "interface";
