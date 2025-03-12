@@ -1,0 +1,16 @@
+{
+  "id": "chalet",
+  "name": "Chalet",
+  "walls": [],
+  "gridSize": {
+    "width": 27,
+    "height": 18
+  },
+  "gridOffset": {
+    "x": 38,
+    "y": 25,
+    "right": 0,
+    "bottom": 25
+  },
+  "cellSize": 73.66666666666666
+}

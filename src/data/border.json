@@ -1,0 +1,16 @@
+{
+  "id": "border",
+  "name": "Border",
+  "walls": [],
+  "gridSize": {
+    "width": 17,
+    "height": 18
+  },
+  "gridOffset": {
+    "x": 89,
+    "y": 25,
+    "right": 0,
+    "bottom": 46
+  },
+  "cellSize": 109.7892156862745
+}

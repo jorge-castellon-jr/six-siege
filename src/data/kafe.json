@@ -1,0 +1,16 @@
+{
+  "id": "kafe",
+  "name": "Kafe Dostoyevsky",
+  "walls": [],
+  "gridSize": {
+    "width": 18,
+    "height": 18
+  },
+  "gridOffset": {
+    "x": 36,
+    "y": 36,
+    "right": 0,
+    "bottom": 36
+  },
+  "cellSize": 108.11111111111111
+}

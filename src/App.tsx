@@ -7,59 +7,24 @@ import AdminPage from "./components/AdminPage";
 import "./App.css";
 
 import bankData from "./data/bank.json";
+import oregonData from "./data/oregon.json";
+import consulateData from "./data/consulate.json";
+import chaletData from "./data/chalet.json";
+import coastlineData from "./data/bank.json";
+import clubhouseData from "./data/clubhouse.json";
+import kafeData from "./data/kafe.json";
+import borderData from "./data/border.json";
 
 // Default maps data
 const DEFAULT_MAPS: MapData[] = [
   bankData,
-  {
-    id: "oregon",
-    name: "Oregon",
-    walls: [],
-    gridSize: { width: 20, height: 20 },
-    gridOffset: { x: 0, y: 0, right: 0, bottom: 0 },
-  },
-  {
-    id: "consulate",
-    name: "Consulate",
-    walls: [],
-    gridSize: { width: 20, height: 20 },
-    gridOffset: { x: 0, y: 0, right: 0, bottom: 0 },
-  },
-  {
-    id: "chalet",
-    name: "Chalet",
-    walls: [],
-    gridSize: { width: 20, height: 20 },
-    gridOffset: { x: 0, y: 0, right: 0, bottom: 0 },
-  },
-  {
-    id: "coastline",
-    name: "Coastline",
-    walls: [],
-    gridSize: { width: 20, height: 20 },
-    gridOffset: { x: 0, y: 0, right: 0, bottom: 0 },
-  },
-  {
-    id: "clubhouse",
-    name: "Clubhouse",
-    walls: [],
-    gridSize: { width: 20, height: 20 },
-    gridOffset: { x: 0, y: 0, right: 0, bottom: 0 },
-  },
-  {
-    id: "kafe",
-    name: "Kafe Dostoyevsky",
-    walls: [],
-    gridSize: { width: 20, height: 20 },
-    gridOffset: { x: 0, y: 0, right: 0, bottom: 0 },
-  },
-  {
-    id: "border",
-    name: "Border",
-    walls: [],
-    gridSize: { width: 20, height: 20 },
-    gridOffset: { x: 0, y: 0, right: 0, bottom: 0 },
-  },
+  oregonData,
+  consulateData,
+  chaletData,
+  coastlineData,
+  clubhouseData,
+  kafeData,
+  borderData,
 ];
 
 const App: React.FC = () => {

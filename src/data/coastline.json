@@ -1,0 +1,16 @@
+{
+  "id": "coastline",
+  "name": "Coastline",
+  "walls": [],
+  "gridSize": {
+    "width": 18,
+    "height": 17
+  },
+  "gridOffset": {
+    "x": 35,
+    "y": 100,
+    "right": 0,
+    "bottom": 79
+  },
+  "cellSize": 108.14215686274511
+}

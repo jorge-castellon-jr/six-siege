@@ -1,0 +1,16 @@
+{
+  "id": "oregon",
+  "name": "Oregon",
+  "walls": [],
+  "gridSize": {
+    "width": 27,
+    "height": 18
+  },
+  "gridOffset": {
+    "x": 37,
+    "y": 16,
+    "right": 0,
+    "bottom": 32
+  },
+  "cellSize": 73.74074074074073
+}

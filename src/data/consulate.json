@@ -1,0 +1,16 @@
+{
+  "id": "consulate",
+  "name": "Consulate",
+  "walls": [],
+  "gridSize": {
+    "width": 27,
+    "height": 18
+  },
+  "gridOffset": {
+    "x": 39,
+    "y": 25,
+    "right": 0,
+    "bottom": 23
+  },
+  "cellSize": 73.7037037037037
+}
