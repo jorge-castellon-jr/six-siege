@@ -6,23 +6,17 @@ import CalculatorPage from "./components/CalculatorPage";
 import AdminPage from "./components/AdminPage";
 import "./App.css";
 
+import bankData from "./data/bank.json";
+
 // Default maps data
 const DEFAULT_MAPS: MapData[] = [
-  {
-    id: "bank",
-    name: "Bank",
-    walls: [],
-    gridSize: { width: 20, height: 20 },
-    gridOffset: { x: 0, y: 0, right: 0, bottom: 0 },
-    description: "An isolated, fortified farmhouse",
-  },
+  bankData,
   {
     id: "oregon",
     name: "Oregon",
     walls: [],
     gridSize: { width: 20, height: 20 },
     gridOffset: { x: 0, y: 0, right: 0, bottom: 0 },
-    description: "An isolated, fortified farmhouse",
   },
   {
     id: "consulate",
@@ -30,7 +24,6 @@ const DEFAULT_MAPS: MapData[] = [
     walls: [],
     gridSize: { width: 20, height: 20 },
     gridOffset: { x: 0, y: 0, right: 0, bottom: 0 },
-    description: "A diplomatic office and embassy",
   },
   {
     id: "chalet",
@@ -38,7 +31,6 @@ const DEFAULT_MAPS: MapData[] = [
     walls: [],
     gridSize: { width: 20, height: 20 },
     gridOffset: { x: 0, y: 0, right: 0, bottom: 0 },
-    description: "A ski cabin in the French Alps",
   },
   {
     id: "coastline",
@@ -46,7 +38,6 @@ const DEFAULT_MAPS: MapData[] = [
     walls: [],
     gridSize: { width: 20, height: 20 },
     gridOffset: { x: 0, y: 0, right: 0, bottom: 0 },
-    description: "A biker club headquarters",
   },
   {
     id: "clubhouse",
@@ -54,7 +45,6 @@ const DEFAULT_MAPS: MapData[] = [
     walls: [],
     gridSize: { width: 20, height: 20 },
     gridOffset: { x: 0, y: 0, right: 0, bottom: 0 },
-    description: "A biker club headquarters",
   },
   {
     id: "kafe",
@@ -62,7 +52,6 @@ const DEFAULT_MAPS: MapData[] = [
     walls: [],
     gridSize: { width: 20, height: 20 },
     gridOffset: { x: 0, y: 0, right: 0, bottom: 0 },
-    description: "An upscale restaurant in downtown Moscow",
   },
   {
     id: "border",
@@ -70,7 +59,6 @@ const DEFAULT_MAPS: MapData[] = [
     walls: [],
     gridSize: { width: 20, height: 20 },
     gridOffset: { x: 0, y: 0, right: 0, bottom: 0 },
-    description: "A border checkpoint in the Middle East",
   },
 ];
 

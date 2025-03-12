@@ -75,11 +75,6 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
 
   // Get cell size: either from MapData if provided, or calculate it
   const getCellSize = (): number => {
-    // If cellSize is defined in mapData, use that
-    if (mapData.cellSize) {
-      return mapData.cellSize;
-    }
-
     // Otherwise calculate it based on grid dimensions
     return calculateCellSize();
   };

@@ -36,8 +36,6 @@ export interface MapData {
   walls: Wall[]; // Wall data
   gridSize: GridSize; // Grid dimensions
   gridOffset: GridOffset; // Grid position offsets
-  cellSize?: number; // Optional cell size
-  description?: string; // Optional description
 }
 
 export type AppPage = "home" | "calculator" | "admin";

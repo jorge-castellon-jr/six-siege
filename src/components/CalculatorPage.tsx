@@ -14,11 +14,6 @@ const CalculatorPage: React.FC<CalculatorPageProps> = ({
   mapData,
   onNavigate,
 }) => {
-  const [imageDimensions, setImageDimensions] = useState({
-    width: 800,
-    height: 600,
-  });
-
   // State for players
   const [bluePlayer, setBluePlayer] = useState<Player | null>(null);
   const [orangePlayer, setOrangePlayer] = useState<Player | null>(null);
@@ -89,7 +84,6 @@ const CalculatorPage: React.FC<CalculatorPageProps> = ({
         isAdminMode={false}
         wallStart={null}
         onCanvasClick={handleCanvasClick}
-        setImageDimensions={setImageDimensions}
         selectedWallIndex={null}
         setSelectedWallIndex={() => { }}
       />
