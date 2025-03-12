@@ -17,11 +17,13 @@ const HomePage: React.FC<HomePageProps> = ({
     <div className="home-page">
       <h1>Rainbow Six: Siege Line of Sight Calculator</h1>
 
-      <div className="page-actions">
-        <button onClick={() => onNavigate("admin")} className="admin-button">
-          Admin Mode
-        </button>
-      </div>
+      {window.location.host.includes("localhost") && (
+        <div className="page-actions">
+          <button onClick={() => onNavigate("admin")} className="admin-button">
+            Admin Mode
+          </button>
+        </div>
+      )}
 
       <div className="map-selection">
         <h2>Select a Map</h2>
