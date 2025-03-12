@@ -38,7 +38,6 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
 
   // State for image
   const [mapImage, setMapImage] = useState<HTMLImageElement | null>(null);
-  const [imageLoaded, setImageLoaded] = useState<boolean>(false);
   const [imageDimensions, setLocalImageDimensions] = useState({
     width: 800,
     height: 600,
@@ -115,47 +114,12 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
       if (setImageDimensions) {
         setImageDimensions(dimensions);
       }
-
-      setImageLoaded(true);
     };
 
     img.onerror = () => {
       console.error(`Failed to load image: ${mapData.id}`);
-      setImageLoaded(true);
     };
   }, [mapData.id, setImageDimensions]);
-
-  // Update canvas dimensions based on container
-  useEffect(() => {
-    if (!canvasRef.current) return;
-
-    const updateCanvasDimensions = () => {
-      const canvas = canvasRef.current;
-      if (!canvas) return;
-
-      // Set canvas dimensions based on image or default
-      if (mapImage) {
-        canvas.width = mapImage.width;
-        canvas.height = mapImage.height;
-        setLocalImageDimensions({
-          width: mapImage.width,
-          height: mapImage.height,
-        });
-      } else {
-        canvas.width = imageDimensions.width;
-        canvas.height = imageDimensions.height;
-      }
-
-      // Draw the canvas content
-      renderCanvas();
-    };
-
-    updateCanvasDimensions();
-
-    // Update canvas when window resizes
-    window.addEventListener("resize", updateCanvasDimensions);
-    return () => window.removeEventListener("resize", updateCanvasDimensions);
-  }, [mapImage, imageLoaded, imageDimensions]);
 
   // Execute the render function when relevant state changes
   useEffect(() => {
