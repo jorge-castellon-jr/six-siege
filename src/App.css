@@ -1,0 +1,278 @@
+/* src/App.css */
+:root {
+  --bg-primary: #121212;
+  --bg-secondary: #1e1e1e;
+  --bg-tertiary: #2d2d2d;
+  --text-primary: #e0e0e0;
+  --text-secondary: #a0a0a0;
+  --accent-blue: #4f8bff;
+  --accent-orange: #ff7f50;
+  --accent-green: #50c878;
+  --disabled: #555555;
+  --error: #ff5252;
+  --success: #69f0ae;
+  --border: #333333;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+.app {
+  width: 100%;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+  color: var(--text-primary);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+h3 {
+  color: var(--text-primary);
+  margin-top: 0;
+  margin-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 5px;
+}
+
+.controls {
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: var(--bg-secondary);
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--border);
+}
+
+.mode-toggle {
+  margin-bottom: 15px;
+  color: var(--text-primary);
+}
+
+.mode-toggle input[type="checkbox"] {
+  margin-right: 8px;
+  accent-color: var(--accent-blue);
+}
+
+.admin-controls,
+.player-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  align-items: flex-start;
+}
+
+.admin-controls {
+  flex-direction: column;
+}
+
+.control-group {
+  background-color: var(--bg-tertiary);
+  padding: 15px;
+  border-radius: 4px;
+  width: 100%;
+}
+
+.grid-controls {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.grid-info {
+  margin: 10px 0;
+  padding: 5px;
+  background-color: var(--bg-tertiary);
+  border-radius: 4px;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.input-group label {
+  min-width: 90px;
+}
+
+.action-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+button,
+.file-input {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+  border: 1px solid var(--border);
+}
+
+button:hover,
+.file-input:hover {
+  background-color: #3d3d3d;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+button:disabled {
+  background-color: var(--disabled);
+  color: #888888;
+  cursor: not-allowed;
+  border-color: #444444;
+}
+
+.blue-button {
+  background-color: var(--accent-blue);
+  color: #ffffff;
+}
+
+.blue-button:hover {
+  background-color: #3b6ecf;
+}
+
+.orange-button {
+  background-color: var(--accent-orange);
+  color: #ffffff;
+}
+
+.orange-button:hover {
+  background-color: #e56a3d;
+}
+
+.check-los-button {
+  background-color: var(--accent-green);
+  color: #ffffff;
+}
+
+.check-los-button:hover {
+  background-color: #3da968;
+}
+
+.player-placed {
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+}
+
+input[type="text"],
+input[type="number"] {
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus {
+  outline: none;
+  border-color: var(--accent-blue);
+  box-shadow: 0 0 5px rgba(79, 139, 255, 0.5);
+}
+
+.text-input {
+  width: 100%;
+  max-width: 300px;
+  margin-bottom: 10px;
+}
+
+.instructions {
+  margin-top: 10px;
+  font-style: italic;
+  color: var(--text-secondary);
+}
+
+.zoom-info {
+  margin-top: 5px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.zoom-info kbd {
+  background-color: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 2px 4px;
+  font-size: 11px;
+}
+
+.canvas-container {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
+  border-radius: 5px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  width: 100%;
+  position: relative;
+}
+
+.zoom-controls {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 10;
+  display: flex;
+  gap: 5px;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.zoom-controls button {
+  width: 40px;
+  height: 40px;
+  font-size: 16px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bg-tertiary);
+}
+
+canvas {
+  display: block;
+  background-color: #000000;
+  width: 100%;
+  height: auto;
+}
+
+.los-result {
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-weight: bold;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.has-los {
+  background-color: rgba(105, 240, 174, 0.2);
+  color: var(--success);
+  border: 1px solid var(--success);
+}
+
+.no-los {
+  background-color: rgba(255, 82, 82, 0.2);
+  color: var(--error);
+  border: 1px solid var(--error);
+}
+
+.image-info {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 5px;
+}
