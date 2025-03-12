@@ -4,7 +4,7 @@ import { MapData, Position, Wall } from "../types";
 
 interface AdminPanelProps {
   mapData: MapData;
-  setMapData: React.Dispatch<React.SetStateAction<MapData>>;
+  setMapData: (data: MapData) => void;
   wallStart: Position | null;
   setWallStart: React.Dispatch<React.SetStateAction<Position | null>>;
   imageDimensions: { width: number; height: number };
@@ -39,7 +39,6 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
   setSelectedWallIndex,
   updateWall,
 }) => {
-  const mapImageInputRef = useRef<HTMLInputElement>(null);
   const mapDataInputRef = useRef<HTMLInputElement>(null);
   const [calculatedCellSize, setCalculatedCellSize] = useState<{
     width: number;
@@ -70,29 +69,6 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
         : 40;
 
     setCalculatedCellSize({ width: cellWidth, height: cellHeight });
-  };
-
-  // Function to load a custom map image
-  const loadMapImage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-    if (!files || files.length === 0) return;
-
-    const file = files[0];
-    const fileName = file.name;
-
-    // Set the path for the image
-    const imagePath = `src/assets/${fileName}`;
-
-    // Update the map data with the new image path
-    setMapData((prevData) => ({
-      ...prevData,
-      imagePath,
-    }));
-
-    // Reset file input
-    if (event.target) {
-      event.target.value = "";
-    }
   };
 
   // Handle grid size change
@@ -176,11 +152,6 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
       try {
         const data = JSON.parse(e.target.result as string) as MapData;
 
-        // Ensure we have an imagePath property
-        if (!data.imagePath) {
-          data.imagePath = "";
-        }
-
         // Ensure all walls have the new properties
         const updatedWalls = data.walls.map((wall) => ({
           start: wall.start,
@@ -252,24 +223,11 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
 
         <input
           type="text"
-          value={mapData.imagePath}
-          onChange={(e) =>
-            setMapData({ ...mapData, imagePath: e.target.value })
-          }
+          value={`src/assets/${mapData.id}.jpg`}
           placeholder="Image Path (src/assets/image.jpg)"
           className="text-input"
+          disabled
         />
-
-        <label className="file-input">
-          Load Map Image
-          <input
-            type="file"
-            accept="image/*"
-            onChange={loadMapImage}
-            ref={mapImageInputRef}
-            style={{ display: "none" }}
-          />
-        </label>
       </div>
 
       <div className="control-group">
