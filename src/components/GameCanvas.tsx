@@ -33,9 +33,6 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
   setSelectedWallIndex,
 }) => {
   // State for panning
-  const [panOffset, setPanOffset] = useState<Position>({ x: 0, y: 0 });
-  const [isDragging, setIsDragging] = useState<boolean>(false);
-  const [dragStart, setDragStart] = useState<Position>({ x: 0, y: 0 });
   const [mousePosition, setMousePosition] = useState<Position | null>(null);
   const [hoveredWallIndex, setHoveredWallIndex] = useState<number | null>(null);
 
@@ -111,13 +108,8 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
 
   // Load or update the map image when the path changes
   useEffect(() => {
-    if (!mapData.imagePath) {
-      setImageLoaded(true);
-      return;
-    }
-
     const img = new Image();
-    img.src = mapData.imagePath;
+    img.src = `src/assets/${mapData.id}.jpg`;
 
     img.onload = () => {
       setMapImage(img);
@@ -133,10 +125,10 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
     };
 
     img.onerror = () => {
-      console.error(`Failed to load image: ${mapData.imagePath}`);
+      console.error(`Failed to load image: ${mapData.id}`);
       setImageLoaded(true);
     };
-  }, [mapData.imagePath, setImageDimensions]);
+  }, [mapData.id, setImageDimensions]);
 
   // Update canvas dimensions based on container
   useEffect(() => {
@@ -180,7 +172,6 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
     orangePlayer,
     hasLos,
     isAdminMode,
-    panOffset,
     mapImage,
     selectedWallIndex,
     mousePosition,
@@ -440,7 +431,6 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
 
     // Apply pan transformation
     ctx.save();
-    ctx.translate(panOffset.x, panOffset.y);
 
     // Draw background image if available
     if (mapImage) {
@@ -616,8 +606,8 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
     const canvasY = (mouseY / rect.height) * canvas.height;
 
     // Apply pan transformation
-    const transformedX = canvasX - panOffset.x;
-    const transformedY = canvasY - panOffset.y;
+    const transformedX = canvasX;
+    const transformedY = canvasY;
 
     const { gridOffset } = mapData;
     const cellSize = getCellSize();
@@ -647,8 +637,8 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
     const canvasY = (mouseY / rect.height) * canvas.height;
 
     // Apply zoom and pan transformation
-    const transformedX = canvasX - panOffset.x;
-    const transformedY = canvasY - panOffset.y;
+    const transformedX = canvasX;
+    const transformedY = canvasY;
 
     const { gridOffset } = mapData;
     const cellSize = getCellSize();
@@ -690,8 +680,8 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
     const canvasY = (mouseY / rect.height) * canvas.height;
 
     // Apply pan transformation
-    const transformedX = canvasX - panOffset.x;
-    const transformedY = canvasY - panOffset.y;
+    const transformedX = canvasX;
+    const transformedY = canvasY;
 
     const { gridOffset } = mapData;
     const cellSize = getCellSize();
@@ -716,19 +706,6 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
     return null;
   };
 
-  // Handle canvas mouse events for panning
-  const handleMouseDown = (event: React.MouseEvent<HTMLCanvasElement>) => {
-    if (event.button === 1 || (event.button === 0 && event.altKey)) {
-      // Middle button or Alt+Left click for panning
-      setIsDragging(true);
-      setDragStart({
-        x: event.clientX,
-        y: event.clientY,
-      });
-      event.preventDefault();
-    }
-  };
-
   const handleMouseMove = (event: React.MouseEvent<HTMLCanvasElement>) => {
     // Update mouse position for temporary wall preview
     setMousePosition({
@@ -737,44 +714,17 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
     });
 
     // Check for wall hover effect
-    if (!isDragging && isAdminMode) {
+    if (isAdminMode) {
       handleMouseMoveOverWalls(event.clientX, event.clientY);
     }
-
-    if (isDragging) {
-      const dx = event.clientX - dragStart.x;
-      const dy = event.clientY - dragStart.y;
-
-      setPanOffset((prev) => ({
-        x: prev.x + dx,
-        y: prev.y + dy,
-      }));
-
-      setDragStart({
-        x: event.clientX,
-        y: event.clientY,
-      });
-    }
-  };
-
-  const handleMouseUp = () => {
-    setIsDragging(false);
   };
 
   const handleMouseLeave = () => {
-    setIsDragging(false);
     setMousePosition(null);
-  };
-
-  // Reset pan
-  const resetPan = () => {
-    setPanOffset({ x: 0, y: 0 });
   };
 
   // Handle canvas click but check if we're dragging first
   const handleCanvasClick = (event: React.MouseEvent<HTMLCanvasElement>) => {
-    if (isDragging) return;
-
     // If in admin mode, handle wall placement or selection
     if (isAdminMode) {
       // Check if we clicked on an existing wall
@@ -824,26 +774,15 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
 
   return (
     <div className="canvas-container">
-      <div className="zoom-controls">
-        <button onClick={resetPan} title="Reset Pan">
-          Center
-        </button>
-      </div>
       <canvas
         ref={canvasRef}
         width={imageDimensions.width}
         height={imageDimensions.height}
         onClick={handleCanvasClick}
-        onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseLeave}
         style={{
-          cursor: isDragging
-            ? "grabbing"
-            : isAdminMode
-              ? "crosshair"
-              : "pointer",
+          cursor: isAdminMode ? "crosshair" : "pointer",
         }}
       />
     </div>

@@ -1,5 +1,6 @@
 {
-  "name": "bank",
+  "id": "bank",
+  "name": "Bank",
   "walls": [
     {
       "start": {
