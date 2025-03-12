@@ -522,3 +522,33 @@ canvas {
   color: #000;
   font-weight: bold;
 }
+/* Add these styles to src/App.css */
+
+/* Canvas wrapper for handling zoom and pan */
+.canvas-wrapper {
+  width: 100%;
+  overflow: auto;
+  position: relative;
+  border-radius: 5px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--border);
+  margin-bottom: 20px;
+  max-height: 70vh;
+  background-color: #000000;
+}
+
+
+/* Adjust the existing canvas-container styling */
+.canvas-container {
+  border-radius: 0;
+  box-shadow: none;
+  border: none;
+  width: 100%;
+  transition: transform 0.1s ease-out;
+}
+
+/* Input with percentage sign */
+.input-group span {
+  margin-left: 5px;
+  color: var(--text-secondary);
+}

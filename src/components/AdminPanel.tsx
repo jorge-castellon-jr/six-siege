@@ -25,6 +25,8 @@ interface AdminPanelProps {
   selectedWallIndex: number | null;
   setSelectedWallIndex: React.Dispatch<React.SetStateAction<number | null>>;
   updateWall: (index: number, props: Partial<Wall>) => void;
+  zoomLevel: number;
+  setZoomLevel: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const AdminPanel: React.FC<AdminPanelProps> = ({
@@ -38,6 +40,8 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
   selectedWallIndex,
   setSelectedWallIndex,
   updateWall,
+  zoomLevel,
+  setZoomLevel,
 }) => {
   const mapDataInputRef = useRef<HTMLInputElement>(null);
   const [calculatedCellSize, setCalculatedCellSize] = useState<{
@@ -282,6 +286,32 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
 
         <div className="grid-controls">
           <div className="input-group">
+            <label>Top Offset:</label>
+            <input
+              type="number"
+              value={mapData.gridOffset.y}
+              onChange={(e) =>
+                handleGridOffsetChange("y", parseInt(e.target.value) || 0)
+              }
+              min="0"
+            />
+          </div>
+
+          <div className="input-group">
+            <label>Bottom Offset:</label>
+            <input
+              type="number"
+              value={mapData.gridOffset.bottom}
+              onChange={(e) =>
+                handleGridOffsetChange("bottom", parseInt(e.target.value) || 0)
+              }
+              min="0"
+            />
+          </div>
+        </div>
+
+        <div className="grid-controls">
+          <div className="input-group">
             <label>Left Offset:</label>
             <input
               type="number"
@@ -305,29 +335,29 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
             />
           </div>
         </div>
+      </div>
 
+      <div className="control-group">
+        <h3>Zoom Controls</h3>
         <div className="grid-controls">
           <div className="input-group">
-            <label>Top Offset:</label>
+            <label>Zoom:</label>
             <input
               type="number"
-              value={mapData.gridOffset.y}
-              onChange={(e) =>
-                handleGridOffsetChange("y", parseInt(e.target.value) || 0)
-              }
-              min="0"
+              value={zoomLevel}
+              onChange={(e) => setZoomLevel(parseInt(e.target.value) || 100)}
+              min="50"
+              max="400"
+              step="10"
             />
-          </div>
-
-          <div className="input-group">
-            <label>Bottom Offset:</label>
+            <span>%</span>
             <input
-              type="number"
-              value={mapData.gridOffset.bottom}
-              onChange={(e) =>
-                handleGridOffsetChange("bottom", parseInt(e.target.value) || 0)
-              }
-              min="0"
+              type="range"
+              min="50"
+              max="400"
+              step="10"
+              value={zoomLevel}
+              onChange={(e) => setZoomLevel(parseInt(e.target.value))}
             />
           </div>
         </div>

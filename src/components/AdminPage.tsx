@@ -42,6 +42,9 @@ const AdminPage: React.FC<AdminPageProps> = ({
     null,
   );
 
+  // New state for zoom
+  const [zoomLevel, setZoomLevel] = useState<number>(100);
+
   // Handle canvas click - this is passed to GameCanvas
   const handleCanvasClick = (
     event: React.MouseEvent<HTMLCanvasElement> & {
@@ -100,6 +103,14 @@ const AdminPage: React.FC<AdminPageProps> = ({
     });
   };
 
+  // Calculate zoom and pan style for the canvas container
+  const canvasContainerStyle = {
+    width: `${zoomLevel}%`,
+    transformOrigin: "top left",
+    overflow: "hidden",
+    position: "relative" as const,
+  };
+
   return (
     <div className="admin-page">
       <div className="page-header">
@@ -122,18 +133,22 @@ const AdminPage: React.FC<AdminPageProps> = ({
         </select>
       </div>
 
-      <GameCanvas
-        mapData={mapData}
-        bluePlayer={null}
-        orangePlayer={null}
-        hasLos={null}
-        isAdminMode={true}
-        wallStart={wallStart}
-        onCanvasClick={handleCanvasClick}
-        setImageDimensions={setImageDimensions}
-        selectedWallIndex={selectedWallIndex}
-        setSelectedWallIndex={setSelectedWallIndex}
-      />
+      <div className="canvas-wrapper">
+        <div className="canvas-container" style={canvasContainerStyle}>
+          <GameCanvas
+            mapData={mapData}
+            bluePlayer={null}
+            orangePlayer={null}
+            hasLos={null}
+            isAdminMode={true}
+            wallStart={wallStart}
+            onCanvasClick={handleCanvasClick}
+            setImageDimensions={setImageDimensions}
+            selectedWallIndex={selectedWallIndex}
+            setSelectedWallIndex={setSelectedWallIndex}
+          />
+        </div>
+      </div>
       <div className="admin-spacer" />
 
       <div className="controls">
@@ -148,6 +163,8 @@ const AdminPage: React.FC<AdminPageProps> = ({
           selectedWallIndex={selectedWallIndex}
           setSelectedWallIndex={setSelectedWallIndex}
           updateWall={updateWall}
+          zoomLevel={zoomLevel}
+          setZoomLevel={setZoomLevel}
         />
       </div>
     </div>
