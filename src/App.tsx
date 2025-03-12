@@ -12,7 +12,7 @@ import bankData from "./data/bank.json";
 import kafeData from "./data/kafe.json";
 import chaletData from "./data/chalet.json";
 import oregonData from "./data/oregon.json";
-import coastlineData from "./data/bank.json";
+import coastlineData from "./data/coastline.json";
 import borderData from "./data/border.json";
 
 // Default maps data
