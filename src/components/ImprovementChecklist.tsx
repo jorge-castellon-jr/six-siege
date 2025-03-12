@@ -16,19 +16,10 @@ interface ImprovementChecklistProps {
 const ImprovementChecklist: React.FC<ImprovementChecklistProps> = ({
   onClose,
 }) => {
-  // Load checklist from localStorage, or use default list if none exists
   const checklist = getDefaultChecklist();
 
   // Filter state to show different categories
   const [activeCategory, setActiveCategory] = useState<string>("all");
-
-  // Save checklist to localStorage when it changes
-  useEffect(() => {
-    localStorage.setItem(
-      "r6s-improvement-checklist",
-      JSON.stringify(checklist),
-    );
-  }, [checklist]);
 
   // Filter checklist by category
   const filteredChecklist =

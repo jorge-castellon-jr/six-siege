@@ -37,23 +37,6 @@ const App: React.FC = () => {
   // State for selected map
   const [selectedMapId, setSelectedMapId] = useState<string | null>(null);
 
-  // Load saved maps from localStorage on initial load
-  useEffect(() => {
-    const savedMaps = localStorage.getItem("r6s-maps");
-    if (savedMaps) {
-      try {
-        setMaps(JSON.parse(savedMaps));
-      } catch (error) {
-        console.error("Error loading saved maps:", error);
-      }
-    }
-  }, []);
-
-  // Save maps to localStorage when they change
-  useEffect(() => {
-    localStorage.setItem("r6s-maps", JSON.stringify(maps));
-  }, [maps]);
-
   // Handle navigation
   const handleNavigate = (page: AppPage) => {
     setCurrentPage(page);

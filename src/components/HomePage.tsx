@@ -1,6 +1,6 @@
 // src/components/HomePage.tsx
 import React, { useState, useEffect } from "react";
-import { MapData, AppPage } from "../types";
+import { MapData, AppPage, ChecklistItem } from "../types";
 import ImprovementChecklist from "./ImprovementChecklist";
 import "./ImprovementChecklist.css";
 import checklistData from "../data/checklist.json";
@@ -22,10 +22,10 @@ const HomePage: React.FC<HomePageProps> = ({
     total: 0,
   });
 
-  // Load completion stats from localStorage
+  // Load completion stats from json
   useEffect(() => {
-    const checklist = checklistData;
-    const completed = checklist.filter((item: any) => item.completed).length;
+    const checklist = checklistData as ChecklistItem[];
+    const completed = checklist.filter((item) => item.completed).length;
     const total = checklist.length;
     setCompletionStats({ completed, total });
   }, []);
@@ -34,20 +34,10 @@ const HomePage: React.FC<HomePageProps> = ({
   const handleCloseChecklist = () => {
     setShowChecklist(false);
 
-    // Update completion stats
-    const savedChecklist = localStorage.getItem("r6s-improvement-checklist");
-    if (savedChecklist) {
-      try {
-        const checklist = JSON.parse(savedChecklist);
-        const completed = checklist.filter(
-          (item: any) => item.completed,
-        ).length;
-        const total = checklist.length;
-        setCompletionStats({ completed, total });
-      } catch (error) {
-        console.error("Error parsing saved checklist for stats:", error);
-      }
-    }
+    const checklist = checklistData as ChecklistItem[];
+    const completed = checklist.filter((item) => item.completed).length;
+    const total = checklist.length;
+    setCompletionStats({ completed, total });
   };
 
   const completionPercentage =
