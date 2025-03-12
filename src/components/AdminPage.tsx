@@ -156,7 +156,6 @@ const AdminPage: React.FC<AdminPageProps> = ({
           mapData={mapData}
           setMapData={onUpdateMap}
           wallStart={wallStart}
-          setWallStart={setWallStart}
           imageDimensions={imageDimensions}
           currentWallProps={currentWallProps}
           setCurrentWallProps={setCurrentWallProps}

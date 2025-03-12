@@ -1,12 +1,11 @@
 // src/components/AdminPanel.tsx
-import React, { useRef, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { MapData, Position, Wall } from "../types";
 
 interface AdminPanelProps {
   mapData: MapData;
   setMapData: (data: MapData) => void;
   wallStart: Position | null;
-  setWallStart: React.Dispatch<React.SetStateAction<Position | null>>;
   imageDimensions: { width: number; height: number };
   currentWallProps: {
     thickness: number;
@@ -33,7 +32,6 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
   mapData,
   setMapData,
   wallStart,
-  setWallStart,
   imageDimensions,
   currentWallProps,
   setCurrentWallProps,
@@ -43,7 +41,6 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
   zoomLevel,
   setZoomLevel,
 }) => {
-  const mapDataInputRef = useRef<HTMLInputElement>(null);
   const [calculatedCellSize, setCalculatedCellSize] = useState<{
     width: number;
     height: number;
@@ -136,65 +133,35 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
 
   // Save map data to JSON
   const saveMapData = () => {
-    // Create a copy of mapData that includes the calculated cell size
-    const dataToSave = {
-      ...mapData,
-      // We'll save the average of width and height if they differ
-      cellSize: (calculatedCellSize.width + calculatedCellSize.height) / 2,
-    };
-
-    const dataStr = JSON.stringify(dataToSave, null, 2);
-    const dataUri =
-      "data:application/json;charset=utf-8," + encodeURIComponent(dataStr);
-
-    const exportFileDefaultName = `${mapData.name.toLowerCase().replace(/\s+/g, "-")}.json`;
-
-    const linkElement = document.createElement("a");
-    linkElement.setAttribute("href", dataUri);
-    linkElement.setAttribute("download", exportFileDefaultName);
-    linkElement.click();
+    copyMapDataToClipboard();
   };
 
-  // Load map data from JSON
-  const loadMapData = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const fileReader = new FileReader();
-    const files = event.target.files;
+  // Copy map data to clipboard
+  const copyMapDataToClipboard = () => {
+    const dataStr = JSON.stringify(mapData, null, 2);
 
-    if (!files || files.length === 0) return;
+    // Use the Clipboard API to copy the data
+    navigator.clipboard
+      .writeText(dataStr)
+      .then(() => {
+        // Show temporary success message
+        const button = document.getElementById("copy-button");
+        if (button) {
+          const originalText = button.textContent;
+          button.textContent = "Copied! ✓";
+          button.style.backgroundColor = "var(--accent-green)";
 
-    fileReader.readAsText(files[0], "UTF-8");
-    fileReader.onload = (e) => {
-      if (!e.target?.result) return;
-
-      try {
-        const data = JSON.parse(e.target.result as string) as MapData;
-
-        // Ensure all walls have the new properties
-        const updatedWalls = data.walls.map((wall) => ({
-          start: wall.start,
-          end: wall.end,
-          thickness: wall.thickness ?? 0.2,
-          offset: wall.offset ?? 0,
-          startExtension: wall.startExtension ?? 0,
-          endExtension: wall.endExtension ?? 0,
-        }));
-
-        setMapData({
-          ...data,
-          walls: updatedWalls,
-        });
-        setWallStart(null);
-        setSelectedWallIndex(null);
-      } catch (err) {
-        console.error("Error parsing JSON:", err);
-        alert("Failed to load map data. Invalid JSON format.");
-      }
-    };
-
-    // Reset file input
-    if (event.target) {
-      event.target.value = "";
-    }
+          // Reset button after 2 seconds
+          setTimeout(() => {
+            button.textContent = originalText;
+            button.style.backgroundColor = "";
+          }, 2000);
+        }
+      })
+      .catch((err) => {
+        console.error("Failed to copy map data: ", err);
+        alert("Failed to copy map data to clipboard.");
+      });
   };
 
   // Remove the last wall (undo in admin mode)
@@ -346,15 +313,15 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
               type="number"
               value={zoomLevel}
               onChange={(e) => setZoomLevel(parseInt(e.target.value) || 100)}
-              min="50"
-              max="400"
+              min="100"
+              max="1000"
               step="10"
             />
             <span>%</span>
             <input
               type="range"
-              min="50"
-              max="400"
+              min="100"
+              max="1000"
               step="10"
               value={zoomLevel}
               onChange={(e) => setZoomLevel(parseInt(e.target.value))}
@@ -510,16 +477,6 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
         <h3>Wall Actions</h3>
         <div className="action-buttons">
           <button onClick={saveMapData}>Save Map Data</button>
-          <label className="file-input">
-            Load Map Data
-            <input
-              type="file"
-              accept=".json"
-              onChange={loadMapData}
-              ref={mapDataInputRef}
-              style={{ display: "none" }}
-            />
-          </label>
           <button onClick={removeLastWall}>Undo Last Wall</button>
           {selectedWallIndex !== null && (
             <button onClick={removeSelectedWall} className="delete-button">
