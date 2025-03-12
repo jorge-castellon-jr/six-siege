@@ -1,6 +1,5 @@
 {
   "name": "bank",
-  "imagePath": "src/assets/6S_bank.jpg",
   "walls": [
     {
       "start": {
@@ -922,6 +921,5 @@
     "y": 35,
     "right": 30,
     "bottom": 35
-  },
-  "cellSize": 107.5
+  }
 }

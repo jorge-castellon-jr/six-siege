@@ -560,9 +560,6 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
           <div>
             Click on an existing wall to select and edit its properties.
           </div>
-          <div className="zoom-info">
-            Pan: <kbd>Middle-click</kbd> or <kbd>Alt + Left-click</kbd> and drag
-          </div>
         </div>
       </div>
     </div>

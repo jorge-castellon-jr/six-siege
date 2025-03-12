@@ -31,10 +31,13 @@ export interface Player {
 }
 
 export interface MapData {
-  name: string;
-  imagePath: string;
-  walls: Wall[];
-  gridSize: GridSize;
-  gridOffset: GridOffset;
-  cellSize?: number;
+  id: string;
+  name: string; // Display name of the map
+  walls: Wall[]; // Wall data
+  gridSize: GridSize; // Grid dimensions
+  gridOffset: GridOffset; // Grid position offsets
+  cellSize?: number; // Optional cell size
+  description?: string; // Optional description
 }
+
+export type AppPage = "home" | "calculator" | "admin";

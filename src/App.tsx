@@ -1,205 +1,157 @@
 // src/App.tsx
-import React, { useState } from "react";
-import { Position, Wall, Player, MapData } from "./types";
-import { hasLineOfSight } from "./utils/lineOfSight";
-import AdminPanel from "./components/AdminPanel";
-import PlayerControls from "./components/PlayerControls";
-import GameCanvas from "./components/GameCanvas";
+import React, { useState, useEffect } from "react";
+import { MapData, AppPage } from "./types";
+import HomePage from "./components/HomePage";
+import CalculatorPage from "./components/CalculatorPage";
+import AdminPage from "./components/AdminPage";
 import "./App.css";
 
-const App: React.FC = () => {
-  const [imageDimensions, setImageDimensions] = useState({
-    width: 800,
-    height: 600,
-  }); // State for the map data
-  const [mapData, setMapData] = useState<MapData>({
-    name: "Default Map",
-    imagePath: "",
+// Default maps data
+const DEFAULT_MAPS: MapData[] = [
+  {
+    id: "bank",
+    name: "Bank",
     walls: [],
     gridSize: { width: 20, height: 20 },
     gridOffset: { x: 0, y: 0, right: 0, bottom: 0 },
-  });
+    description: "An isolated, fortified farmhouse",
+  },
+  {
+    id: "oregon",
+    name: "Oregon",
+    walls: [],
+    gridSize: { width: 20, height: 20 },
+    gridOffset: { x: 0, y: 0, right: 0, bottom: 0 },
+    description: "An isolated, fortified farmhouse",
+  },
+  {
+    id: "consulate",
+    name: "Consulate",
+    walls: [],
+    gridSize: { width: 20, height: 20 },
+    gridOffset: { x: 0, y: 0, right: 0, bottom: 0 },
+    description: "A diplomatic office and embassy",
+  },
+  {
+    id: "chalet",
+    name: "Chalet",
+    walls: [],
+    gridSize: { width: 20, height: 20 },
+    gridOffset: { x: 0, y: 0, right: 0, bottom: 0 },
+    description: "A ski cabin in the French Alps",
+  },
+  {
+    id: "coastline",
+    name: "Coastline",
+    walls: [],
+    gridSize: { width: 20, height: 20 },
+    gridOffset: { x: 0, y: 0, right: 0, bottom: 0 },
+    description: "A biker club headquarters",
+  },
+  {
+    id: "clubhouse",
+    name: "Clubhouse",
+    walls: [],
+    gridSize: { width: 20, height: 20 },
+    gridOffset: { x: 0, y: 0, right: 0, bottom: 0 },
+    description: "A biker club headquarters",
+  },
+  {
+    id: "kafe",
+    name: "Kafe Dostoyevsky",
+    walls: [],
+    gridSize: { width: 20, height: 20 },
+    gridOffset: { x: 0, y: 0, right: 0, bottom: 0 },
+    description: "An upscale restaurant in downtown Moscow",
+  },
+  {
+    id: "border",
+    name: "Border",
+    walls: [],
+    gridSize: { width: 20, height: 20 },
+    gridOffset: { x: 0, y: 0, right: 0, bottom: 0 },
+    description: "A border checkpoint in the Middle East",
+  },
+];
 
-  // State for players
-  const [bluePlayer, setBluePlayer] = useState<Player | null>(null);
-  const [orangePlayer, setOrangePlayer] = useState<Player | null>(null);
+const App: React.FC = () => {
+  // State for navigation
+  const [currentPage, setCurrentPage] = useState<AppPage>("home");
 
-  // State for admin mode
-  const [isAdminMode, setIsAdminMode] = useState<boolean>(false);
+  // State for maps data
+  const [maps, setMaps] = useState<MapData[]>(DEFAULT_MAPS);
 
-  // State for wall drawing
-  const [wallStart, setWallStart] = useState<Position | null>(null);
+  // State for selected map
+  const [selectedMapId, setSelectedMapId] = useState<string | null>(null);
 
-  // State for current wall properties
-  const [currentWallProps, setCurrentWallProps] = useState({
-    thickness: 0.2, // Default thickness
-    offset: 0, // Default centered
-    startExtension: 0, // Default no extension
-    endExtension: 0, // Default no extension
-  });
-
-  // State for line of sight result
-  const [hasLos, setHasLos] = useState<boolean | null>(null);
-
-  // State for active team selection
-  const [activeTeam, setActiveTeam] = useState<"blue" | "orange" | null>(null);
-
-  // State for selected wall (for editing)
-  const [selectedWallIndex, setSelectedWallIndex] = useState<number | null>(
-    null,
-  );
-
-  // Handle canvas click - this is passed to GameCanvas
-  const handleCanvasClick = (
-    event: React.MouseEvent<HTMLCanvasElement> & {
-      gridIntersection?: Position;
-      gridPosition?: Position;
-    },
-  ) => {
-    // Admin mode - create walls at grid intersections
-    if (isAdminMode && event.gridIntersection) {
-      const intersectionPos = event.gridIntersection;
-
-      if (wallStart === null) {
-        // Start new wall at the grid intersection
-        setWallStart(intersectionPos);
-      } else {
-        // Complete wall between intersections
-        const newWall: Wall = {
-          start: wallStart,
-          end: intersectionPos,
-          thickness: currentWallProps.thickness,
-          offset: currentWallProps.offset,
-          startExtension: currentWallProps.startExtension,
-          endExtension: currentWallProps.endExtension,
-        };
-
-        // Don't add walls with same start and end
-        if (
-          wallStart.x !== intersectionPos.x ||
-          wallStart.y !== intersectionPos.y
-        ) {
-          setMapData({
-            ...mapData,
-            walls: [...mapData.walls, newWall],
-          });
-        }
-
-        setWallStart(null);
+  // Load saved maps from localStorage on initial load
+  useEffect(() => {
+    const savedMaps = localStorage.getItem("r6s-maps");
+    if (savedMaps) {
+      try {
+        setMaps(JSON.parse(savedMaps));
+      } catch (error) {
+        console.error("Error loading saved maps:", error);
       }
-      return;
     }
+  }, []);
 
-    // Player mode - place players in cells
-    if (!isAdminMode && event.gridPosition) {
-      const { x, y } = event.gridPosition;
+  // Save maps to localStorage when they change
+  useEffect(() => {
+    localStorage.setItem("r6s-maps", JSON.stringify(maps));
+  }, [maps]);
 
-      if (activeTeam === "blue") {
-        setBluePlayer({
-          position: { x, y },
-          team: "blue",
-        });
-        setActiveTeam(null);
-      } else if (activeTeam === "orange") {
-        setOrangePlayer({
-          position: { x, y },
-          team: "orange",
-        });
-        setActiveTeam(null);
-      }
-
-      // Reset LoS result when players move
-      setHasLos(null);
-    }
+  // Handle navigation
+  const handleNavigate = (page: AppPage) => {
+    setCurrentPage(page);
   };
 
-  // Check line of sight
-  const checkLineOfSight = () => {
-    if (!bluePlayer || !orangePlayer) return;
+  // Handle map selection
+  const handleSelectMap = (mapId: string) => {
+    setSelectedMapId(mapId);
+    setCurrentPage("calculator");
+  };
 
-    const result = hasLineOfSight(
-      bluePlayer.position,
-      orangePlayer.position,
-      mapData.walls,
+  // Update an existing map
+  const handleUpdateMap = (updatedMap: MapData) => {
+    const updatedMaps = maps.map((map) =>
+      map.id === updatedMap.id ? updatedMap : map,
     );
-
-    setHasLos(result);
+    setMaps(updatedMaps);
   };
 
-  // Update a wall's properties
-  const updateWall = (index: number, props: Partial<Wall>) => {
-    if (index < 0 || index >= mapData.walls.length) return;
+  // Get selected map data
+  const selectedMap = maps.find((map) => map.id === selectedMapId) || maps[0];
 
-    const updatedWalls = [...mapData.walls];
-    updatedWalls[index] = { ...updatedWalls[index], ...props };
-
-    setMapData({
-      ...mapData,
-      walls: updatedWalls,
-    });
+  // Render current page
+  const renderCurrentPage = () => {
+    switch (currentPage) {
+      case "home":
+        return (
+          <HomePage
+            maps={maps}
+            onSelectMap={handleSelectMap}
+            onNavigate={handleNavigate}
+          />
+        );
+      case "calculator":
+        return (
+          <CalculatorPage mapData={selectedMap} onNavigate={handleNavigate} />
+        );
+      case "admin":
+        return (
+          <AdminPage
+            maps={maps}
+            onUpdateMap={handleUpdateMap}
+            onNavigate={handleNavigate}
+          />
+        );
+      default:
+        return <div>Page not found</div>;
+    }
   };
 
-  return (
-    <div className="app">
-      <h1>Rainbow Six: Siege Line of Sight Calculator</h1>
-
-      <GameCanvas
-        mapData={mapData}
-        bluePlayer={bluePlayer}
-        orangePlayer={orangePlayer}
-        hasLos={hasLos}
-        isAdminMode={isAdminMode}
-        wallStart={wallStart}
-        onCanvasClick={handleCanvasClick}
-        setImageDimensions={setImageDimensions}
-        selectedWallIndex={selectedWallIndex}
-        setSelectedWallIndex={setSelectedWallIndex}
-      />
-      {isAdminMode && <div className="spacer" />}
-
-      <div className="controls">
-        <div className="mode-toggle">
-          <label>
-            <input
-              type="checkbox"
-              checked={isAdminMode}
-              onChange={() => {
-                setIsAdminMode(!isAdminMode);
-                setActiveTeam(null);
-                setWallStart(null);
-                setSelectedWallIndex(null);
-              }}
-            />
-            Admin Mode
-          </label>
-        </div>
-
-        {isAdminMode ? (
-          <AdminPanel
-            mapData={mapData}
-            setMapData={setMapData}
-            wallStart={wallStart}
-            setWallStart={setWallStart}
-            imageDimensions={imageDimensions}
-            currentWallProps={currentWallProps}
-            setCurrentWallProps={setCurrentWallProps}
-            selectedWallIndex={selectedWallIndex}
-            setSelectedWallIndex={setSelectedWallIndex}
-            updateWall={updateWall}
-          />
-        ) : (
-          <PlayerControls
-            bluePlayer={bluePlayer}
-            orangePlayer={orangePlayer}
-            activeTeam={activeTeam}
-            setActiveTeam={setActiveTeam}
-            hasLos={hasLos}
-            checkLineOfSight={checkLineOfSight}
-          />
-        )}
-      </div>
-    </div>
-  );
+  return <div className="app">{renderCurrentPage()}</div>;
 };
 
 export default App;
