@@ -50,6 +50,19 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
     calculateCellSize();
   }, [mapData.gridSize, mapData.gridOffset, imageDimensions]);
 
+  // Update current wall properties when a wall is selected
+  useEffect(() => {
+    if (selectedWallIndex !== null && mapData.walls[selectedWallIndex]) {
+      const selectedWall = mapData.walls[selectedWallIndex];
+      setCurrentWallProps({
+        thickness: selectedWall.thickness,
+        offset: selectedWall.offset,
+        startExtension: selectedWall.startExtension,
+        endExtension: selectedWall.endExtension,
+      });
+    }
+  }, [selectedWallIndex, mapData.walls, setCurrentWallProps]);
+
   // Calculate cell size based on image dimensions, grid dimensions, and offset
   const calculateCellSize = () => {
     // Available width is the image width minus left and right offsets

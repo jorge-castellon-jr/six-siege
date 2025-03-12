@@ -77,6 +77,9 @@ const AdminPage: React.FC<AdminPageProps> = ({
           };
 
           onUpdateMap(updatedMap);
+
+          // Select the newly created wall
+          setSelectedWallIndex(updatedMap.walls.length - 1);
         }
 
         setWallStart(null);
