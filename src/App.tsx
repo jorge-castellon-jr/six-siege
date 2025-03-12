@@ -143,6 +143,20 @@ const App: React.FC = () => {
     <div className="app">
       <h1>Rainbow Six: Siege Line of Sight Calculator</h1>
 
+      <GameCanvas
+        mapData={mapData}
+        bluePlayer={bluePlayer}
+        orangePlayer={orangePlayer}
+        hasLos={hasLos}
+        isAdminMode={isAdminMode}
+        wallStart={wallStart}
+        onCanvasClick={handleCanvasClick}
+        setImageDimensions={setImageDimensions}
+        selectedWallIndex={selectedWallIndex}
+        setSelectedWallIndex={setSelectedWallIndex}
+      />
+      {isAdminMode && <div className="spacer" />}
+
       <div className="controls">
         <div className="mode-toggle">
           <label>
@@ -184,19 +198,6 @@ const App: React.FC = () => {
           />
         )}
       </div>
-
-      <GameCanvas
-        mapData={mapData}
-        bluePlayer={bluePlayer}
-        orangePlayer={orangePlayer}
-        hasLos={hasLos}
-        isAdminMode={isAdminMode}
-        wallStart={wallStart}
-        onCanvasClick={handleCanvasClick}
-        setImageDimensions={setImageDimensions}
-        selectedWallIndex={selectedWallIndex}
-        setSelectedWallIndex={setSelectedWallIndex}
-      />
     </div>
   );
 };

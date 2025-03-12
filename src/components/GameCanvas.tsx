@@ -32,12 +32,12 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
   selectedWallIndex,
   setSelectedWallIndex,
 }) => {
-  // State for zoom level
-  const [zoomLevel, setZoomLevel] = useState<number>(1);
+  // State for panning
   const [panOffset, setPanOffset] = useState<Position>({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [dragStart, setDragStart] = useState<Position>({ x: 0, y: 0 });
   const [mousePosition, setMousePosition] = useState<Position | null>(null);
+  const [hoveredWallIndex, setHoveredWallIndex] = useState<number | null>(null);
 
   // State for image
   const [mapImage, setMapImage] = useState<HTMLImageElement | null>(null);
@@ -180,7 +180,6 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
     orangePlayer,
     hasLos,
     isAdminMode,
-    zoomLevel,
     panOffset,
     mapImage,
     selectedWallIndex,
@@ -195,6 +194,7 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
     startY: number,
     cellSize: number,
     isSelected: boolean = false,
+    isHovered: boolean = false,
   ) => {
     // Get wall endpoints in canvas coordinates
     const x1 = startX + wall.start.x * cellSize;
@@ -259,28 +259,77 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
     ctx.closePath();
 
     // Fill with color
-    ctx.fillStyle = isSelected ? "#ff9800" : "#ff5252";
+    ctx.fillStyle = isSelected ? "#ff9800" : isHovered ? "#ffcc80" : "#ff5252";
     ctx.fill();
 
     // Add outline
-    ctx.strokeStyle = isSelected ? "#ffc107" : "#b71c1c";
-    ctx.lineWidth = 1 / zoomLevel;
+    ctx.strokeStyle = isSelected
+      ? "#ffc107"
+      : isHovered
+        ? "#ffb74d"
+        : "#b71c1c";
+    ctx.lineWidth = 1;
     ctx.stroke();
 
     // If selected, draw the endpoints as circles
     if (isSelected) {
       // Draw start point
       ctx.beginPath();
-      ctx.arc(x1, y1, 5 / zoomLevel, 0, Math.PI * 2);
+      ctx.arc(x1, y1, 5, 0, Math.PI * 2);
       ctx.fillStyle = "#4CAF50";
       ctx.fill();
+      ctx.strokeStyle = "white";
+      ctx.lineWidth = 1;
+      ctx.stroke();
+
+      // Label start point
+      ctx.fillStyle = "white";
+      ctx.fillText("S", x1, y1 + 3);
 
       // Draw end point
       ctx.beginPath();
-      ctx.arc(x2, y2, 5 / zoomLevel, 0, Math.PI * 2);
+      ctx.arc(x2, y2, 5, 0, Math.PI * 2);
       ctx.fillStyle = "#2196F3";
       ctx.fill();
+      ctx.strokeStyle = "white";
+      ctx.lineWidth = 1;
+      ctx.stroke();
+
+      // Label end point
+      ctx.fillStyle = "white";
+      ctx.fillText("E", x2, y2 + 3);
+
+      // Draw midpoint for offset adjustment
+      const midX = (x1 + x2) / 2;
+      const midY = (y1 + y2) / 2;
+
+      // Add offset position indicator
+      const direction = getNormalizedDirection(
+        { x: x1, y: y1 },
+        { x: x2, y: y2 },
+      );
+      const perpendicular = getPerpendicularVector(direction);
+      const offsetX = perpendicular.x * wall.offset * cellSize;
+      const offsetY = perpendicular.y * wall.offset * cellSize;
+
+      ctx.beginPath();
+      ctx.arc(midX + offsetX, midY + offsetY, 5, 0, Math.PI * 2);
+      ctx.fillStyle = "#9C27B0";
+      ctx.fill();
+      ctx.strokeStyle = "white";
+      ctx.lineWidth = 1;
+      ctx.stroke();
+
+      // Label offset point
+      ctx.fillStyle = "white";
+      ctx.fillText("O", midX + offsetX, midY + offsetY + 3);
     }
+  };
+
+  // Check if mouse is over a wall for hover effect
+  const handleMouseMoveOverWalls = (clientX: number, clientY: number) => {
+    const index = getWallIndexAtPoint(clientX, clientY);
+    setHoveredWallIndex(index);
   };
 
   // Check if a point is inside a wall (for selection)
@@ -389,24 +438,17 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
     // Clear canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Apply zoom and pan transformation
+    // Apply pan transformation
     ctx.save();
     ctx.translate(panOffset.x, panOffset.y);
-    ctx.scale(zoomLevel, zoomLevel);
 
     // Draw background image if available
     if (mapImage) {
-      ctx.drawImage(
-        mapImage,
-        0,
-        0,
-        canvas.width / zoomLevel,
-        canvas.height / zoomLevel,
-      );
+      ctx.drawImage(mapImage, 0, 0, canvas.width, canvas.height);
     } else {
       // Black background if no image
       ctx.fillStyle = "#000000";
-      ctx.fillRect(0, 0, canvas.width / zoomLevel, canvas.height / zoomLevel);
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
 
     const { gridSize, gridOffset } = mapData;
@@ -414,7 +456,7 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
 
     // Draw grid
     ctx.strokeStyle = "rgba(255, 255, 255, 0.15)";
-    ctx.lineWidth = 1 / zoomLevel; // Adjust line width for zoom
+    ctx.lineWidth = 1;
 
     // Calculate grid boundaries based on offset and cell size
     const startX = gridOffset.x;
@@ -449,8 +491,34 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
         startY,
         cellSize,
         index === selectedWallIndex,
+        index === hoveredWallIndex,
       );
     });
+
+    // If a wall is selected, show its index and properties
+    if (selectedWallIndex !== null) {
+      const wall = mapData.walls[selectedWallIndex];
+      // const x1 = startX + wall.start.x * cellSize;
+      // const y1 = startY + wall.start.y * cellSize;
+
+      ctx.fillStyle = "rgba(0, 0, 0, 0.7)";
+      ctx.fillRect(10, 10, 200, 85);
+      ctx.strokeStyle = "#ff9800";
+      ctx.lineWidth = 2;
+      ctx.strokeRect(10, 10, 200, 85);
+
+      ctx.fillStyle = "white";
+      ctx.font = "14px Arial";
+      ctx.textAlign = "left";
+      ctx.fillText(`Wall #${selectedWallIndex + 1}`, 20, 30);
+      ctx.fillText(`Thickness: ${wall.thickness.toFixed(2)}`, 20, 50);
+      ctx.fillText(`Offset: ${wall.offset.toFixed(2)}`, 20, 70);
+      ctx.fillText(
+        `Extensions: ${wall.startExtension.toFixed(2)}, ${wall.endExtension.toFixed(2)}`,
+        20,
+        90,
+      );
+    }
 
     // Draw temporary wall being created (also at grid intersection)
     if (isAdminMode && wallStart) {
@@ -458,22 +526,9 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
       const mouseY = startY + wallStart.y * cellSize;
 
       ctx.beginPath();
-      ctx.arc(mouseX, mouseY, 5 / zoomLevel, 0, Math.PI * 2);
+      ctx.arc(mouseX, mouseY, 5, 0, Math.PI * 2);
       ctx.fillStyle = "#ffeb3b";
       ctx.fill();
-
-      // Draw line to mouse position if available
-      if (mousePosition) {
-        const mX = (mousePosition.x - panOffset.x) / zoomLevel;
-        const mY = (mousePosition.y - panOffset.y) / zoomLevel;
-
-        ctx.beginPath();
-        ctx.moveTo(mouseX, mouseY);
-        ctx.lineTo(mX, mY);
-        ctx.strokeStyle = "#ffeb3b";
-        ctx.lineWidth = 2 / zoomLevel;
-        ctx.stroke();
-      }
     }
 
     // Draw players
@@ -486,7 +541,7 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
       ctx.fillStyle = "#4f8bff";
       ctx.fill();
       ctx.strokeStyle = "white";
-      ctx.lineWidth = 2 / zoomLevel;
+      ctx.lineWidth = 2;
       ctx.stroke();
     }
 
@@ -499,7 +554,7 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
       ctx.fillStyle = "#ff7f50";
       ctx.fill();
       ctx.strokeStyle = "white";
-      ctx.lineWidth = 2 / zoomLevel;
+      ctx.lineWidth = 2;
       ctx.stroke();
     }
 
@@ -520,24 +575,22 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
       ctx.strokeStyle = hasLos
         ? "rgba(105, 240, 174, 0.9)"
         : "rgba(255, 82, 82, 0.9)";
-      ctx.lineWidth = 2 / zoomLevel;
+      ctx.lineWidth = 2;
       ctx.stroke();
     }
 
-    // Add grid coordinates when zoomed in for precise placement
-    if (zoomLevel >= 2) {
-      ctx.font = `${12 / zoomLevel}px Arial`;
-      ctx.fillStyle = "rgba(255, 255, 255, 0.7)";
-      ctx.textAlign = "center";
+    // Always show grid coordinates for precise placement
+    // ctx.font = "12px Arial";
+    // ctx.fillStyle = "rgba(255, 255, 255, 0.7)";
+    // ctx.textAlign = "center";
 
-      for (let x = 0; x <= gridSize.width; x++) {
-        for (let y = 0; y <= gridSize.height; y++) {
-          const posX = startX + x * cellSize;
-          const posY = startY + y * cellSize;
-          ctx.fillText(`${x},${y}`, posX, posY - 5 / zoomLevel);
-        }
-      }
-    }
+    // for (let x = 0; x <= gridSize.width; x++) {
+    //   for (let y = 0; y <= gridSize.height; y++) {
+    //     const posX = startX + x * cellSize;
+    //     const posY = startY + y * cellSize;
+    //     // ctx.fillText(`${x},${y}`, posX, posY - 5);
+    //   }
+    // }
 
     ctx.restore();
   };
@@ -562,9 +615,9 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
     const canvasX = (mouseX / rect.width) * canvas.width;
     const canvasY = (mouseY / rect.height) * canvas.height;
 
-    // Apply zoom and pan transformation
-    const transformedX = (canvasX - panOffset.x) / zoomLevel;
-    const transformedY = (canvasY - panOffset.y) / zoomLevel;
+    // Apply pan transformation
+    const transformedX = canvasX - panOffset.x;
+    const transformedY = canvasY - panOffset.y;
 
     const { gridOffset } = mapData;
     const cellSize = getCellSize();
@@ -594,8 +647,8 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
     const canvasY = (mouseY / rect.height) * canvas.height;
 
     // Apply zoom and pan transformation
-    const transformedX = (canvasX - panOffset.x) / zoomLevel;
-    const transformedY = (canvasY - panOffset.y) / zoomLevel;
+    const transformedX = canvasX - panOffset.x;
+    const transformedY = canvasY - panOffset.y;
 
     const { gridOffset } = mapData;
     const cellSize = getCellSize();
@@ -636,9 +689,9 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
     const canvasX = (mouseX / rect.width) * canvas.width;
     const canvasY = (mouseY / rect.height) * canvas.height;
 
-    // Apply zoom and pan transformation
-    const transformedX = (canvasX - panOffset.x) / zoomLevel;
-    const transformedY = (canvasY - panOffset.y) / zoomLevel;
+    // Apply pan transformation
+    const transformedX = canvasX - panOffset.x;
+    const transformedY = canvasY - panOffset.y;
 
     const { gridOffset } = mapData;
     const cellSize = getCellSize();
@@ -683,6 +736,11 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
       y: event.clientY,
     });
 
+    // Check for wall hover effect
+    if (!isDragging && isAdminMode) {
+      handleMouseMoveOverWalls(event.clientX, event.clientY);
+    }
+
     if (isDragging) {
       const dx = event.clientX - dragStart.x;
       const dy = event.clientY - dragStart.y;
@@ -708,17 +766,8 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
     setMousePosition(null);
   };
 
-  // Handle zoom in/out
-  const zoomIn = () => {
-    setZoomLevel((prev) => Math.min(prev + 0.5, 5)); // Max zoom 5x
-  };
-
-  const zoomOut = () => {
-    setZoomLevel((prev) => Math.max(prev - 0.5, 0.5)); // Min zoom 0.5x
-  };
-
-  const resetZoom = () => {
-    setZoomLevel(1);
+  // Reset pan
+  const resetPan = () => {
     setPanOffset({ x: 0, y: 0 });
   };
 
@@ -776,14 +825,8 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
   return (
     <div className="canvas-container">
       <div className="zoom-controls">
-        <button onClick={zoomIn} title="Zoom In">
-          +
-        </button>
-        <button onClick={resetZoom} title="Reset Zoom">
-          {Math.round(zoomLevel * 100)}%
-        </button>
-        <button onClick={zoomOut} title="Zoom Out">
-          -
+        <button onClick={resetPan} title="Reset Pan">
+          Center
         </button>
       </div>
       <canvas

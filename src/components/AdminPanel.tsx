@@ -364,6 +364,21 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
 
       <div className="control-group">
         <h3>Wall Properties</h3>
+
+        {selectedWallIndex !== null && (
+          <div className="selected-wall-info">
+            <div className="selected-wall-header">
+              <h4>Editing Wall #{selectedWallIndex + 1}</h4>
+              <button
+                onClick={() => setSelectedWallIndex(null)}
+                className="small-button"
+              >
+                Deselect
+              </button>
+            </div>
+          </div>
+        )}
+
         <div className="grid-controls">
           <div className="input-group">
             <label>Thickness:</label>
@@ -378,7 +393,17 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
               }
               min="0.05"
               max="1"
-              step="0.05"
+              step="0.01"
+            />
+            <input
+              type="range"
+              min="0.05"
+              max="1"
+              step="0.01"
+              value={currentWallProps.thickness}
+              onChange={(e) =>
+                handleWallPropChange("thickness", parseFloat(e.target.value))
+              }
             />
           </div>
 
@@ -392,7 +417,17 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
               }
               min="-1"
               max="1"
-              step="0.1"
+              step="0.01"
+            />
+            <input
+              type="range"
+              min="-1"
+              max="1"
+              step="0.01"
+              value={currentWallProps.offset}
+              onChange={(e) =>
+                handleWallPropChange("offset", parseFloat(e.target.value))
+              }
             />
           </div>
         </div>
@@ -411,7 +446,20 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
               }
               min="0"
               max="1"
-              step="0.1"
+              step="0.01"
+            />
+            <input
+              type="range"
+              min="0"
+              max="1"
+              step="0.01"
+              value={currentWallProps.startExtension}
+              onChange={(e) =>
+                handleWallPropChange(
+                  "startExtension",
+                  parseFloat(e.target.value),
+                )
+              }
             />
           </div>
 
@@ -428,17 +476,32 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
               }
               min="0"
               max="1"
-              step="0.1"
+              step="0.01"
+            />
+            <input
+              type="range"
+              min="0"
+              max="1"
+              step="0.01"
+              value={currentWallProps.endExtension}
+              onChange={(e) =>
+                handleWallPropChange("endExtension", parseFloat(e.target.value))
+              }
             />
           </div>
         </div>
 
         <div className="instructions">
-          {selectedWallIndex !== null
-            ? `Editing Wall #${selectedWallIndex + 1} - Click elsewhere to deselect`
-            : wallStart
-              ? "Click to place the end point of the wall"
-              : "Click to place the start point of a wall"}
+          {selectedWallIndex !== null ? (
+            <strong>
+              Editing Wall #{selectedWallIndex + 1} - Use the sliders to adjust
+              properties
+            </strong>
+          ) : wallStart ? (
+            "Click to place the end point of the wall"
+          ) : (
+            "Click to place the start point of a wall or click an existing wall to edit it"
+          )}
         </div>
       </div>
 
@@ -458,7 +521,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
           </label>
           <button onClick={removeLastWall}>Undo Last Wall</button>
           {selectedWallIndex !== null && (
-            <button onClick={removeSelectedWall}>Delete Selected Wall</button>
+            <button onClick={removeSelectedWall} className="delete-button">
+              Delete Selected Wall
+            </button>
           )}
           <button
             onClick={() => {
@@ -469,6 +534,27 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
             Clear All Walls
           </button>
         </div>
+
+        {mapData.walls.length > 0 && (
+          <div className="wall-list">
+            <h4>Wall List:</h4>
+            <div className="wall-buttons">
+              {mapData.walls.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() =>
+                    setSelectedWallIndex(
+                      index === selectedWallIndex ? null : index,
+                    )
+                  }
+                  className={`wall-button ${index === selectedWallIndex ? "selected-wall" : ""}`}
+                >
+                  Wall #{index + 1}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
         <div className="instructions">
           <div>Click two points to create a wall between them.</div>
           <div>
