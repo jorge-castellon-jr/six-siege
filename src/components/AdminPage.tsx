@@ -131,7 +131,7 @@ const AdminPage: React.FC<AdminPageProps> = ({
         selectedWallIndex={selectedWallIndex}
         setSelectedWallIndex={setSelectedWallIndex}
       />
-      <div className="spacer" />
+      <div className="admin-spacer" />
 
       <div className="controls">
         <AdminPanel

@@ -87,6 +87,7 @@ const CalculatorPage: React.FC<CalculatorPageProps> = ({
         selectedWallIndex={null}
         setSelectedWallIndex={() => { }}
       />
+      <div className="player-spacer" />
 
       <div className="calculator-controls">
         <PlayerControls
