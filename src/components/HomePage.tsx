@@ -4,6 +4,7 @@ import { MapData, AppPage, ChecklistItem } from "../types";
 import ImprovementChecklist from "./ImprovementChecklist";
 import "./ImprovementChecklist.css";
 import checklistData from "../data/checklist.json";
+import { isAdmin } from "../utils/admin";
 
 interface HomePageProps {
   maps: MapData[];
@@ -48,7 +49,7 @@ const HomePage: React.FC<HomePageProps> = ({
       <h1>Rainbow Six: Siege Line of Sight Calculator</h1>
 
       <div className="page-actions">
-        {window.location.host.includes("localhost") && (
+        {isAdmin() && (
           <button onClick={() => onNavigate("admin")} className="admin-button">
             Admin Mode
           </button>

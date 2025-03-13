@@ -1,6 +1,7 @@
 // src/components/GameCanvas.tsx
 import React, { useState, useEffect, useRef } from "react";
 import { Position, Player, MapData, Wall } from "../types";
+import { Intersection } from "../utils/lineOfSight";
 
 interface GameCanvasProps {
   mapData: MapData;
@@ -21,6 +22,7 @@ interface GameCanvasProps {
   setBluePlayer?: React.Dispatch<React.SetStateAction<Player | null>>;
   setOrangePlayer?: React.Dispatch<React.SetStateAction<Player | null>>;
   setHasLos?: React.Dispatch<React.SetStateAction<boolean | null>>;
+  intersections?: Intersection[]; // New prop for intersection points
 }
 
 const GameCanvas: React.FC<GameCanvasProps> = ({
@@ -37,6 +39,7 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
   setBluePlayer,
   setOrangePlayer,
   setHasLos,
+  intersections,
 }) => {
   // State for panning
   const [mousePosition, setMousePosition] = useState<Position | null>(null);
@@ -596,6 +599,64 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
         : "rgba(255, 82, 82, 0.9)";
       ctx.lineWidth = 2;
       ctx.stroke();
+    }
+    // Draw intersection points if available
+    if (intersections && intersections.length > 0) {
+      const { gridOffset } = mapData;
+      const cellSize = getCellSize();
+
+      // Group intersections by wall for color coding
+      const wallIntersections = new Map<number, Intersection[]>();
+
+      intersections.forEach((intersection) => {
+        if (!wallIntersections.has(intersection.wallIndex)) {
+          wallIntersections.set(intersection.wallIndex, []);
+        }
+        wallIntersections.get(intersection.wallIndex)?.push(intersection);
+      });
+
+      // Generate distinct colors for each wall
+      const generateColor = (index: number) => {
+        const hue = (index * 137) % 360; // Golden angle to spread colors
+        return `hsl(${hue}, 100%, 70%)`;
+      };
+
+      // Draw all intersection points
+      Array.from(wallIntersections.entries()).forEach(
+        ([wallIndex, points], colorIndex) => {
+          const fillColor = generateColor(colorIndex);
+          const strokeColor = `hsl(${parseInt(fillColor.match(/\d+/)![0])}, 100%, 30%)`;
+
+          points.forEach((intersection, i) => {
+            const x = intersection.point.x * cellSize + gridOffset.x;
+            const y = intersection.point.y * cellSize + gridOffset.y;
+
+            // Draw point
+            ctx.beginPath();
+            ctx.arc(x, y, 6, 0, Math.PI * 2);
+            ctx.fillStyle = fillColor;
+            ctx.fill();
+            ctx.strokeStyle = strokeColor;
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+
+            // Draw point number
+            ctx.fillStyle = "black";
+            ctx.font = "bold 10px Arial";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText((i + 1).toString(), x, y);
+
+            // Draw wall number
+            ctx.fillStyle = "white";
+            ctx.font = "bold 8px Arial";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            const wallText = `W${wallIndex + 1}`;
+            ctx.fillText(wallText, x, y + 15);
+          });
+        },
+      );
     }
 
     ctx.restore();

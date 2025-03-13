@@ -1,9 +1,10 @@
 // src/components/CalculatorPage.tsx
 import React, { useState } from "react";
 import { MapData, Position, Player, AppPage } from "../types";
-import { hasLineOfSight } from "../utils/lineOfSight";
+import { getLineOfSightDetails, Intersection } from "../utils/lineOfSight";
 import GameCanvas from "./GameCanvas";
 import PlayerControls from "./PlayerControls";
+import { isAdmin } from "../utils/admin";
 
 interface CalculatorPageProps {
   mapData: MapData;
@@ -24,6 +25,9 @@ const CalculatorPage: React.FC<CalculatorPageProps> = ({
   // State for line of sight result
   const [hasLos, setHasLos] = useState<boolean | null>(null);
 
+  // State for line of sight intersections
+  const [intersections, setIntersections] = useState<Intersection[]>([]);
+
   // Handle canvas click - this is passed to GameCanvas
   const handleCanvasClick = (
     event: React.MouseEvent<HTMLCanvasElement> & {
@@ -43,6 +47,7 @@ const CalculatorPage: React.FC<CalculatorPageProps> = ({
         });
         setActiveTeam(null);
         setHasLos(null); // Reset line of sight
+        setIntersections([]); // Reset intersections
       } else if (activeTeam === "orange") {
         // Place orange player when explicitly selected
         setOrangePlayer({
@@ -51,6 +56,7 @@ const CalculatorPage: React.FC<CalculatorPageProps> = ({
         });
         setActiveTeam(null);
         setHasLos(null); // Reset line of sight
+        setIntersections([]); // Reset intersections
       } else {
         // Auto-placement logic when no team is explicitly selected
         if (!bluePlayer) {
@@ -60,6 +66,7 @@ const CalculatorPage: React.FC<CalculatorPageProps> = ({
             team: "blue",
           });
           setHasLos(null); // Reset line of sight
+          setIntersections([]); // Reset intersections
         } else if (!orangePlayer) {
           // If blue exists but no orange, place orange player
           setOrangePlayer({
@@ -67,6 +74,7 @@ const CalculatorPage: React.FC<CalculatorPageProps> = ({
             team: "orange",
           });
           setHasLos(null); // Reset line of sight
+          setIntersections([]); // Reset intersections
         }
         // If both players exist, do nothing on direct click
       }
@@ -77,13 +85,14 @@ const CalculatorPage: React.FC<CalculatorPageProps> = ({
   const checkLineOfSight = () => {
     if (!bluePlayer || !orangePlayer) return;
 
-    const result = hasLineOfSight(
+    const result = getLineOfSightDetails(
       bluePlayer.position,
       orangePlayer.position,
       mapData.walls,
     );
 
-    setHasLos(result);
+    setHasLos(result.hasLineOfSight);
+    setIntersections(result.intersections);
   };
 
   return (
@@ -108,8 +117,9 @@ const CalculatorPage: React.FC<CalculatorPageProps> = ({
         setBluePlayer={setBluePlayer}
         setOrangePlayer={setOrangePlayer}
         setHasLos={setHasLos}
+        intersections={intersections}
       />
-      <div className="player-spacer" />
+      <div className={`player-spacer ${isAdmin() ? "admin" : ""}`} />
 
       <div className="calculator-controls">
         <PlayerControls
@@ -119,6 +129,7 @@ const CalculatorPage: React.FC<CalculatorPageProps> = ({
           setActiveTeam={setActiveTeam}
           hasLos={hasLos}
           checkLineOfSight={checkLineOfSight}
+          intersections={intersections}
         />
       </div>
     </div>

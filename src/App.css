@@ -35,6 +35,9 @@ body {
 .player-spacer {
   height: 66px;
 }
+.player-spacer.admin {
+  height: 272px;
+}
 
 h1 {
   text-align: center;
@@ -599,4 +602,61 @@ canvas {
 /* Transition for smoother visual updates during drag */
 .player-preview {
   transition: opacity 0.15s ease;
+}
+
+/* Add these styles to src/App.css */
+
+.los-details {
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.2);
+  font-size: 14px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.los-details ul {
+  list-style-type: none;
+  padding-left: 5px;
+}
+
+.los-details li {
+  margin-bottom: 3px;
+}
+
+.los-details .wall-heading {
+  font-weight: bold;
+  margin-top: 5px;
+}
+
+.los-details .coordinate {
+  font-family: monospace;
+  background-color: rgba(0, 0, 0, 0.2);
+  padding: 1px 3px;
+  border-radius: 2px;
+}
+
+.los-result {
+  max-width: 350px;
+  transition: max-width 0.3s ease;
+}
+
+.los-result:hover {
+  max-width: 500px;
+}
+
+.intersection-marker {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 5px;
+  vertical-align: middle;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+}
+
+.wall-blocked {
+  color: var(--error);
+  font-weight: bold;
 }
