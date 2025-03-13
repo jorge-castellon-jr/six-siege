@@ -49,6 +49,12 @@
     "completed": false,
     "category": "player"
   },
+  {
+    "id": "player-9",
+    "description": "Add different type of wals (red, orange, gadgets)",
+    "completed": false,
+    "category": "player"
+  },
 
   {
     "id": "maps-1",
