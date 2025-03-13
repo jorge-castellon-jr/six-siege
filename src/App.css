@@ -642,10 +642,6 @@ canvas {
   transition: max-width 0.3s ease;
 }
 
-.los-result:hover {
-  max-width: 500px;
-}
-
 .intersection-marker {
   display: inline-block;
   width: 12px;
