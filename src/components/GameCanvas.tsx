@@ -209,15 +209,15 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
     ctx.closePath();
 
     // Fill with color
-    ctx.fillStyle = isSelected ? "#ff9800" : isHovered ? "#ffcc80" : "#ff5252";
+    ctx.fillStyle = isSelected ? "#b71c1c" : isHovered ? "#ffcc80" : "#ff5252";
     ctx.fill();
 
     // Add outline
     ctx.strokeStyle = isSelected
-      ? "#ffc107"
+      ? "#b71c1c"
       : isHovered
         ? "#ffb74d"
-        : "#b71c1c";
+        : "#ff5252";
     ctx.lineWidth = 1;
     ctx.stroke();
 
