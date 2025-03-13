@@ -537,7 +537,6 @@ canvas {
   background-color: #000000;
 }
 
-
 /* Adjust the existing canvas-container styling */
 .canvas-container {
   border-radius: 0;
@@ -551,4 +550,53 @@ canvas {
 .input-group span {
   margin-left: 5px;
   color: var(--text-secondary);
+}
+
+/* Add these styles to App.css */
+
+/* Enhance cursor behavior for draggable elements */
+.canvas-container canvas {
+  touch-action: none; /* Prevents default touch actions to enable custom drag handling */
+}
+
+/* Make dragging visually responsive */
+.canvas-container canvas:active {
+  cursor: grabbing;
+}
+
+/* Add the below guidance tooltip to explain dragging */
+.drag-tooltip {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  z-index: 100;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.canvas-container:hover .drag-tooltip {
+  opacity: 1;
+}
+
+/* Enhance appearance of draggable players */
+.player-token {
+  transition:
+    transform 0.1s ease,
+    filter 0.1s ease;
+}
+
+.player-token:hover {
+  filter: brightness(1.2);
+  transform: scale(1.05);
+}
+
+/* Transition for smoother visual updates during drag */
+.player-preview {
+  transition: opacity 0.15s ease;
 }

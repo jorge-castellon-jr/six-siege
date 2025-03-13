@@ -18,6 +18,9 @@ interface GameCanvasProps {
   setImageDimensions?: (dimensions: { width: number; height: number }) => void;
   selectedWallIndex: number | null;
   setSelectedWallIndex: React.Dispatch<React.SetStateAction<number | null>>;
+  setBluePlayer?: React.Dispatch<React.SetStateAction<Player | null>>;
+  setOrangePlayer?: React.Dispatch<React.SetStateAction<Player | null>>;
+  setHasLos?: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
 
 const GameCanvas: React.FC<GameCanvasProps> = ({
@@ -31,6 +34,9 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
   setImageDimensions,
   selectedWallIndex,
   setSelectedWallIndex,
+  setBluePlayer,
+  setOrangePlayer,
+  setHasLos,
 }) => {
   // State for panning
   const [mousePosition, setMousePosition] = useState<Position | null>(null);
@@ -42,6 +48,12 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
     width: 800,
     height: 600,
   });
+
+  // State for dragging
+  const [draggingPlayer, setDraggingPlayer] = useState<
+    "blue" | "orange" | null
+  >(null);
+  const [dragPosition, setDragPosition] = useState<Position | null>(null);
 
   // Ref for the canvas
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -134,7 +146,31 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
     mapImage,
     selectedWallIndex,
     mousePosition,
+    draggingPlayer,
+    dragPosition,
+    hoveredWallIndex,
   ]);
+
+  // New function: check if a point is inside a player token
+  const isPointInPlayer = (
+    point: Position,
+    player: Player | null,
+    startX: number,
+    startY: number,
+    cellSize: number,
+  ): boolean => {
+    if (!player) return false;
+
+    const playerX = startX + player.position.x * cellSize + cellSize / 2;
+    const playerY = startY + player.position.y * cellSize + cellSize / 2;
+    const radius = cellSize / 3;
+
+    const distance = Math.sqrt(
+      Math.pow(point.x - playerX, 2) + Math.pow(point.y - playerY, 2),
+    );
+
+    return distance <= radius;
+  };
 
   // Draw a wall with thickness, offset and extensions
   const drawWall = (
@@ -209,20 +245,50 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
     ctx.closePath();
 
     // Fill with color
-    ctx.fillStyle = isSelected ? "#b71c1c" : isHovered ? "#ffcc80" : "#ff5252";
+    ctx.fillStyle = isSelected ? "#ff9800" : isHovered ? "#ffcc80" : "#ff5252";
     ctx.fill();
 
     // Add outline
     ctx.strokeStyle = isSelected
-      ? "#b71c1c"
+      ? "#ffc107"
       : isHovered
         ? "#ffb74d"
-        : "#ff5252";
+        : "#b71c1c";
     ctx.lineWidth = 1;
     ctx.stroke();
 
     // If selected, draw the endpoints as circles
     if (isSelected) {
+      // Draw start point
+      ctx.beginPath();
+      ctx.arc(x1, y1, 5, 0, Math.PI * 2);
+      ctx.fillStyle = "#4CAF50";
+      ctx.fill();
+      ctx.strokeStyle = "white";
+      ctx.lineWidth = 1;
+      ctx.stroke();
+
+      // Label start point
+      ctx.fillStyle = "white";
+      ctx.fillText("S", x1, y1 + 3);
+
+      // Draw end point
+      ctx.beginPath();
+      ctx.arc(x2, y2, 5, 0, Math.PI * 2);
+      ctx.fillStyle = "#2196F3";
+      ctx.fill();
+      ctx.strokeStyle = "white";
+      ctx.lineWidth = 1;
+      ctx.stroke();
+
+      // Label end point
+      ctx.fillStyle = "white";
+      ctx.fillText("E", x2, y2 + 3);
+
+      // Draw midpoint for offset adjustment
+      const midX = (x1 + x2) / 2;
+      const midY = (y1 + y2) / 2;
+
       // Add offset position indicator
       const direction = getNormalizedDirection(
         { x: x1, y: y1 },
@@ -232,26 +298,17 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
       const offsetX = perpendicular.x * wall.offset * cellSize;
       const offsetY = perpendicular.y * wall.offset * cellSize;
 
-      // Draw start point
       ctx.beginPath();
-      ctx.arc(x1 + offsetX, y1 + offsetY, 3, 0, Math.PI * 2);
-      ctx.fillStyle = "#4CAF50";
+      ctx.arc(midX + offsetX, midY + offsetY, 5, 0, Math.PI * 2);
+      ctx.fillStyle = "#9C27B0";
       ctx.fill();
+      ctx.strokeStyle = "white";
+      ctx.lineWidth = 1;
+      ctx.stroke();
 
-      // Draw end point
-      ctx.beginPath();
-      ctx.arc(x2 + offsetX, y2 + offsetY, 3, 0, Math.PI * 2);
-      ctx.fillStyle = "#2196F3";
-      ctx.fill();
-
-      // Draw midpoint for offset adjustment
-      const midX = (x1 + x2) / 2;
-      const midY = (y1 + y2) / 2;
-
-      ctx.beginPath();
-      ctx.arc(midX + offsetX, midY + offsetY, 3, 0, Math.PI * 2);
-      ctx.fillStyle = "#FFFF00";
-      ctx.fill();
+      // Label offset point
+      ctx.fillStyle = "white";
+      ctx.fillText("O", midX + offsetX, midY + offsetY + 3);
     }
   };
 
@@ -423,31 +480,6 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
       );
     });
 
-    // If a wall is selected, show its index and properties
-    if (selectedWallIndex !== null) {
-      const wall = mapData.walls[selectedWallIndex];
-      // const x1 = startX + wall.start.x * cellSize;
-      // const y1 = startY + wall.start.y * cellSize;
-
-      ctx.fillStyle = "rgba(0, 0, 0, 0.7)";
-      ctx.fillRect(10, 10, 200, 85);
-      ctx.strokeStyle = "#ff9800";
-      ctx.lineWidth = 2;
-      ctx.strokeRect(10, 10, 200, 85);
-
-      ctx.fillStyle = "white";
-      ctx.font = "14px Arial";
-      ctx.textAlign = "left";
-      ctx.fillText(`Wall #${selectedWallIndex + 1}`, 20, 30);
-      ctx.fillText(`Thickness: ${wall.thickness.toFixed(2)}`, 20, 50);
-      ctx.fillText(`Offset: ${wall.offset.toFixed(2)}`, 20, 70);
-      ctx.fillText(
-        `Extensions: ${wall.startExtension.toFixed(2)}, ${wall.endExtension.toFixed(2)}`,
-        20,
-        90,
-      );
-    }
-
     // Draw temporary wall being created (also at grid intersection)
     if (isAdminMode && wallStart) {
       const mouseX = startX + wallStart.x * cellSize;
@@ -471,6 +503,26 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
       ctx.strokeStyle = "white";
       ctx.lineWidth = 2;
       ctx.stroke();
+
+      // Add highlight effect if this player can be dragged
+      if (!isAdminMode) {
+        ctx.beginPath();
+        ctx.arc(x, y, cellSize / 3 + 2, 0, Math.PI * 2);
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.3)";
+        ctx.setLineDash([2, 2]);
+        ctx.lineWidth = 1;
+        ctx.stroke();
+        ctx.setLineDash([]);
+      }
+
+      // Add stronger highlight effect if dragging
+      if (draggingPlayer === "blue") {
+        ctx.beginPath();
+        ctx.arc(x, y, cellSize / 3 + 3, 0, Math.PI * 2);
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.7)";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+      }
     }
 
     if (orangePlayer) {
@@ -484,6 +536,45 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
       ctx.strokeStyle = "white";
       ctx.lineWidth = 2;
       ctx.stroke();
+
+      // Add highlight effect if this player can be dragged
+      if (!isAdminMode) {
+        ctx.beginPath();
+        ctx.arc(x, y, cellSize / 3 + 2, 0, Math.PI * 2);
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.3)";
+        ctx.setLineDash([2, 2]);
+        ctx.lineWidth = 1;
+        ctx.stroke();
+        ctx.setLineDash([]);
+      }
+
+      // Add stronger highlight effect if dragging
+      if (draggingPlayer === "orange") {
+        ctx.beginPath();
+        ctx.arc(x, y, cellSize / 3 + 3, 0, Math.PI * 2);
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.7)";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+      }
+    }
+
+    // Draw drag preview if dragging a player
+    if (draggingPlayer && dragPosition) {
+      const x = startX + dragPosition.x * cellSize + cellSize / 2;
+      const y = startY + dragPosition.y * cellSize + cellSize / 2;
+
+      ctx.beginPath();
+      ctx.arc(x, y, cellSize / 3, 0, Math.PI * 2);
+      ctx.fillStyle =
+        draggingPlayer === "blue"
+          ? "rgba(79, 139, 255, 0.5)"
+          : "rgba(255, 127, 80, 0.5)";
+      ctx.fill();
+      ctx.strokeStyle = "white";
+      ctx.lineWidth = 2;
+      ctx.setLineDash([3, 3]);
+      ctx.stroke();
+      ctx.setLineDash([]);
     }
 
     // Draw line of sight if both players are placed
@@ -506,19 +597,6 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
       ctx.lineWidth = 2;
       ctx.stroke();
     }
-
-    // Always show grid coordinates for precise placement
-    // ctx.font = "12px Arial";
-    // ctx.fillStyle = "rgba(255, 255, 255, 0.7)";
-    // ctx.textAlign = "center";
-
-    // for (let x = 0; x <= gridSize.width; x++) {
-    //   for (let y = 0; y <= gridSize.height; y++) {
-    //     const posX = startX + x * cellSize;
-    //     const posY = startY + y * cellSize;
-    //     // ctx.fillText(`${x},${y}`, posX, posY - 5);
-    //   }
-    // }
 
     ctx.restore();
   };
@@ -655,14 +733,112 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
     if (isAdminMode) {
       handleMouseMoveOverWalls(event.clientX, event.clientY);
     }
+    // Handle player dragging in calculator mode
+    else if (draggingPlayer) {
+      const gridPosition = getGridPositionFromMouse(
+        event.clientX,
+        event.clientY,
+      );
+      if (gridPosition) {
+        setDragPosition(gridPosition);
+      }
+    }
+  };
+
+  const handleMouseDown = (event: React.MouseEvent<HTMLCanvasElement>) => {
+    if (isAdminMode) return; // No dragging in admin mode
+
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const rect = canvas.getBoundingClientRect();
+    const mouseX = event.clientX - rect.left;
+    const mouseY = event.clientY - rect.top;
+
+    // Convert screen coordinates to canvas coordinates
+    const canvasX = (mouseX / rect.width) * canvas.width;
+    const canvasY = (mouseY / rect.height) * canvas.height;
+
+    const { gridOffset } = mapData;
+    const cellSize = getCellSize();
+    const startX = gridOffset.x;
+    const startY = gridOffset.y;
+
+    // Check if clicked on orange player first (orange appears on top)
+    if (
+      orangePlayer &&
+      isPointInPlayer(
+        { x: canvasX, y: canvasY },
+        orangePlayer,
+        startX,
+        startY,
+        cellSize,
+      )
+    ) {
+      setDraggingPlayer("orange");
+      setDragPosition(orangePlayer.position);
+      event.preventDefault();
+      return;
+    }
+
+    // Then check if clicked on blue player
+    if (
+      bluePlayer &&
+      isPointInPlayer(
+        { x: canvasX, y: canvasY },
+        bluePlayer,
+        startX,
+        startY,
+        cellSize,
+      )
+    ) {
+      setDraggingPlayer("blue");
+      setDragPosition(bluePlayer.position);
+      event.preventDefault();
+      return;
+    }
+  };
+
+  const handleMouseUp = (event: React.MouseEvent<HTMLCanvasElement>) => {
+    // If we were dragging a player
+    if (draggingPlayer && dragPosition && !isAdminMode) {
+      if (draggingPlayer === "blue" && setBluePlayer) {
+        setBluePlayer({
+          position: dragPosition,
+          team: "blue",
+        });
+
+        // Reset line of sight result
+        if (setHasLos) setHasLos(null);
+      } else if (draggingPlayer === "orange" && setOrangePlayer) {
+        setOrangePlayer({
+          position: dragPosition,
+          team: "orange",
+        });
+
+        // Reset line of sight result
+        if (setHasLos) setHasLos(null);
+      }
+
+      setDraggingPlayer(null);
+      setDragPosition(null);
+    } else {
+      // Handle normal click if we weren't dragging
+      handleCanvasClick(event);
+    }
   };
 
   const handleMouseLeave = () => {
     setMousePosition(null);
+    setDraggingPlayer(null);
+    setDragPosition(null);
   };
 
   // Handle canvas click but check if we're dragging first
   const handleCanvasClick = (event: React.MouseEvent<HTMLCanvasElement>) => {
+    // Skip if we were dragging (prevents accidental clicks after drag)
+    if (draggingPlayer) return;
+
     // If in admin mode, handle wall placement or selection
     if (isAdminMode) {
       // Check if we clicked on an existing wall
@@ -716,11 +892,16 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
         ref={canvasRef}
         width={imageDimensions.width}
         height={imageDimensions.height}
-        onClick={handleCanvasClick}
+        onMouseDown={handleMouseDown}
+        onMouseUp={handleMouseUp}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
         style={{
-          cursor: isAdminMode ? "crosshair" : "pointer",
+          cursor: isAdminMode
+            ? "crosshair"
+            : draggingPlayer
+              ? "grabbing"
+              : "pointer",
         }}
       />
     </div>
