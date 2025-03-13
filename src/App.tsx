@@ -1,5 +1,5 @@
 // src/App.tsx
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { MapData, AppPage } from "./types";
 import HomePage from "./components/HomePage";
 import CalculatorPage from "./components/CalculatorPage";
