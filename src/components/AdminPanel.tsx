@@ -442,7 +442,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                   parseFloat(e.target.value) || 0,
                 )
               }
-              min="0"
+              min="-1"
               max="1"
               step="0.01"
             />
