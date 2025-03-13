@@ -137,8 +137,6 @@ const AdminPage: React.FC<AdminPageProps> = ({
           setImageDimensions={setImageDimensions}
           selectedWallIndex={selectedWallIndex}
           setSelectedWallIndex={setSelectedWallIndex}
-          zoomLevel={zoomLevel}
-          setZoomLevel={setZoomLevel}
         />
       </div>
       <div className="admin-spacer" />
