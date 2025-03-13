@@ -660,3 +660,41 @@ canvas {
   color: var(--error);
   font-weight: bold;
 }
+
+/* Add these styles to src/App.css */
+
+.zoom-controls {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  z-index: 10;
+  display: flex;
+  gap: 5px;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 5px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.zoom-controls button {
+  width: 40px;
+  height: 40px;
+  font-size: 16px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bg-tertiary);
+  transition: background-color 0.2s;
+}
+
+.zoom-controls button:hover {
+  background-color: var(--accent-blue);
+}
+
+.zoom-controls button:nth-child(2) {
+  width: auto;
+  min-width: 60px;
+  font-size: 14px;
+  font-weight: bold;
+}

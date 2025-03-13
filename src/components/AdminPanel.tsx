@@ -38,8 +38,6 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
   selectedWallIndex,
   setSelectedWallIndex,
   updateWall,
-  zoomLevel,
-  setZoomLevel,
 }) => {
   const [calculatedCellSize, setCalculatedCellSize] = useState<{
     width: number;
@@ -299,32 +297,6 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                 handleGridOffsetChange("right", parseInt(e.target.value) || 0)
               }
               min="0"
-            />
-          </div>
-        </div>
-      </div>
-
-      <div className="control-group">
-        <h3>Zoom Controls</h3>
-        <div className="grid-controls">
-          <div className="input-group">
-            <label>Zoom:</label>
-            <input
-              type="number"
-              value={zoomLevel}
-              onChange={(e) => setZoomLevel(parseInt(e.target.value) || 100)}
-              min="100"
-              max="1000"
-              step="10"
-            />
-            <span>%</span>
-            <input
-              type="range"
-              min="100"
-              max="1000"
-              step="10"
-              value={zoomLevel}
-              onChange={(e) => setZoomLevel(parseInt(e.target.value))}
             />
           </div>
         </div>

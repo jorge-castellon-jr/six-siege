@@ -42,7 +42,7 @@ const AdminPage: React.FC<AdminPageProps> = ({
     null,
   );
 
-  // New state for zoom
+  // State for zoom (now passed to GameCanvas)
   const [zoomLevel, setZoomLevel] = useState<number>(100);
 
   // Handle canvas click - this is passed to GameCanvas
@@ -103,14 +103,6 @@ const AdminPage: React.FC<AdminPageProps> = ({
     });
   };
 
-  // Calculate zoom and pan style for the canvas container
-  const canvasContainerStyle = {
-    width: `${zoomLevel}%`,
-    transformOrigin: "top left",
-    overflow: "hidden",
-    position: "relative" as const,
-  };
-
   return (
     <div className="admin-page">
       <div className="page-header">
@@ -134,20 +126,20 @@ const AdminPage: React.FC<AdminPageProps> = ({
       </div>
 
       <div className="canvas-wrapper">
-        <div className="canvas-container" style={canvasContainerStyle}>
-          <GameCanvas
-            mapData={mapData}
-            bluePlayer={null}
-            orangePlayer={null}
-            hasLos={null}
-            isAdminMode={true}
-            wallStart={wallStart}
-            onCanvasClick={handleCanvasClick}
-            setImageDimensions={setImageDimensions}
-            selectedWallIndex={selectedWallIndex}
-            setSelectedWallIndex={setSelectedWallIndex}
-          />
-        </div>
+        <GameCanvas
+          mapData={mapData}
+          bluePlayer={null}
+          orangePlayer={null}
+          hasLos={null}
+          isAdminMode={true}
+          wallStart={wallStart}
+          onCanvasClick={handleCanvasClick}
+          setImageDimensions={setImageDimensions}
+          selectedWallIndex={selectedWallIndex}
+          setSelectedWallIndex={setSelectedWallIndex}
+          zoomLevel={zoomLevel}
+          setZoomLevel={setZoomLevel}
+        />
       </div>
       <div className="admin-spacer" />
 

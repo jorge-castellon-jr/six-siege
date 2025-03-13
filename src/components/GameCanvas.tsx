@@ -1,4 +1,4 @@
-// src/components/GameCanvas.tsx
+// src/components/GameCanvas.tsx - updated with zoom controls
 import React, { useState, useEffect, useRef } from "react";
 import { Position, Player, MapData, Wall } from "../types";
 import { Intersection } from "../utils/lineOfSight";
@@ -22,7 +22,7 @@ interface GameCanvasProps {
   setBluePlayer?: React.Dispatch<React.SetStateAction<Player | null>>;
   setOrangePlayer?: React.Dispatch<React.SetStateAction<Player | null>>;
   setHasLos?: React.Dispatch<React.SetStateAction<boolean | null>>;
-  intersections?: Intersection[]; // New prop for intersection points
+  intersections?: Intersection[]; // For line of sight intersections
 }
 
 const GameCanvas: React.FC<GameCanvasProps> = ({
@@ -39,7 +39,7 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
   setBluePlayer,
   setOrangePlayer,
   setHasLos,
-  intersections,
+  intersections = [],
 }) => {
   // State for panning
   const [mousePosition, setMousePosition] = useState<Position | null>(null);
@@ -58,8 +58,33 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
   >(null);
   const [dragPosition, setDragPosition] = useState<Position | null>(null);
 
+  // Local zoom state for when parent doesn't provide it
+  const [zoomLevel, setZoomLevel] = useState<number>(100);
+
+  // Get the actual zoom level to use
+  const updateZoomLevel = (newZoom: number) => {
+    setZoomLevel(newZoom);
+  };
+
   // Ref for the canvas
   const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  // Zoom in function
+  const zoomIn = () => {
+    const newZoom = Math.min(zoomLevel + 25, 1000);
+    updateZoomLevel(newZoom);
+  };
+
+  // Zoom out function
+  const zoomOut = () => {
+    const newZoom = Math.max(zoomLevel - 25, 100);
+    updateZoomLevel(newZoom);
+  };
+
+  // Reset zoom function
+  const resetZoom = () => {
+    updateZoomLevel(100);
+  };
 
   // Calculate cell size based on grid dimensions and image size
   const calculateCellSize = (): number => {
@@ -152,6 +177,7 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
     draggingPlayer,
     dragPosition,
     hoveredWallIndex,
+    intersections,
   ]);
 
   // New function: check if a point is inside a player token
@@ -600,6 +626,7 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
       ctx.lineWidth = 2;
       ctx.stroke();
     }
+
     // Draw intersection points if available
     if (intersections && intersections.length > 0) {
       const { gridOffset } = mapData;
@@ -948,23 +975,48 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
   };
 
   return (
-    <div className="canvas-container">
-      <canvas
-        ref={canvasRef}
-        width={imageDimensions.width}
-        height={imageDimensions.height}
-        onMouseDown={handleMouseDown}
-        onMouseUp={handleMouseUp}
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
+    <div className="canvas-wrapper">
+      <div
+        className="canvas-container"
         style={{
-          cursor: isAdminMode
-            ? "crosshair"
-            : draggingPlayer
-              ? "grabbing"
-              : "pointer",
+          width: `${zoomLevel}%`,
+          transformOrigin: "top left",
+          overflow: "hidden",
+          position: "relative",
         }}
-      />
+      >
+        <canvas
+          ref={canvasRef}
+          width={imageDimensions.width}
+          height={imageDimensions.height}
+          onMouseDown={handleMouseDown}
+          onMouseUp={handleMouseUp}
+          onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
+          style={{
+            cursor: isAdminMode
+              ? "crosshair"
+              : draggingPlayer
+                ? "grabbing"
+                : "pointer",
+          }}
+        />
+        <div className="drag-tooltip">
+          {isAdminMode ? "Click to place walls" : "Drag players to move them"}
+        </div>
+      </div>
+
+      <div className="zoom-controls">
+        <button onClick={zoomOut} title="Zoom Out">
+          <span>−</span>
+        </button>
+        <button onClick={resetZoom} title="Reset Zoom">
+          {zoomLevel}%
+        </button>
+        <button onClick={zoomIn} title="Zoom In">
+          <span>+</span>
+        </button>
+      </div>
     </div>
   );
 };
