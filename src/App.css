@@ -694,3 +694,82 @@ canvas {
   font-size: 14px;
   font-weight: bold;
 }
+
+/* Add these styles to src/App.css */
+
+.side-info {
+  font-style: italic;
+  color: var(--text-secondary);
+  font-size: 0.9em;
+  margin-left: 5px;
+}
+
+.los-details {
+  max-height: 70px;
+  margin-top: 10px;
+  padding: 12px;
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.2);
+  overflow-y: auto;
+}
+
+.los-details ul {
+  margin-top: 5px;
+  padding-left: 20px;
+  list-style-type: none;
+}
+
+.los-details li {
+  margin-bottom: 8px;
+  padding-left: 0;
+}
+
+.los-details li li {
+  margin-bottom: 3px;
+  font-size: 0.9em;
+}
+
+.protrusion-indicator {
+  display: inline-block;
+  padding: 2px 6px;
+  margin-left: 5px;
+  border-radius: 3px;
+  font-size: 0.85em;
+  font-weight: bold;
+}
+
+.protrusion-indicator.protruding {
+  background-color: rgba(255, 82, 82, 0.2);
+  color: var(--error);
+  border: 1px solid var(--error);
+}
+
+.protrusion-indicator.non-protruding {
+  background-color: rgba(105, 240, 174, 0.2);
+  color: var(--success);
+  border: 1px solid var(--success);
+}
+
+.intersection-info {
+  margin-top: 12px;
+  padding: 10px;
+  background-color: var(--bg-tertiary);
+  border-radius: 4px;
+  font-size: 0.95em;
+}
+
+.intersection-info p {
+  margin: 5px 0;
+}
+
+.intersection-info strong {
+  color: var(--accent-blue);
+}
+
+.intersection-info .warning {
+  margin-top: 8px;
+  padding: 8px;
+  background-color: rgba(255, 82, 82, 0.1);
+  border-left: 3px solid var(--error);
+  border-radius: 0 4px 4px 0;
+}

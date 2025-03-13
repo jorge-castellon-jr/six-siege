@@ -1,7 +1,7 @@
 // src/components/PlayerControls.tsx
 import React from "react";
 import { Player } from "../types";
-import { Intersection } from "../utils/lineOfSight";
+import { Intersection, DEFAULT_LINE_THICKNESS } from "../utils/lineOfSight";
 import { isAdmin } from "../utils/admin";
 
 interface PlayerControlsProps {
@@ -12,6 +12,7 @@ interface PlayerControlsProps {
   hasLos: boolean | null;
   checkLineOfSight: () => void;
   intersections: Intersection[];
+  protrudingWalls?: number[]; // New prop for protruding walls
 }
 
 const PlayerControls: React.FC<PlayerControlsProps> = ({
@@ -22,6 +23,7 @@ const PlayerControls: React.FC<PlayerControlsProps> = ({
   hasLos,
   checkLineOfSight,
   intersections,
+  protrudingWalls = [], // Default to empty array if not provided
 }) => {
   // Group intersections by wall
   const wallIntersections = new Map<number, Intersection[]>();
@@ -63,29 +65,31 @@ const PlayerControls: React.FC<PlayerControlsProps> = ({
 
   return (
     <div className="player-controls">
-      <button
-        onClick={() => setActiveTeam("blue")}
-        disabled={activeTeam === "blue"}
-        className={`blue-button ${bluePlayer ? "player-placed" : ""}`}
-      >
-        {bluePlayer ? "Blue Player ✓" : "Place Blue Player"}
-      </button>
+      <div className="controls-main">
+        <button
+          onClick={() => setActiveTeam("blue")}
+          disabled={activeTeam === "blue"}
+          className={`blue-button ${bluePlayer ? "player-placed" : ""}`}
+        >
+          {bluePlayer ? "Blue Player ✓" : "Place Blue Player"}
+        </button>
 
-      <button
-        onClick={() => setActiveTeam("orange")}
-        disabled={activeTeam === "orange"}
-        className={`orange-button ${orangePlayer ? "player-placed" : ""}`}
-      >
-        {orangePlayer ? "Orange Player ✓" : "Place Orange Player"}
-      </button>
+        <button
+          onClick={() => setActiveTeam("orange")}
+          disabled={activeTeam === "orange"}
+          className={`orange-button ${orangePlayer ? "player-placed" : ""}`}
+        >
+          {orangePlayer ? "Orange Player ✓" : "Place Orange Player"}
+        </button>
 
-      <button
-        onClick={checkLineOfSight}
-        disabled={!bluePlayer || !orangePlayer}
-        className="check-los-button"
-      >
-        Check Line of Sight
-      </button>
+        <button
+          onClick={checkLineOfSight}
+          disabled={!bluePlayer || !orangePlayer}
+          className="check-los-button"
+        >
+          Check Line of Sight
+        </button>
+      </div>
 
       {hasLos !== null && (
         <div className={`los-result ${hasLos ? "has-los" : "no-los"}`}>
@@ -97,6 +101,7 @@ const PlayerControls: React.FC<PlayerControlsProps> = ({
               <ul style={{ marginTop: "5px", paddingLeft: "20px" }}>
                 {Array.from(wallIntersections.entries()).map(
                   ([wallIndex, wallPoints]) => {
+                    const isProtruding = protrudingWalls.includes(wallIndex);
                     const arePointsClose = checkIfPointsAreClose(wallPoints);
                     const arePointsValid =
                       wallPoints.length < 2 || arePointsClose;
@@ -105,6 +110,16 @@ const PlayerControls: React.FC<PlayerControlsProps> = ({
                       <li key={wallIndex} style={{ marginBottom: "5px" }}>
                         Wall #{wallIndex + 1} ({wallPoints.length} point
                         {wallPoints.length > 1 ? "s" : ""}):
+                        <span
+                          style={{
+                            marginLeft: "5px",
+                            color: isProtruding
+                              ? "var(--error)"
+                              : "var(--success)",
+                          }}
+                        >
+                          [{isProtruding ? "Protrudes" : "Doesn't Protrude"}]
+                        </span>
                         {wallPoints.length >= 2 && (
                           <span
                             style={{
@@ -114,8 +129,7 @@ const PlayerControls: React.FC<PlayerControlsProps> = ({
                                 : "var(--error)",
                             }}
                           >
-                            [{arePointsValid ? "Close Enough" : "Too Far Apart"}
-                            ]
+                            [{arePointsValid ? "Close Points" : "Far Points"}]
                           </span>
                         )}
                         <ul style={{ paddingLeft: "15px" }}>
@@ -124,6 +138,21 @@ const PlayerControls: React.FC<PlayerControlsProps> = ({
                               Point {pointIndex + 1}: (
                               {intersection.point.x.toFixed(2)},{" "}
                               {intersection.point.y.toFixed(2)})
+                              {intersection.distance !== undefined && (
+                                <span className="distance-info">
+                                  {" "}
+                                  - Distance: {intersection.distance.toFixed(3)}
+                                </span>
+                              )}
+                              {intersection.side !== undefined && (
+                                <span className="side-info">
+                                  {intersection.side === 0
+                                    ? " - On line"
+                                    : intersection.side > 0
+                                      ? " - Above line"
+                                      : " - Below line"}
+                                </span>
+                              )}
                             </li>
                           ))}
                         </ul>
@@ -132,12 +161,25 @@ const PlayerControls: React.FC<PlayerControlsProps> = ({
                   },
                 )}
               </ul>
-              {!hasLos && (
-                <div style={{ marginTop: "5px", fontWeight: "bold" }}>
-                  Line is blocked because it passes through points on the same
-                  wall that are more than 0.05 units apart.
-                </div>
-              )}
+              <div className="intersection-info">
+                <p>
+                  Current line thickness:{" "}
+                  <strong>{DEFAULT_LINE_THICKNESS}</strong> grid units
+                </p>
+                <p>
+                  Protruding walls:{" "}
+                  {protrudingWalls.length > 0
+                    ? protrudingWalls.map((w) => w + 1).join(", ")
+                    : "None"}
+                </p>
+                {!hasLos && (
+                  <div style={{ marginTop: "5px", fontWeight: "bold" }}>
+                    Line is blocked because wall(s) protrude through both sides
+                    of the line AND have multiple intersection points that are
+                    far apart.
+                  </div>
+                )}
+              </div>
             </div>
           )}
         </div>

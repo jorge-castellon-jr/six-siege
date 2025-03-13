@@ -2,7 +2,7 @@
 import { Position, Wall } from "../types";
 
 // Default line thickness in grid units (can be adjusted)
-export const DEFAULT_LINE_THICKNESS = 0.05;
+export const DEFAULT_LINE_THICKNESS = 0.03;
 
 // Tolerance for considering multiple intersections as one
 export const INTERSECTION_TOLERANCE = 0.05;
@@ -15,6 +15,7 @@ export interface Intersection {
   point: Position;
   edgeIndex: number; // Index of the edge in the wall polygon
   distance?: number; // Distance from line to point (for thick line calculations)
+  side?: number; // Which side of the line the point is on (-1, 0, or 1)
 }
 
 /**
@@ -23,6 +24,7 @@ export interface Intersection {
 export interface LineOfSightResult {
   hasLineOfSight: boolean;
   intersections: Intersection[];
+  protrudingWalls: number[]; // Walls that protrude through both sides of the line
 }
 
 /**
@@ -123,6 +125,36 @@ function distanceFromPointToLine(
 }
 
 /**
+ * Calculate which side of a line a point is on
+ * Returns:
+ *  1 if on positive side
+ * -1 if on negative side
+ *  0 if on the line (within a small epsilon)
+ */
+function getSideOfLine(
+  point: Position,
+  lineStart: Position,
+  lineEnd: Position,
+): number {
+  // Vector from start to end
+  const dx = lineEnd.x - lineStart.x;
+  const dy = lineEnd.y - lineStart.y;
+
+  // Vector from start to point
+  const px = point.x - lineStart.x;
+  const py = point.y - lineStart.y;
+
+  // Cross product: determines which side the point is on
+  const cross = dx * py - dy * px;
+
+  // Epsilon for "on the line" determination (adjust as needed)
+  const epsilon = 1e-10;
+
+  if (Math.abs(cross) < epsilon) return 0; // On the line
+  return cross > 0 ? 1 : -1; // Positive or negative side
+}
+
+/**
  * Get the center point of a grid cell
  */
 export function getCellCenter(position: Position): Position {
@@ -211,7 +243,49 @@ function getWallCorners(wall: Wall): [Position, Position, Position, Position] {
 }
 
 /**
- * Check if a line intersects with a polygon (wall), considering line thickness
+ * Check if a wall protrudes through both sides of a thick line
+ * Returns true if the wall has points on both sides of the line
+ */
+function checkWallProtrusion(
+  wallCorners: Position[],
+  lineStart: Position,
+  lineEnd: Position,
+  lineThickness: number = 0,
+): boolean {
+  const halfThickness = lineThickness / 2;
+
+  // Track if we've found points on both sides
+  let hasPositiveSide = false;
+  let hasNegativeSide = false;
+
+  // Check each corner of the wall
+  for (const corner of wallCorners) {
+    // First, calculate the distance to the line
+    const distance = distanceFromPointToLine(corner, lineStart, lineEnd);
+
+    // If point is within the line thickness, it doesn't count as protruding
+    if (distance <= halfThickness) {
+      continue;
+    }
+
+    // Determine which side of the line this point is on
+    const side = getSideOfLine(corner, lineStart, lineEnd);
+
+    if (side > 0) hasPositiveSide = true;
+    if (side < 0) hasNegativeSide = true;
+
+    // If we've found points on both sides, we can exit early
+    if (hasPositiveSide && hasNegativeSide) {
+      return true;
+    }
+  }
+
+  // Wall doesn't protrude if all points are on the same side or within the line
+  return hasPositiveSide && hasNegativeSide;
+}
+
+/**
+ * Check if a line intersects with a polygon (wall), considering line thickness and protrusion
  */
 function doesLineIntersectPolygon(
   lineStart: Position,
@@ -219,7 +293,7 @@ function doesLineIntersectPolygon(
   polygonPoints: Position[],
   wallIndex: number,
   lineThickness: number = 0,
-): { intersections: Intersection[] } {
+): { intersections: Intersection[]; protrudes: boolean } {
   const intersections: Intersection[] = [];
   const halfThickness = lineThickness / 2;
 
@@ -235,18 +309,17 @@ function doesLineIntersectPolygon(
     );
 
     if (result.intersects && result.point) {
+      // Calculate which side of the line this point is on
+      const side = getSideOfLine(result.point, lineStart, lineEnd);
+
       intersections.push({
         wallIndex,
         point: result.point,
         edgeIndex: i,
         distance: 0, // Direct intersection, so distance is 0
+        side,
       });
     }
-  }
-
-  // If we're not considering thickness or already found intersections, we're done
-  if (lineThickness <= 0 || intersections.length > 0) {
-    return { intersections };
   }
 
   // For thick lines, check the distance from each wall point to the line
@@ -254,30 +327,52 @@ function doesLineIntersectPolygon(
     const point = polygonPoints[i];
     const distance = distanceFromPointToLine(point, lineStart, lineEnd);
 
-    // If the point is within half the line thickness, it's an intersection
+    // Calculate which side of the line this point is on
+    const side = getSideOfLine(point, lineStart, lineEnd);
+
+    // If the point is within half the line thickness, include it as intersection
     if (distance <= halfThickness) {
-      intersections.push({
-        wallIndex,
-        point,
-        edgeIndex: i,
-        distance,
-      });
+      // Check if we already have this point (from the direct intersection check)
+      const exists = intersections.some(
+        (intr) =>
+          Math.abs(intr.point.x - point.x) < 1e-5 &&
+          Math.abs(intr.point.y - point.y) < 1e-5,
+      );
+
+      if (!exists) {
+        intersections.push({
+          wallIndex,
+          point,
+          edgeIndex: i,
+          distance,
+          side,
+        });
+      }
     }
   }
 
-  return { intersections };
+  // Check if this wall protrudes through both sides of the line
+  const protrudes = checkWallProtrusion(
+    polygonPoints,
+    lineStart,
+    lineEnd,
+    lineThickness,
+  );
+
+  return { intersections, protrudes };
 }
 
 /**
  * Check if there's a clear line of sight between two positions,
- * considering wall thickness, offset, and extensions
+ * considering wall thickness, offset, extensions, and protrusion
  */
 export function hasLineOfSight(
   pos1: Position,
   pos2: Position,
   walls: Wall[],
+  lineThickness: number = DEFAULT_LINE_THICKNESS,
 ): boolean {
-  const result = getLineOfSightDetails(pos1, pos2, walls);
+  const result = getLineOfSightDetails(pos1, pos2, walls, lineThickness);
   return result.hasLineOfSight;
 }
 
@@ -288,20 +383,21 @@ export function getLineOfSightDetails(
   pos1: Position,
   pos2: Position,
   walls: Wall[],
+  lineThickness: number = DEFAULT_LINE_THICKNESS,
 ): LineOfSightResult {
-  const lineThickness: number = DEFAULT_LINE_THICKNESS;
   // Convert grid positions to cell centers for line of sight check
   const center1 = getCellCenter(pos1);
   const center2 = getCellCenter(pos2);
 
   const allIntersections: Intersection[] = [];
+  const protrudingWalls: number[] = [];
 
   // Check each wall for intersections
   for (let i = 0; i < walls.length; i++) {
     const wall = walls[i];
     const corners = getWallCorners(wall);
 
-    const { intersections } = doesLineIntersectPolygon(
+    const { intersections, protrudes } = doesLineIntersectPolygon(
       center1,
       center2,
       corners,
@@ -309,6 +405,10 @@ export function getLineOfSightDetails(
       lineThickness,
     );
     allIntersections.push(...intersections);
+
+    if (protrudes) {
+      protrudingWalls.push(i);
+    }
   }
 
   // Group intersections by wall
@@ -321,11 +421,14 @@ export function getLineOfSightDetails(
     wallIntersections.get(intersection.wallIndex)!.push(intersection);
   }
 
-  // Block line of sight only if the line passes through two points of the same wall
-  // that are separated by more than the tolerance distance
+  // Block line of sight only if:
+  // 1. Wall protrudes through both sides of the line, AND
+  // 2. The line passes through two points of the same wall that are separated by more than the tolerance
   let blocked = false;
 
-  for (const [, intersections] of wallIntersections.entries()) {
+  for (const wallIndex of protrudingWalls) {
+    const intersections = wallIntersections.get(wallIndex) || [];
+
     if (intersections.length >= 2) {
       // Check if any pair of points is separated by more than the tolerance
       let validIntersection = true;
@@ -356,5 +459,6 @@ export function getLineOfSightDetails(
   return {
     hasLineOfSight: !blocked,
     intersections: allIntersections,
+    protrudingWalls,
   };
 }
