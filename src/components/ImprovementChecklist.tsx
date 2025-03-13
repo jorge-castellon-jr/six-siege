@@ -1,5 +1,5 @@
 // src/components/ImprovementChecklist.tsx
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import checklistData from "../data/checklist.json";
 
 interface ChecklistItem {
