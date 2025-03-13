@@ -263,7 +263,7 @@ export function getLineOfSightDetails(
   // that are separated by more than the tolerance distance
   let blocked = false;
 
-  for (const [wallIndex, intersections] of wallIntersections.entries()) {
+  for (const [, intersections] of wallIntersections.entries()) {
     if (intersections.length >= 2) {
       // Check if any pair of points is separated by more than the tolerance
       let validIntersection = true;
