@@ -57,8 +57,20 @@
   },
   {
     "id": "player-10",
-    "description": "Better UX for placing team DOTS",
-    "completed": false,
+    "description": "Auto place blue team on first click",
+    "completed": true,
+    "category": "player"
+  },
+  {
+    "id": "player-11",
+    "description": "Auto place orange team on first click if blue already exists",
+    "completed": true,
+    "category": "player"
+  },
+  {
+    "id": "player-12",
+    "description": "Drag and drop team placements",
+    "completed": true,
     "category": "player"
   },
 
