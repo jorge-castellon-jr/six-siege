@@ -1,7 +1,8 @@
 // src/components/GameCanvas.tsx - updated with zoom controls
 import React, { useState, useEffect, useRef } from "react";
 import { Position, Player, MapData, Wall } from "../types";
-import { Intersection } from "../utils/lineOfSight";
+import { DEFAULT_LINE_THICKNESS, Intersection } from "../utils/lineOfSight";
+import { isAdmin } from "../utils/admin";
 
 interface GameCanvasProps {
   mapData: MapData;
@@ -617,18 +618,35 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
       const endY =
         gridOffset.y + orangePlayer.position.y * cellSize + cellSize / 2;
 
+      // Draw the line
       ctx.beginPath();
       ctx.moveTo(startX, startY);
       ctx.lineTo(endX, endY);
       ctx.strokeStyle = hasLos
         ? "rgba(105, 240, 174, 0.9)"
         : "rgba(255, 255, 0, 0.9)";
-      ctx.lineWidth = 2;
+
+      // Use the lineThickness to determine stroke width
+      // Scale by cellSize to make it relative to the grid
+      const lineThickness = DEFAULT_LINE_THICKNESS;
+      ctx.lineWidth = lineThickness * cellSize;
       ctx.stroke();
+
+      // Optional: Draw a thinner, more visible center line
+      if (lineThickness > 0.1) {
+        ctx.beginPath();
+        ctx.moveTo(startX, startY);
+        ctx.lineTo(endX, endY);
+        ctx.strokeStyle = hasLos
+          ? "rgba(105, 240, 174, 1.0)"
+          : "rgba(255, 82, 82, 1.0)";
+        ctx.lineWidth = Math.min(2, lineThickness * cellSize * 0.5);
+        ctx.stroke();
+      }
     }
 
     // Draw intersection points if available
-    if (isAdminMode && intersections && intersections.length > 0) {
+    if (isAdmin() && intersections && intersections.length > 0) {
       const { gridOffset } = mapData;
       const cellSize = getCellSize();
 

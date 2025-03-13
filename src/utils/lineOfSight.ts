@@ -1,6 +1,12 @@
 // src/utils/lineOfSight.ts
 import { Position, Wall } from "../types";
 
+// Default line thickness in grid units (can be adjusted)
+export const DEFAULT_LINE_THICKNESS = 0.05;
+
+// Tolerance for considering multiple intersections as one
+export const INTERSECTION_TOLERANCE = 0.05;
+
 /**
  * Information about an intersection between a line and a wall
  */
@@ -8,6 +14,7 @@ export interface Intersection {
   wallIndex: number;
   point: Position;
   edgeIndex: number; // Index of the edge in the wall polygon
+  distance?: number; // Distance from line to point (for thick line calculations)
 }
 
 /**
@@ -72,6 +79,47 @@ export function doLinesIntersect(
   }
 
   return { intersects: false };
+}
+
+/**
+ * Calculate the Euclidean distance between two points
+ */
+export function getDistance(p1: Position, p2: Position): number {
+  const dx = p2.x - p1.x;
+  const dy = p2.y - p1.y;
+  return Math.sqrt(dx * dx + dy * dy);
+}
+
+/**
+ * Calculate the minimum distance from a point to a line segment
+ */
+function distanceFromPointToLine(
+  point: Position,
+  lineStart: Position,
+  lineEnd: Position,
+): number {
+  const lineLength = getDistance(lineStart, lineEnd);
+
+  if (lineLength === 0) {
+    // Line is actually a point
+    return getDistance(point, lineStart);
+  }
+
+  // Calculate the projection of the point onto the line
+  const t =
+    ((point.x - lineStart.x) * (lineEnd.x - lineStart.x) +
+      (point.y - lineStart.y) * (lineEnd.y - lineStart.y)) /
+    (lineLength * lineLength);
+
+  // Clamp t to [0, 1] for a line segment
+  const tClamped = Math.max(0, Math.min(1, t));
+
+  // Find the closest point on the line segment
+  const closestX = lineStart.x + tClamped * (lineEnd.x - lineStart.x);
+  const closestY = lineStart.y + tClamped * (lineEnd.y - lineStart.y);
+
+  // Return the distance to the closest point
+  return getDistance(point, { x: closestX, y: closestY });
 }
 
 /**
@@ -163,17 +211,19 @@ function getWallCorners(wall: Wall): [Position, Position, Position, Position] {
 }
 
 /**
- * Check if a line intersects with a polygon (wall)
+ * Check if a line intersects with a polygon (wall), considering line thickness
  */
 function doesLineIntersectPolygon(
   lineStart: Position,
   lineEnd: Position,
   polygonPoints: Position[],
   wallIndex: number,
+  lineThickness: number = 0,
 ): { intersections: Intersection[] } {
   const intersections: Intersection[] = [];
+  const halfThickness = lineThickness / 2;
 
-  // Check intersection with each edge of the polygon
+  // First, check standard line intersections (thin line)
   for (let i = 0; i < polygonPoints.length; i++) {
     const j = (i + 1) % polygonPoints.length;
 
@@ -189,6 +239,28 @@ function doesLineIntersectPolygon(
         wallIndex,
         point: result.point,
         edgeIndex: i,
+        distance: 0, // Direct intersection, so distance is 0
+      });
+    }
+  }
+
+  // If we're not considering thickness or already found intersections, we're done
+  if (lineThickness <= 0 || intersections.length > 0) {
+    return { intersections };
+  }
+
+  // For thick lines, check the distance from each wall point to the line
+  for (let i = 0; i < polygonPoints.length; i++) {
+    const point = polygonPoints[i];
+    const distance = distanceFromPointToLine(point, lineStart, lineEnd);
+
+    // If the point is within half the line thickness, it's an intersection
+    if (distance <= halfThickness) {
+      intersections.push({
+        wallIndex,
+        point,
+        edgeIndex: i,
+        distance,
       });
     }
   }
@@ -210,15 +282,6 @@ export function hasLineOfSight(
 }
 
 /**
- * Calculate the Euclidean distance between two points
- */
-function getDistance(p1: Position, p2: Position): number {
-  const dx = p2.x - p1.x;
-  const dy = p2.y - p1.y;
-  return Math.sqrt(dx * dx + dy * dy);
-}
-
-/**
  * Get detailed information about the line of sight check
  */
 export function getLineOfSightDetails(
@@ -226,6 +289,7 @@ export function getLineOfSightDetails(
   pos2: Position,
   walls: Wall[],
 ): LineOfSightResult {
+  const lineThickness: number = DEFAULT_LINE_THICKNESS;
   // Convert grid positions to cell centers for line of sight check
   const center1 = getCellCenter(pos1);
   const center2 = getCellCenter(pos2);
@@ -242,6 +306,7 @@ export function getLineOfSightDetails(
       center2,
       corners,
       i,
+      lineThickness,
     );
     allIntersections.push(...intersections);
   }
@@ -255,9 +320,6 @@ export function getLineOfSightDetails(
     }
     wallIntersections.get(intersection.wallIndex)!.push(intersection);
   }
-
-  // Tolerance distance for considering points as a single intersection
-  const TOLERANCE = 0.05;
 
   // Block line of sight only if the line passes through two points of the same wall
   // that are separated by more than the tolerance distance
@@ -275,7 +337,7 @@ export function getLineOfSightDetails(
             intersections[i].point,
             intersections[j].point,
           );
-          if (dist > TOLERANCE) {
+          if (dist > INTERSECTION_TOLERANCE) {
             // Points are far enough apart to be considered separate intersections
             validIntersection = false;
             break;
