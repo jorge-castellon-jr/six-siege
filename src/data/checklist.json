@@ -102,7 +102,7 @@
   {
     "id": "maps-11",
     "description": "Kafe map with walls",
-    "completed": false,
+    "completed": true,
     "category": "maps"
   },
   {
