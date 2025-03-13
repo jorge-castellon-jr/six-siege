@@ -628,7 +628,7 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
     }
 
     // Draw intersection points if available
-    if (intersections && intersections.length > 0) {
+    if (isAdminMode && intersections && intersections.length > 0) {
       const { gridOffset } = mapData;
       const cellSize = getCellSize();
 
