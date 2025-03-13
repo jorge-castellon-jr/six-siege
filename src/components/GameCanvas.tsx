@@ -622,7 +622,7 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
       ctx.lineTo(endX, endY);
       ctx.strokeStyle = hasLos
         ? "rgba(105, 240, 174, 0.9)"
-        : "rgba(255, 82, 82, 0.9)";
+        : "rgba(255, 255, 0, 0.9)";
       ctx.lineWidth = 2;
       ctx.stroke();
     }
