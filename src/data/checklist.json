@@ -55,6 +55,12 @@
     "completed": false,
     "category": "player"
   },
+  {
+    "id": "player-10",
+    "description": "Better UX for placing team DOTS",
+    "completed": false,
+    "category": "player"
+  },
 
   {
     "id": "maps-1",
