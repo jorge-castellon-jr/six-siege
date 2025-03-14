@@ -196,7 +196,7 @@ const PlayerControls: React.FC<PlayerControlsProps> = ({
       )}
 
       {/* Smoke Overlay Controls */}
-      <div className="smoke-controls">
+      <div className="smoke-controls flex gap-5 items-center">
         <h4>Deploy Smoke</h4>
         <div className="smoke-patterns">
           <button
