@@ -138,7 +138,7 @@
   {
     "id": "maps-15",
     "description": "Adds Breakable walls to Clubhouse",
-    "completed": false,
+    "completed": true,
     "category": "maps"
   },
   {
