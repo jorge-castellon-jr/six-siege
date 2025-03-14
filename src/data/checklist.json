@@ -52,7 +52,7 @@
   {
     "id": "player-8",
     "description": "Smoke placement and visualization",
-    "completed": false,
+    "completed": true,
     "category": "player"
   },
   {
