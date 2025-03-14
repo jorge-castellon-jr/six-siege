@@ -125,20 +125,18 @@ const AdminPage: React.FC<AdminPageProps> = ({
         </select>
       </div>
 
-      <div className="canvas-wrapper">
-        <GameCanvas
-          mapData={mapData}
-          bluePlayer={null}
-          orangePlayer={null}
-          hasLos={null}
-          isAdminMode={true}
-          wallStart={wallStart}
-          onCanvasClick={handleCanvasClick}
-          setImageDimensions={setImageDimensions}
-          selectedWallIndex={selectedWallIndex}
-          setSelectedWallIndex={setSelectedWallIndex}
-        />
-      </div>
+      <GameCanvas
+        mapData={mapData}
+        bluePlayer={null}
+        orangePlayer={null}
+        hasLos={null}
+        isAdminMode={true}
+        wallStart={wallStart}
+        onCanvasClick={handleCanvasClick}
+        setImageDimensions={setImageDimensions}
+        selectedWallIndex={selectedWallIndex}
+        setSelectedWallIndex={setSelectedWallIndex}
+      />
       <div className="admin-spacer" />
 
       <div className="controls">
