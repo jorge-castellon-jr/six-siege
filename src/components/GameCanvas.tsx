@@ -1475,11 +1475,20 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
           }}
         />
         <div className="drag-tooltip">
-          {isAdminMode
-            ? wallStart
-              ? "Click to place the end point of the wall"
-              : `Click to place walls (${currentWallType}) or select an existing wall to edit`
-            : "Click breakable walls to toggle them, or drag players to move them"}
+          {isAdminMode ? (
+            wallStart ? (
+              "Click to place the end point of the wall"
+            ) : (
+              `Click to place walls (${currentWallType}) or select an existing wall to edit`
+            )
+          ) : (
+            <>
+              1. First click adds Blue Player <br />
+              2. Second click adds Orange Player <br />
+              3. Click breakable walls to toggle them <br />
+              4. Drag players to move them
+            </>
+          )}
         </div>
       </div>
 
