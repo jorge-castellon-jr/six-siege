@@ -40,7 +40,7 @@ interface GameCanvasProps {
   currentWallType?: WallType; // Current wall type being placed
   smokes?: Smoke[];
   selectedSmokePattern?: SmokePattern | null;
-  setSmokes: React.Dispatch<React.SetStateAction<Smoke[]>>;
+  setSmokes?: React.Dispatch<React.SetStateAction<Smoke[]>>;
   activeTeam?: "blue" | "orange" | null;
 }
 
@@ -1624,7 +1624,7 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
       });
     } else {
       // Player mode - first check if we're clicking on a smoke (unless we're placing players or another smoke)
-      if (!selectedSmokePattern && !activeTeam && smokes) {
+      if (!selectedSmokePattern && !activeTeam && smokes && setSmokes) {
         const clickedSmokeIndex = isPointInSmoke(
           { x: canvasX, y: canvasY },
           startX,

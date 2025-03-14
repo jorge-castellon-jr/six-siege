@@ -565,13 +565,13 @@ function doesLinePassThroughSmoke(
 
         // Check if line passes through the cell (even if it doesn't intersect any edge)
         // This can happen when a line passes diagonally through a cell
-        const pointInsideCell = {
-          x: actualCellX + actualCellWidth / 2,
-          y: actualCellY + actualCellHeight / 2,
-        };
+        // const pointInsideCell = {
+        //   x: actualCellX + actualCellWidth / 2,
+        //   y: actualCellY + actualCellHeight / 2,
+        // };
 
         // Check which side of the line this point is on
-        const side = getSideOfLine(pointInsideCell, lineStart, lineEnd);
+        // const side = getSideOfLine(pointInsideCell, lineStart, lineEnd);
 
         // Check points on the cell's corners to see if they're on different sides of the line
         const cornerTopLeft = { x: actualCellX, y: actualCellY };
