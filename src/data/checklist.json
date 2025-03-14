@@ -11,6 +11,12 @@
     "completed": true,
     "category": "core"
   },
+  {
+    "id": "core-5",
+    "description": "Get high res images of maps",
+    "completed": false,
+    "category": "core"
+  },
 
   {
     "id": "player-1",
@@ -40,7 +46,7 @@
   {
     "id": "player-7",
     "description": "Toggle destructible wall sections",
-    "completed": false,
+    "completed": true,
     "category": "player"
   },
   {
@@ -51,7 +57,7 @@
   },
   {
     "id": "player-9",
-    "description": "Add different type of wals (red, orange, gadgets)",
+    "description": "Ability to add different type of wals (red, orange, gadgets)",
     "completed": false,
     "category": "player"
   },
