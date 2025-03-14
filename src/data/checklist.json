@@ -102,7 +102,7 @@
   {
     "id": "maps-9",
     "description": "Coastline map with walls",
-    "completed": false,
+    "completed": true,
     "category": "maps"
   },
   {
@@ -120,7 +120,7 @@
   {
     "id": "maps-12",
     "description": "Oregon map with walls",
-    "completed": false,
+    "completed": true,
     "category": "maps"
   },
   {
