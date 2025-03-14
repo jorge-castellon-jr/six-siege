@@ -351,7 +351,7 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
       // Default colors based on wall type
       switch (type) {
         case WallType.MAIN:
-          fillColor = "#ff5252"; // Regular main wall color
+          fillColor = "#dbdfae"; // Regular main wall color
           break;
         case WallType.RED:
           fillColor = "#d32f2f"; // Deep red for red walls
@@ -891,7 +891,7 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
       // Color the start point based on the current wall type
       switch (currentWallType) {
         case WallType.MAIN:
-          ctx.fillStyle = "#ff5252";
+          ctx.fillStyle = "#dbdfae";
           break;
         case WallType.RED:
           ctx.fillStyle = "#f44336";
