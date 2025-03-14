@@ -41,7 +41,7 @@ interface GameCanvasProps {
   smokes?: Smoke[];
   selectedSmokePattern?: SmokePattern | null;
   setSmokes: React.Dispatch<React.SetStateAction<Smoke[]>>;
-  activeTeam: "blue" | "orange" | null;
+  activeTeam?: "blue" | "orange" | null;
 }
 
 const GameCanvas: React.FC<GameCanvasProps> = ({
@@ -67,7 +67,7 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
   smokes = [],
   selectedSmokePattern = null,
   setSmokes,
-  activeTeam,
+  activeTeam = null,
 }) => {
   // State for panning
   const [mousePosition, setMousePosition] = useState<Position | null>(null);
