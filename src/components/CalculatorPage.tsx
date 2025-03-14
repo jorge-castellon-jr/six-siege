@@ -170,7 +170,6 @@ const CalculatorPage: React.FC<CalculatorPageProps> = ({
           checkLineOfSight={checkLineOfSight}
           intersections={intersections}
           protrudingWalls={protrudingWalls}
-          brokenWalls={brokenWalls}
         />
       </div>
     </div>
