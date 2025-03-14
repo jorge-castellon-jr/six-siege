@@ -1,6 +1,7 @@
 {
   "id": "bank",
   "name": "Bank",
+  "version": 1,
   "walls": [
     {
       "start": {
