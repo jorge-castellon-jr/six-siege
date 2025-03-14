@@ -72,13 +72,13 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
 
   // Zoom in function
   const zoomIn = () => {
-    const newZoom = Math.min(zoomLevel + 25, 1000);
+    const newZoom = Math.min(zoomLevel + 100, 1000);
     updateZoomLevel(newZoom);
   };
 
   // Zoom out function
   const zoomOut = () => {
-    const newZoom = Math.max(zoomLevel - 25, 50);
+    const newZoom = Math.max(zoomLevel - 100, 50);
     updateZoomLevel(newZoom);
   };
 
