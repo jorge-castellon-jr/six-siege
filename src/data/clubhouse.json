@@ -1,6 +1,7 @@
 {
   "id": "clubhouse",
   "name": "Clubhouse",
+  "version": 1,
   "walls": [
     {
       "start": {

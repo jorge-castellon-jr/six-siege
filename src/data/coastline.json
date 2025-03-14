@@ -1,6 +1,7 @@
 {
   "id": "coastline",
   "name": "Coastline",
+  "version": 1,
   "walls": [],
   "gridSize": {
     "width": 18,

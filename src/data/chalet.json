@@ -1,6 +1,7 @@
 {
   "id": "chalet",
   "name": "Chalet",
+  "version": 1,
   "walls": [
     {
       "start": {

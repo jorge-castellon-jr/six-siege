@@ -144,7 +144,10 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
   // Load or update the map image when the path changes
   useEffect(() => {
     const img = new Image();
-    img.src = `./assets/${mapData.id}.jpg`;
+    img.src =
+      mapData.version > 1
+        ? `src/assets/${mapData.id}.png`
+        : `./assets/${mapData.id}.jpg`;
 
     img.onload = () => {
       setMapImage(img);
@@ -157,8 +160,9 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
       }
     };
 
-    img.onerror = () => {
+    img.onerror = (error) => {
       console.error(`Failed to load image: ${mapData.id}`);
+      console.error(error);
     };
   }, [mapData.id, setImageDimensions]);
 
@@ -266,6 +270,8 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
       y: extendedStart.y + offsetY + perpendicular.y * halfThickness,
     };
 
+    const dotSize = 3;
+
     // Draw the wall as a filled polygon
     ctx.beginPath();
     ctx.moveTo(topLeft.x, topLeft.y);
@@ -289,36 +295,6 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
 
     // If selected, draw the endpoints as circles
     if (isSelected) {
-      // Draw start point
-      ctx.beginPath();
-      ctx.arc(x1, y1, 5, 0, Math.PI * 2);
-      ctx.fillStyle = "#4CAF50";
-      ctx.fill();
-      ctx.strokeStyle = "white";
-      ctx.lineWidth = 1;
-      ctx.stroke();
-
-      // Label start point
-      ctx.fillStyle = "white";
-      ctx.fillText("S", x1, y1 + 3);
-
-      // Draw end point
-      ctx.beginPath();
-      ctx.arc(x2, y2, 5, 0, Math.PI * 2);
-      ctx.fillStyle = "#2196F3";
-      ctx.fill();
-      ctx.strokeStyle = "white";
-      ctx.lineWidth = 1;
-      ctx.stroke();
-
-      // Label end point
-      ctx.fillStyle = "white";
-      ctx.fillText("E", x2, y2 + 3);
-
-      // Draw midpoint for offset adjustment
-      const midX = (x1 + x2) / 2;
-      const midY = (y1 + y2) / 2;
-
       // Add offset position indicator
       const direction = getNormalizedDirection(
         { x: x1, y: y1 },
@@ -328,17 +304,26 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
       const offsetX = perpendicular.x * wall.offset * cellSize;
       const offsetY = perpendicular.y * wall.offset * cellSize;
 
+      // Draw start point
       ctx.beginPath();
-      ctx.arc(midX + offsetX, midY + offsetY, 5, 0, Math.PI * 2);
-      ctx.fillStyle = "#9C27B0";
+      ctx.arc(x1 + offsetX, y1 + offsetY, dotSize, 0, Math.PI * 2);
+      ctx.fillStyle = "#4CAF50";
       ctx.fill();
-      ctx.strokeStyle = "white";
-      ctx.lineWidth = 1;
-      ctx.stroke();
 
-      // Label offset point
-      ctx.fillStyle = "white";
-      ctx.fillText("O", midX + offsetX, midY + offsetY + 3);
+      // Draw end point
+      ctx.beginPath();
+      ctx.arc(x2 + offsetX, y2 + offsetY, dotSize, 0, Math.PI * 2);
+      ctx.fillStyle = "#2196F3";
+      ctx.fill();
+
+      // Draw midpoint for offset adjustment
+      const midX = (x1 + x2) / 2;
+      const midY = (y1 + y2) / 2;
+
+      ctx.beginPath();
+      ctx.arc(midX + offsetX, midY + offsetY, dotSize, 0, Math.PI * 2);
+      ctx.fillStyle = "yellow";
+      ctx.fill();
     }
   };
 

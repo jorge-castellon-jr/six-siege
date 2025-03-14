@@ -1,6 +1,7 @@
 {
   "id": "kafe",
   "name": "Kafe Dostoyevsky",
+  "version": 1,
   "walls": [
     {
       "start": {

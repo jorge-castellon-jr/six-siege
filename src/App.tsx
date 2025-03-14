@@ -8,6 +8,7 @@ import "./App.css";
 
 import consulateData from "./data/consulate.json";
 import clubhouseData from "./data/clubhouse.json";
+// import clubhouseData2 from "./data/clubhouse2.json";
 import bankData from "./data/bank.json";
 import kafeData from "./data/kafe.json";
 import chaletData from "./data/chalet.json";
@@ -19,6 +20,7 @@ import borderData from "./data/border.json";
 const DEFAULT_MAPS: MapData[] = [
   consulateData,
   clubhouseData,
+  // clubhouseData2,
   bankData,
   kafeData,
   chaletData,

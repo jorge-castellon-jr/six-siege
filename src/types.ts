@@ -39,7 +39,8 @@ export interface MapData {
   walls: Wall[];
   gridSize: GridSize;
   gridOffset: GridOffset;
-  cellSize?: number;
+ cellSize?: number;
+  version: number;
 }
 
 // New types for the improvement checklist

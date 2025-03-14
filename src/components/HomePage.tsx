@@ -74,7 +74,10 @@ const HomePage: React.FC<HomePageProps> = ({
               onClick={() => onSelectMap(map.id)}
             >
               <div className="map-thumbnail">
-                <img src={`./assets/${map.id}.jpg`} alt={map.name} />
+                <img
+                  src={`/assets/${map.id}${map.version > 1 ? ".png" : ".jpg"}`}
+                  alt={map.name}
+                />
               </div>
               <div className="map-name">{map.name}</div>
             </div>

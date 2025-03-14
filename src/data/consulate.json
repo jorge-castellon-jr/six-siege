@@ -1,6 +1,7 @@
 {
   "id": "consulate",
   "name": "Consulate",
+  "version": 1,
   "walls": [
     {
       "start": {
