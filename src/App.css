@@ -1,4 +1,6 @@
 /* src/App.css */
+@import "tailwindcss";
+
 :root {
   --bg-primary: #121212;
   --bg-secondary: #1e1e1e;
@@ -40,6 +42,8 @@ body {
 }
 
 h1 {
+  @apply text-4xl font-bold;
+
   text-align: center;
   color: var(--text-primary);
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
@@ -47,6 +51,7 @@ h1 {
 }
 
 h2 {
+  @apply text-2xl font-bold;
   color: var(--text-primary);
   margin-top: 20px;
   margin-bottom: 20px;
