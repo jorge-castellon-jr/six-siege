@@ -129,6 +129,54 @@
     "completed": true,
     "category": "maps"
   },
+  {
+    "id": "maps-14",
+    "description": "Adds Breakable walls to Consulate",
+    "completed": true,
+    "category": "maps"
+  },
+  {
+    "id": "maps-15",
+    "description": "Adds Breakable walls to Clubhouse",
+    "completed": false,
+    "category": "maps"
+  },
+  {
+    "id": "maps-16",
+    "description": "Adds Breakable walls to Bank",
+    "completed": false,
+    "category": "maps"
+  },
+  {
+    "id": "maps-17",
+    "description": "Adds Breakable walls to Kafe",
+    "completed": false,
+    "category": "maps"
+  },
+  {
+    "id": "maps-18",
+    "description": "Adds Breakable walls to Chalet",
+    "completed": false,
+    "category": "maps"
+  },
+  {
+    "id": "maps-19",
+    "description": "Adds Breakable walls to Oregon",
+    "completed": false,
+    "category": "maps"
+  },
+  {
+    "id": "maps-20",
+    "description": "Adds Breakable walls to Coastline",
+    "completed": false,
+    "category": "maps"
+  },
+  {
+    "id": "maps-21",
+    "description": "Adds Breakable walls to Border",
+    "completed": false,
+    "category": "maps"
+  },
 
   {
     "id": "interface-2",
