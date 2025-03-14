@@ -1,5 +1,5 @@
 // src/utils/lineOfSight.ts
-import { Position, Wall, BrokenWalls } from "../types";
+import { Position, Wall, BrokenWalls, Smoke } from "../types";
 
 // Default line thickness in grid units (can be adjusted)
 export const DEFAULT_LINE_THICKNESS = 0.03;
@@ -505,4 +505,176 @@ export function hasLineOfSightWithBreakableWalls(
 
   // Run the standard line of sight check with only the active walls
   return hasLineOfSight(pos1, pos2, activeWalls, lineThickness);
+}
+
+/**
+ * Checks if a line passes through any smoke
+ */
+function doesLinePassThroughSmoke(
+  lineStart: Position,
+  lineEnd: Position,
+  smokes: Smoke[],
+): boolean {
+  // For each smoke
+  for (const smoke of smokes) {
+    // For each cell in the smoke pattern
+    for (let x = 0; x < smoke.pattern.width; x++) {
+      for (let y = 0; y < smoke.pattern.height; y++) {
+        // Get cell corners
+        const cellX = smoke.position.x + x;
+        const cellY = smoke.position.y + y;
+
+        // Create the four corners of the cell
+        const topLeft = getCellCenter({ x: cellX, y: cellY });
+        const topRight = getCellCenter({ x: cellX + 1, y: cellY });
+        const bottomLeft = getCellCenter({ x: cellX, y: cellY + 1 });
+        const bottomRight = getCellCenter({ x: cellX + 1, y: cellY + 1 });
+
+        // Check if the line passes through this cell
+        // Check if line intersects with any of the cell edges
+        if (
+          doLinesIntersect(lineStart, lineEnd, topLeft, topRight).intersects ||
+          doLinesIntersect(lineStart, lineEnd, topRight, bottomRight)
+            .intersects ||
+          doLinesIntersect(lineStart, lineEnd, bottomRight, bottomLeft)
+            .intersects ||
+          doLinesIntersect(lineStart, lineEnd, bottomLeft, topLeft).intersects
+        ) {
+          return true;
+        }
+
+        // Also check if either end point is inside the cell
+        // We need to adjust to the actual cell boundaries, not the centers
+        const actualCellX = cellX + 0.5 - 0.5; // Adjusted for center coordinates
+        const actualCellY = cellY + 0.5 - 0.5;
+        const actualCellWidth = 1;
+        const actualCellHeight = 1;
+
+        if (
+          (lineStart.x >= actualCellX &&
+            lineStart.x <= actualCellX + actualCellWidth &&
+            lineStart.y >= actualCellY &&
+            lineStart.y <= actualCellY + actualCellHeight) ||
+          (lineEnd.x >= actualCellX &&
+            lineEnd.x <= actualCellX + actualCellWidth &&
+            lineEnd.y >= actualCellY &&
+            lineEnd.y <= actualCellY + actualCellHeight)
+        ) {
+          return true;
+        }
+
+        // Check if line passes through the cell (even if it doesn't intersect any edge)
+        // This can happen when a line passes diagonally through a cell
+        const pointInsideCell = {
+          x: actualCellX + actualCellWidth / 2,
+          y: actualCellY + actualCellHeight / 2,
+        };
+
+        // Check which side of the line this point is on
+        const side = getSideOfLine(pointInsideCell, lineStart, lineEnd);
+
+        // Check points on the cell's corners to see if they're on different sides of the line
+        const cornerTopLeft = { x: actualCellX, y: actualCellY };
+        const cornerTopRight = {
+          x: actualCellX + actualCellWidth,
+          y: actualCellY,
+        };
+        const cornerBottomLeft = {
+          x: actualCellX,
+          y: actualCellY + actualCellHeight,
+        };
+        const cornerBottomRight = {
+          x: actualCellX + actualCellWidth,
+          y: actualCellY + actualCellHeight,
+        };
+
+        const sideTopLeft = getSideOfLine(cornerTopLeft, lineStart, lineEnd);
+        const sideTopRight = getSideOfLine(cornerTopRight, lineStart, lineEnd);
+        const sideBottomLeft = getSideOfLine(
+          cornerBottomLeft,
+          lineStart,
+          lineEnd,
+        );
+        const sideBottomRight = getSideOfLine(
+          cornerBottomRight,
+          lineStart,
+          lineEnd,
+        );
+
+        // If points are on different sides, line passes through the cell
+        if (
+          (sideTopLeft !== sideTopRight &&
+            sideTopLeft !== 0 &&
+            sideTopRight !== 0) ||
+          (sideTopLeft !== sideBottomLeft &&
+            sideTopLeft !== 0 &&
+            sideBottomLeft !== 0) ||
+          (sideTopRight !== sideBottomRight &&
+            sideTopRight !== 0 &&
+            sideBottomRight !== 0) ||
+          (sideBottomLeft !== sideBottomRight &&
+            sideBottomLeft !== 0 &&
+            sideBottomRight !== 0)
+        ) {
+          return true;
+        }
+      }
+    }
+  }
+
+  return false;
+}
+
+/**
+ * Modified line of sight function that takes into account smoke and broken walls
+ */
+export function hasLineOfSightWithSmoke(
+  pos1: Position,
+  pos2: Position,
+  mainWalls: Wall[],
+  redWalls: Wall[] = [],
+  orangeWalls: Wall[] = [],
+  windows: Wall[] = [],
+  smokes: Smoke[] = [],
+  brokenWalls: BrokenWalls = { red: [], orange: [], windows: [] },
+  lineThickness: number = DEFAULT_LINE_THICKNESS,
+): boolean {
+  // Start with all main walls (unbreakable)
+  const activeWalls = [...mainWalls];
+
+  // Add only the red walls that aren't broken
+  redWalls.forEach((wall, index) => {
+    if (!brokenWalls.red.includes(index)) {
+      activeWalls.push(wall);
+    }
+  });
+
+  // Add only the orange walls that aren't broken
+  orangeWalls.forEach((wall, index) => {
+    if (!brokenWalls.orange.includes(index)) {
+      activeWalls.push(wall);
+    }
+  });
+
+  // Add only the windows that aren't broken
+  windows.forEach((wall, index) => {
+    if (!brokenWalls.windows.includes(index)) {
+      activeWalls.push(wall);
+    }
+  });
+
+  // First check walls using the standard function
+  const wallResult = hasLineOfSight(pos1, pos2, activeWalls, lineThickness);
+
+  // If already blocked by walls, no need to check smoke
+  if (!wallResult) return false;
+
+  // Check if line passes through any smoke
+  const center1 = getCellCenter(pos1);
+  const center2 = getCellCenter(pos2);
+
+  const smokeBlocks = doesLinePassThroughSmoke(center1, center2, smokes);
+
+  // Line of sight exists if not blocked by walls AND not blocked by smoke
+  return !smokeBlocks;
 }

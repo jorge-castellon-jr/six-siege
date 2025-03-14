@@ -1,10 +1,18 @@
 // src/components/CalculatorPage.tsx
 import React, { useState } from "react";
-import { MapData, Position, Player, AppPage, BrokenWalls } from "../types";
+import {
+  MapData,
+  Position,
+  Player,
+  AppPage,
+  BrokenWalls,
+  SmokePattern,
+  Smoke,
+} from "../types";
 import {
   getLineOfSightDetails,
   Intersection,
-  hasLineOfSightWithBreakableWalls,
+  hasLineOfSightWithSmoke,
 } from "../utils/lineOfSight";
 import GameCanvas from "./GameCanvas";
 import PlayerControls from "./PlayerControls";
@@ -41,6 +49,11 @@ const CalculatorPage: React.FC<CalculatorPageProps> = ({
     windows: [],
   });
 
+  // State for smoke patterns and deployed smokes
+  const [selectedSmokePattern, setSelectedSmokePattern] =
+    useState<SmokePattern | null>(null);
+  const [smokes, setSmokes] = useState<Smoke[]>([]);
+
   // Handle canvas click - this is passed to GameCanvas
   const handleCanvasClick = (
     event: React.MouseEvent<HTMLCanvasElement> & {
@@ -48,11 +61,33 @@ const CalculatorPage: React.FC<CalculatorPageProps> = ({
       gridPosition?: Position;
     },
   ) => {
-    // Player mode - place players in cells
+    // Player mode - place players or smoke in cells
     if (event.gridPosition) {
       const { x, y } = event.gridPosition;
 
-      if (activeTeam === "blue") {
+      // If we have a selected smoke pattern, place smoke
+      if (selectedSmokePattern) {
+        // Check if the smoke would fit within the grid
+        if (
+          x + selectedSmokePattern.width <= mapData.gridSize.width &&
+          y + selectedSmokePattern.height <= mapData.gridSize.height
+        ) {
+          // Add new smoke
+          const newSmoke: Smoke = {
+            position: { x, y },
+            pattern: { ...selectedSmokePattern },
+          };
+          setSmokes([...smokes, newSmoke]);
+          setHasLos(null); // Reset line of sight
+
+          // Reset smoke selection after deployment
+          setSelectedSmokePattern(null);
+
+          return;
+        }
+      }
+      // Otherwise handle player placement
+      else if (activeTeam === "blue") {
         // Place blue player when explicitly selected
         setBluePlayer({
           position: { x, y },
@@ -98,7 +133,7 @@ const CalculatorPage: React.FC<CalculatorPageProps> = ({
     }
   };
 
-  // Check line of sight including breakable walls
+  // Check line of sight including breakable walls and smoke
   const checkLineOfSight = () => {
     if (!bluePlayer || !orangePlayer) return;
 
@@ -112,14 +147,15 @@ const CalculatorPage: React.FC<CalculatorPageProps> = ({
     setIntersections(result.intersections);
     setProtrudingWalls(result.protrudingWalls);
 
-    // Then calculate actual line of sight using all active walls (non-broken)
-    const hasLineOfSight = hasLineOfSightWithBreakableWalls(
+    // Then calculate actual line of sight using all active walls (non-broken) and smoke
+    const hasLineOfSight = hasLineOfSightWithSmoke(
       bluePlayer.position,
       orangePlayer.position,
       mapData.walls,
       mapData.redWalls || [],
       mapData.orangeWalls || [],
       mapData.windows || [],
+      smokes,
       brokenWalls,
     );
 
@@ -130,6 +166,12 @@ const CalculatorPage: React.FC<CalculatorPageProps> = ({
   const handleBrokenWallsUpdate = (updatedBrokenWalls: BrokenWalls) => {
     setBrokenWalls(updatedBrokenWalls);
     setHasLos(null); // Reset line of sight whenever walls are toggled
+  };
+
+  // Clear all deployed smokes
+  const clearSmokes = () => {
+    setSmokes([]);
+    setHasLos(null); // Reset line of sight when clearing smokes
   };
 
   return (
@@ -157,6 +199,10 @@ const CalculatorPage: React.FC<CalculatorPageProps> = ({
         intersections={intersections}
         brokenWalls={brokenWalls}
         onBrokenWallsUpdate={handleBrokenWallsUpdate}
+        smokes={smokes}
+        setSmokes={setSmokes} // Add this prop
+        selectedSmokePattern={selectedSmokePattern}
+        activeTeam={activeTeam} // Pass active team to know when player placement is happening
       />
       <div className="player-spacer" />
 
@@ -170,6 +216,10 @@ const CalculatorPage: React.FC<CalculatorPageProps> = ({
           checkLineOfSight={checkLineOfSight}
           intersections={intersections}
           protrudingWalls={protrudingWalls}
+          selectedSmokePattern={selectedSmokePattern}
+          setSelectedSmokePattern={setSelectedSmokePattern}
+          clearSmokes={clearSmokes}
+          smokesCount={smokes.length}
         />
       </div>
     </div>

@@ -7,6 +7,8 @@ import {
   Wall,
   WallType,
   BrokenWalls,
+  Smoke,
+  SmokePattern,
 } from "../types";
 import { DEFAULT_LINE_THICKNESS, Intersection } from "../utils/lineOfSight";
 import { isAdmin } from "../utils/admin";
@@ -36,6 +38,10 @@ interface GameCanvasProps {
   brokenWalls?: BrokenWalls; // For broken walls
   onBrokenWallsUpdate?: (brokenWalls: BrokenWalls) => void; // For updating broken walls
   currentWallType?: WallType; // Current wall type being placed
+  smokes?: Smoke[];
+  selectedSmokePattern?: SmokePattern | null;
+  setSmokes: React.Dispatch<React.SetStateAction<Smoke[]>>;
+  activeTeam: "blue" | "orange" | null;
 }
 
 const GameCanvas: React.FC<GameCanvasProps> = ({
@@ -58,6 +64,10 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
   brokenWalls = { red: [], orange: [], windows: [] },
   onBrokenWallsUpdate = () => { },
   currentWallType = WallType.MAIN,
+  smokes = [],
+  selectedSmokePattern = null,
+  setSmokes,
+  activeTeam,
 }) => {
   // State for panning
   const [mousePosition, setMousePosition] = useState<Position | null>(null);
@@ -157,6 +167,38 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
       x: -direction.y,
       y: direction.x,
     };
+  };
+
+  const isPointInSmoke = (
+    point: Position,
+    startX: number,
+    startY: number,
+    cellSize: number,
+  ): number => {
+    if (!smokes) return -1;
+
+    // Check each smoke
+    for (let i = smokes.length - 1; i >= 0; i--) {
+      const smoke = smokes[i];
+
+      // Calculate smoke boundaries
+      const smokeStartX = startX + smoke.position.x * cellSize;
+      const smokeStartY = startY + smoke.position.y * cellSize;
+      const smokeEndX = smokeStartX + smoke.pattern.width * cellSize;
+      const smokeEndY = smokeStartY + smoke.pattern.height * cellSize;
+
+      // Check if point is inside this smoke
+      if (
+        point.x >= smokeStartX &&
+        point.x < smokeEndX &&
+        point.y >= smokeStartY &&
+        point.y < smokeEndY
+      ) {
+        return i; // Return the index of the smoke that was clicked
+      }
+    }
+
+    return -1; // No smoke was clicked
   };
 
   // Load or update the map image when the path changes
@@ -923,6 +965,156 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
       }
     }
 
+    const rect = canvas.getBoundingClientRect();
+
+    // Add hover effect for smoke cells
+    const isHoveringOverSmoke =
+      mousePosition &&
+      !draggingPlayer &&
+      !selectedSmokePattern &&
+      !activeTeam &&
+      isPointInSmoke(
+        {
+          x: ((mousePosition.x - rect.left) / rect.width) * canvas.width,
+          y: ((mousePosition.y - rect.top) / rect.height) * canvas.height,
+        },
+        startX,
+        startY,
+        cellSize,
+      ) >= 0;
+
+    // If hovering over a smoke, draw a removal indicator
+    if (isHoveringOverSmoke) {
+      canvas.style.cursor = "pointer";
+
+      // Adding a tooltip to the drag-tooltip element
+      const tooltip = document.querySelector(".drag-tooltip");
+      if (tooltip) {
+        tooltip.textContent = "Click to remove smoke";
+        tooltip.classList.add("visible");
+      }
+    } else if (
+      !isAdminMode &&
+      !draggingPlayer &&
+      !activeTeam &&
+      !selectedSmokePattern &&
+      hoveredWallType === null
+    ) {
+      canvas.style.cursor = "default";
+
+      // Reset tooltip
+      const tooltip = document.querySelector(".drag-tooltip");
+      if (tooltip) {
+        tooltip.textContent = tooltip.getAttribute("data-original") || "";
+        tooltip.classList.remove("visible");
+      }
+    }
+
+    // Draw smokes
+    if (smokes && smokes.length > 0) {
+      ctx.globalAlpha = 0.7; // Set transparency for smoke
+
+      smokes.forEach((smoke) => {
+        // Draw each cell of the smoke pattern
+        for (let x = 0; x < smoke.pattern.width; x++) {
+          for (let y = 0; y < smoke.pattern.height; y++) {
+            const cellX = startX + (smoke.position.x + x) * cellSize;
+            const cellY = startY + (smoke.position.y + y) * cellSize;
+
+            // Draw smoke cell
+            ctx.fillStyle = "#aaaaaa"; // Gray smoke color
+            ctx.fillRect(cellX, cellY, cellSize, cellSize);
+
+            // Add some internal pattern to visually identify as smoke
+            ctx.fillStyle = "#6a6a6a";
+            ctx.beginPath();
+            ctx.arc(
+              cellX + cellSize / 2,
+              cellY + cellSize / 2,
+              cellSize / 4,
+              0,
+              Math.PI * 2,
+            );
+            ctx.fill();
+
+            // Add swirl pattern
+            ctx.strokeStyle = "#888888";
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(
+              cellX + cellSize / 2,
+              cellY + cellSize / 2,
+              cellSize / 3,
+              0,
+              Math.PI,
+              true,
+            );
+            ctx.stroke();
+
+            // Smaller inner swirl
+            ctx.strokeStyle = "#777777";
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.arc(
+              cellX + cellSize / 2,
+              cellY + cellSize / 2,
+              cellSize / 5,
+              Math.PI,
+              0,
+              true,
+            );
+            ctx.stroke();
+          }
+        }
+      });
+
+      ctx.globalAlpha = 1.0; // Reset transparency
+    }
+
+    // If a smoke pattern is selected, draw a preview on hover
+    if (!isAdminMode && selectedSmokePattern && mousePosition) {
+      const gridPos = getGridPositionFromMouse(
+        mousePosition.x,
+        mousePosition.y,
+      );
+
+      if (gridPos) {
+        // Check if the smoke would fit within the grid
+        if (
+          gridPos.x + selectedSmokePattern.width <= mapData.gridSize.width &&
+          gridPos.y + selectedSmokePattern.height <= mapData.gridSize.height
+        ) {
+          ctx.globalAlpha = 0.4; // More transparent for preview
+
+          // Draw each cell of the smoke pattern preview
+          for (let x = 0; x < selectedSmokePattern.width; x++) {
+            for (let y = 0; y < selectedSmokePattern.height; y++) {
+              const cellX = startX + (gridPos.x + x) * cellSize;
+              const cellY = startY + (gridPos.y + y) * cellSize;
+
+              // Draw smoke cell preview
+              ctx.fillStyle = "#aaaaaa";
+              ctx.fillRect(cellX, cellY, cellSize, cellSize);
+
+              // Simple smoke indicator
+              ctx.fillStyle = "#666666";
+              ctx.beginPath();
+              ctx.arc(
+                cellX + cellSize / 2,
+                cellY + cellSize / 2,
+                cellSize / 5,
+                0,
+                Math.PI * 2,
+              );
+              ctx.fill();
+            }
+          }
+
+          ctx.globalAlpha = 1.0; // Reset transparency
+        }
+      }
+    }
+
     // Draw players
     if (bluePlayer) {
       const x = startX + bluePlayer.position.x * cellSize + cellSize / 2;
@@ -1302,6 +1494,22 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
   const handleCanvasClick = (event: React.MouseEvent<HTMLCanvasElement>) => {
     // Skip if we were dragging (prevents accidental clicks after drag)
     if (draggingPlayer) return;
+    // Get canvas position
+    if (!canvasRef.current) return;
+    const canvas = canvasRef.current;
+    const rect = canvas.getBoundingClientRect();
+
+    // Calculate mouse position in canvas coordinates
+    const mouseX = event.clientX - rect.left;
+    const mouseY = event.clientY - rect.top;
+    const canvasX = (mouseX / rect.width) * canvas.width;
+    const canvasY = (mouseY / rect.height) * canvas.height;
+
+    // Get grid parameters
+    const { gridOffset } = mapData;
+    const cellSize = getCellSize();
+    const startX = gridOffset.x;
+    const startY = gridOffset.y;
 
     // If in admin mode, handle wall placement or selection
     if (isAdminMode) {
@@ -1415,7 +1623,29 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
         gridIntersection: intersectionPos,
       });
     } else {
-      // If in player mode
+      // Player mode - first check if we're clicking on a smoke (unless we're placing players or another smoke)
+      if (!selectedSmokePattern && !activeTeam && smokes) {
+        const clickedSmokeIndex = isPointInSmoke(
+          { x: canvasX, y: canvasY },
+          startX,
+          startY,
+          cellSize,
+        );
+
+        if (clickedSmokeIndex >= 0) {
+          // Remove the clicked smoke
+          setSmokes((prevSmokes) =>
+            prevSmokes.filter((_, index) => index !== clickedSmokeIndex),
+          );
+
+          // Reset line of sight
+          if (setHasLos) {
+            setHasLos(null);
+          }
+
+          return; // Done handling the click
+        }
+      }
 
       // First check if we clicked on a breakable wall
       if (hoveredWallType && hoveredWallIndex !== null) {

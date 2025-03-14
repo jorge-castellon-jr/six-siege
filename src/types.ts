@@ -47,6 +47,18 @@ export interface BrokenWalls {
   windows: number[];
 }
 
+// Smoke overlay patterns
+export interface SmokePattern {
+  width: number;
+  height: number;
+}
+
+// Smoke overlay placed on the board
+export interface Smoke {
+  position: Position; // Top-left position
+  pattern: SmokePattern;
+}
+
 export interface MapData {
   id: string;
   name: string;

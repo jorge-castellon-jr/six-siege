@@ -1,6 +1,6 @@
 // src/components/PlayerControls.tsx
 import React from "react";
-import { Player } from "../types";
+import { Player, SmokePattern } from "../types";
 import { Intersection, DEFAULT_LINE_THICKNESS } from "../utils/lineOfSight";
 import { isAdmin } from "../utils/admin";
 
@@ -12,7 +12,13 @@ interface PlayerControlsProps {
   hasLos: boolean | null;
   checkLineOfSight: () => void;
   intersections: Intersection[];
-  protrudingWalls?: number[]; // New prop for protruding walls
+  protrudingWalls?: number[]; // Prop for protruding walls
+  selectedSmokePattern: SmokePattern | null;
+  setSelectedSmokePattern: React.Dispatch<
+    React.SetStateAction<SmokePattern | null>
+  >;
+  clearSmokes: () => void;
+  smokesCount: number;
 }
 
 const PlayerControls: React.FC<PlayerControlsProps> = ({
@@ -24,6 +30,10 @@ const PlayerControls: React.FC<PlayerControlsProps> = ({
   checkLineOfSight,
   intersections,
   protrudingWalls = [], // Default to empty array if not provided
+  selectedSmokePattern,
+  setSelectedSmokePattern,
+  clearSmokes,
+  smokesCount,
 }) => {
   // Group intersections by wall
   const wallIntersections = new Map<number, Intersection[]>();
@@ -184,6 +194,63 @@ const PlayerControls: React.FC<PlayerControlsProps> = ({
           )}
         </div>
       )}
+
+      {/* Smoke Overlay Controls */}
+      <div className="smoke-controls">
+        <h4>Deploy Smoke</h4>
+        <div className="smoke-patterns">
+          <button
+            className={`smoke-pattern ${selectedSmokePattern?.width === 2 && selectedSmokePattern?.height === 2 ? "selected" : ""}`}
+            onClick={() => setSelectedSmokePattern({ width: 2, height: 2 })}
+          >
+            <div className="smoke-preview smoke-2x2">
+              <div className="smoke-cell"></div>
+              <div className="smoke-cell"></div>
+              <div className="smoke-cell"></div>
+              <div className="smoke-cell"></div>
+            </div>
+          </button>
+          <button
+            className={`smoke-pattern ${selectedSmokePattern?.width === 2 && selectedSmokePattern?.height === 1 ? "selected" : ""}`}
+            onClick={() => setSelectedSmokePattern({ width: 2, height: 1 })}
+          >
+            <div className="smoke-preview smoke-2x1">
+              <div className="smoke-cell"></div>
+              <div className="smoke-cell"></div>
+            </div>
+          </button>
+          <button
+            className={`smoke-pattern ${selectedSmokePattern?.width === 1 && selectedSmokePattern?.height === 2 ? "selected" : ""}`}
+            onClick={() => setSelectedSmokePattern({ width: 1, height: 2 })}
+          >
+            <div className="smoke-preview smoke-1x2">
+              <div className="smoke-cell"></div>
+              <div className="smoke-cell"></div>
+            </div>
+          </button>
+        </div>
+
+        {selectedSmokePattern && (
+          <div className="instructions" style={{ marginTop: "10px" }}>
+            Click on the map to place the {selectedSmokePattern.width}×
+            {selectedSmokePattern.height} smoke
+          </div>
+        )}
+
+        {smokesCount > 0 && (
+          <>
+            <div
+              className="instructions"
+              style={{ marginTop: "5px", marginBottom: "10px" }}
+            >
+              Click on a deployed smoke to remove it
+            </div>
+            <button onClick={clearSmokes} className="clear-smokes-button">
+              Clear All Smokes ({smokesCount})
+            </button>
+          </>
+        )}
+      </div>
     </div>
   );
 };
