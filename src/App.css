@@ -31,6 +31,7 @@ body {
   padding: 20px;
 }
 
+/* Spacers */
 .admin-spacer {
   height: 330px;
 }
@@ -41,9 +42,9 @@ body {
   height: 272px;
 }
 
+/* Typography */
 h1 {
   @apply text-4xl font-bold;
-
   text-align: center;
   color: var(--text-primary);
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
@@ -224,14 +225,13 @@ h4 {
   background-color: #3da968;
 }
 
-/* Existing styles */
+/* Control panel styles */
 .controls {
   position: fixed;
   bottom: 0;
   right: 0;
   max-height: 300px;
   overflow: auto;
-
   padding: 15px;
   background-color: var(--bg-secondary);
   border-radius: 5px;
@@ -292,6 +292,12 @@ h4 {
   min-width: 90px;
 }
 
+/* Input with percentage sign */
+.input-group span {
+  margin-left: 5px;
+  color: var(--text-secondary);
+}
+
 .action-buttons {
   display: flex;
   flex-wrap: wrap;
@@ -299,6 +305,7 @@ h4 {
   margin-bottom: 10px;
 }
 
+/* Button styles */
 button,
 .file-input {
   padding: 8px 16px;
@@ -371,6 +378,7 @@ button:disabled {
   box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
 }
 
+/* Form controls */
 input[type="text"],
 input[type="number"] {
   padding: 8px;
@@ -399,6 +407,7 @@ input[type="number"]:focus {
   margin-bottom: 10px;
 }
 
+/* Helper UI elements */
 .instructions {
   margin-top: 10px;
   font-style: italic;
@@ -419,36 +428,26 @@ input[type="number"]:focus {
   font-size: 11px;
 }
 
-.canvas-container {
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
+/* Canvas container styles */
+.canvas-wrapper {
+  width: 100%;
+  overflow: auto;
+  position: relative;
   border-radius: 5px;
-  overflow: hidden;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
   border: 1px solid var(--border);
+  margin-bottom: 20px;
+  max-height: 70vh;
+  background-color: #000000;
+}
+
+.canvas-container {
   width: 100%;
   position: relative;
-}
-
-.zoom-controls {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  z-index: 10;
-  display: flex;
-  gap: 5px;
-  background-color: rgba(0, 0, 0, 0.5);
-  padding: 5px;
-  border-radius: 5px;
-}
-
-.zoom-controls button {
-  width: 80px;
-  height: 40px;
-  font-size: 16px;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--bg-tertiary);
+  border-radius: 0;
+  box-shadow: none;
+  border: none;
+  transition: transform 0.1s ease-out;
 }
 
 canvas {
@@ -456,13 +455,57 @@ canvas {
   background-color: #000000;
   width: 100%;
   height: auto;
+  touch-action: none; /* Prevents default touch actions to enable custom drag handling */
 }
 
+.canvas-container canvas:active {
+  cursor: grabbing;
+}
+
+/* Drag tooltip */
+.drag-tooltip {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  z-index: 100;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.canvas-container:hover .drag-tooltip {
+  opacity: 1;
+}
+
+/* Player token styles */
+.player-token {
+  transition:
+    transform 0.1s ease,
+    filter 0.1s ease;
+}
+
+.player-token:hover {
+  filter: brightness(1.2);
+  transform: scale(1.05);
+}
+
+.player-preview {
+  transition: opacity 0.15s ease;
+}
+
+/* Line of sight result styles */
 .los-result {
   padding: 8px 16px;
   border-radius: 4px;
   font-weight: bold;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  max-width: 350px;
+  transition: max-width 0.3s ease;
 }
 
 .has-los {
@@ -477,10 +520,112 @@ canvas {
   border: 1px solid var(--error);
 }
 
-.image-info {
-  font-size: 12px;
-  color: var(--text-secondary);
+/* Line of sight details */
+.los-details {
+  max-height: 70px;
+  margin-top: 10px;
+  padding: 12px;
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.2);
+  overflow-y: auto;
+  font-size: 14px;
+}
+
+.los-details ul {
   margin-top: 5px;
+  padding-left: 20px;
+  list-style-type: none;
+}
+
+.los-details li {
+  margin-bottom: 8px;
+  padding-left: 0;
+}
+
+.los-details li li {
+  margin-bottom: 3px;
+  font-size: 0.9em;
+}
+
+.los-details .wall-heading {
+  font-weight: bold;
+  margin-top: 5px;
+}
+
+.los-details .coordinate {
+  font-family: monospace;
+  background-color: rgba(0, 0, 0, 0.2);
+  padding: 1px 3px;
+  border-radius: 2px;
+}
+
+.side-info {
+  font-style: italic;
+  color: var(--text-secondary);
+  font-size: 0.9em;
+  margin-left: 5px;
+}
+
+.intersection-marker {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 5px;
+  vertical-align: middle;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+}
+
+.wall-blocked {
+  color: var(--error);
+  font-weight: bold;
+}
+
+/* Intersection information */
+.intersection-info {
+  margin-top: 12px;
+  padding: 10px;
+  background-color: var(--bg-tertiary);
+  border-radius: 4px;
+  font-size: 0.95em;
+}
+
+.intersection-info p {
+  margin: 5px 0;
+}
+
+.intersection-info strong {
+  color: var(--accent-blue);
+}
+
+.intersection-info .warning {
+  margin-top: 8px;
+  padding: 8px;
+  background-color: rgba(255, 82, 82, 0.1);
+  border-left: 3px solid var(--error);
+  border-radius: 0 4px 4px 0;
+}
+
+/* Protrusion indicators */
+.protrusion-indicator {
+  display: inline-block;
+  padding: 2px 6px;
+  margin-left: 5px;
+  border-radius: 3px;
+  font-size: 0.85em;
+  font-weight: bold;
+}
+
+.protrusion-indicator.protruding {
+  background-color: rgba(255, 82, 82, 0.2);
+  color: var(--error);
+  border: 1px solid var(--error);
+}
+
+.protrusion-indicator.non-protruding {
+  background-color: rgba(105, 240, 174, 0.2);
+  color: var(--success);
+  border: 1px solid var(--success);
 }
 
 /* Wall editing styles */
@@ -530,140 +675,8 @@ canvas {
   color: #000;
   font-weight: bold;
 }
-/* Add these styles to src/App.css */
 
-/* Canvas wrapper for handling zoom and pan */
-.canvas-wrapper {
-  width: 100%;
-  overflow: auto;
-  position: relative;
-  border-radius: 5px;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
-  border: 1px solid var(--border);
-  margin-bottom: 20px;
-  max-height: 70vh;
-  background-color: #000000;
-}
-
-/* Adjust the existing canvas-container styling */
-.canvas-container {
-  border-radius: 0;
-  box-shadow: none;
-  border: none;
-  width: 100%;
-  transition: transform 0.1s ease-out;
-}
-
-/* Input with percentage sign */
-.input-group span {
-  margin-left: 5px;
-  color: var(--text-secondary);
-}
-
-/* Add these styles to App.css */
-
-/* Enhance cursor behavior for draggable elements */
-.canvas-container canvas {
-  touch-action: none; /* Prevents default touch actions to enable custom drag handling */
-}
-
-/* Make dragging visually responsive */
-.canvas-container canvas:active {
-  cursor: grabbing;
-}
-
-/* Add the below guidance tooltip to explain dragging */
-.drag-tooltip {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  background-color: rgba(0, 0, 0, 0.7);
-  color: white;
-  padding: 8px 12px;
-  border-radius: 4px;
-  font-size: 12px;
-  z-index: 100;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.canvas-container:hover .drag-tooltip {
-  opacity: 1;
-}
-
-/* Enhance appearance of draggable players */
-.player-token {
-  transition:
-    transform 0.1s ease,
-    filter 0.1s ease;
-}
-
-.player-token:hover {
-  filter: brightness(1.2);
-  transform: scale(1.05);
-}
-
-/* Transition for smoother visual updates during drag */
-.player-preview {
-  transition: opacity 0.15s ease;
-}
-
-/* Add these styles to src/App.css */
-
-.los-details {
-  margin-top: 10px;
-  padding: 10px;
-  border-radius: 4px;
-  background-color: rgba(0, 0, 0, 0.2);
-  font-size: 14px;
-  max-height: 200px;
-  overflow-y: auto;
-}
-
-.los-details ul {
-  list-style-type: none;
-  padding-left: 5px;
-}
-
-.los-details li {
-  margin-bottom: 3px;
-}
-
-.los-details .wall-heading {
-  font-weight: bold;
-  margin-top: 5px;
-}
-
-.los-details .coordinate {
-  font-family: monospace;
-  background-color: rgba(0, 0, 0, 0.2);
-  padding: 1px 3px;
-  border-radius: 2px;
-}
-
-.los-result {
-  max-width: 350px;
-  transition: max-width 0.3s ease;
-}
-
-.intersection-marker {
-  display: inline-block;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  margin-right: 5px;
-  vertical-align: middle;
-  border: 1px solid rgba(0, 0, 0, 0.5);
-}
-
-.wall-blocked {
-  color: var(--error);
-  font-weight: bold;
-}
-
-/* Add these styles to src/App.css */
-
+/* Zoom controls */
 .zoom-controls {
   position: fixed;
   top: 10px;
@@ -700,81 +713,9 @@ canvas {
   font-weight: bold;
 }
 
-/* Add these styles to src/App.css */
-
-.side-info {
-  font-style: italic;
+/* Image info */
+.image-info {
+  font-size: 12px;
   color: var(--text-secondary);
-  font-size: 0.9em;
-  margin-left: 5px;
-}
-
-.los-details {
-  max-height: 70px;
-  margin-top: 10px;
-  padding: 12px;
-  border-radius: 4px;
-  background-color: rgba(0, 0, 0, 0.2);
-  overflow-y: auto;
-}
-
-.los-details ul {
   margin-top: 5px;
-  padding-left: 20px;
-  list-style-type: none;
-}
-
-.los-details li {
-  margin-bottom: 8px;
-  padding-left: 0;
-}
-
-.los-details li li {
-  margin-bottom: 3px;
-  font-size: 0.9em;
-}
-
-.protrusion-indicator {
-  display: inline-block;
-  padding: 2px 6px;
-  margin-left: 5px;
-  border-radius: 3px;
-  font-size: 0.85em;
-  font-weight: bold;
-}
-
-.protrusion-indicator.protruding {
-  background-color: rgba(255, 82, 82, 0.2);
-  color: var(--error);
-  border: 1px solid var(--error);
-}
-
-.protrusion-indicator.non-protruding {
-  background-color: rgba(105, 240, 174, 0.2);
-  color: var(--success);
-  border: 1px solid var(--success);
-}
-
-.intersection-info {
-  margin-top: 12px;
-  padding: 10px;
-  background-color: var(--bg-tertiary);
-  border-radius: 4px;
-  font-size: 0.95em;
-}
-
-.intersection-info p {
-  margin: 5px 0;
-}
-
-.intersection-info strong {
-  color: var(--accent-blue);
-}
-
-.intersection-info .warning {
-  margin-top: 8px;
-  padding: 8px;
-  background-color: rgba(255, 82, 82, 0.1);
-  border-left: 3px solid var(--error);
-  border-radius: 0 4px 4px 0;
 }
