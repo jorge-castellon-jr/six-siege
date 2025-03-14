@@ -144,7 +144,7 @@
   {
     "id": "maps-16",
     "description": "Adds Breakable walls to Bank",
-    "completed": false,
+    "completed": true,
     "category": "maps"
   },
   {

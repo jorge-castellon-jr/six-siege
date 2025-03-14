@@ -28,7 +28,7 @@
       },
       "thickness": 0.2,
       "offset": -0.03,
-      "startExtension": 0.11,
+      "startExtension": 0.12,
       "endExtension": 0.06
     },
     {
@@ -42,7 +42,7 @@
       },
       "thickness": 0.2,
       "offset": -0.02,
-      "startExtension": 0.11,
+      "startExtension": 0.12,
       "endExtension": 0.05
     },
     {
@@ -56,7 +56,7 @@
       },
       "thickness": 0.2,
       "offset": -0.01,
-      "startExtension": 0.11,
+      "startExtension": 0.12,
       "endExtension": 0.08
     },
     {
@@ -363,9 +363,9 @@
         "y": 9
       },
       "thickness": 0.2,
-      "offset": 0.01,
+      "offset": 0.02,
       "startExtension": 0.08,
-      "endExtension": 0.09
+      "endExtension": 0.1
     },
     {
       "start": {
@@ -644,7 +644,7 @@
       },
       "thickness": 0.2,
       "offset": 0.01,
-      "startExtension": 0.1,
+      "startExtension": 0.11,
       "endExtension": 0.08
     },
     {
@@ -923,5 +923,221 @@
     "y": 35,
     "right": 30,
     "bottom": 35
-  }
+  },
+  "redWalls": [
+    {
+      "start": {
+        "x": 7,
+        "y": 15
+      },
+      "end": {
+        "x": 8,
+        "y": 15
+      },
+      "thickness": 0.2,
+      "offset": 0,
+      "startExtension": 0.1,
+      "endExtension": 0.05
+    },
+    {
+      "start": {
+        "x": 17,
+        "y": 2
+      },
+      "end": {
+        "x": 18,
+        "y": 2
+      },
+      "thickness": 0.2,
+      "offset": -0.02,
+      "startExtension": 0.11,
+      "endExtension": 0.05
+    },
+    {
+      "start": {
+        "x": 5,
+        "y": 6
+      },
+      "end": {
+        "x": 5,
+        "y": 7
+      },
+      "thickness": 0.2,
+      "offset": 0.02,
+      "startExtension": 0.05,
+      "endExtension": 0.15
+    },
+    {
+      "start": {
+        "x": 3,
+        "y": 10
+      },
+      "end": {
+        "x": 3,
+        "y": 11
+      },
+      "thickness": 0.2,
+      "offset": 0.02,
+      "startExtension": 0.09,
+      "endExtension": 0.04
+    }
+  ],
+  "orangeWalls": [
+    {
+      "start": {
+        "x": 8,
+        "y": 7
+      },
+      "end": {
+        "x": 8,
+        "y": 9
+      },
+      "thickness": 0.2,
+      "offset": 0.01,
+      "startExtension": 0.06,
+      "endExtension": 0.05
+    },
+    {
+      "start": {
+        "x": 15,
+        "y": 3
+      },
+      "end": {
+        "x": 15,
+        "y": 5
+      },
+      "thickness": 0.2,
+      "offset": -0.01,
+      "startExtension": 0.08,
+      "endExtension": 0.07
+    },
+    {
+      "start": {
+        "x": 14,
+        "y": 7
+      },
+      "end": {
+        "x": 14,
+        "y": 9
+      },
+      "thickness": 0.2,
+      "offset": 0,
+      "startExtension": 0.1,
+      "endExtension": 0.06
+    },
+    {
+      "start": {
+        "x": 12,
+        "y": 7
+      },
+      "end": {
+        "x": 12,
+        "y": 9
+      },
+      "thickness": 0.2,
+      "offset": 0,
+      "startExtension": 0.08,
+      "endExtension": 0.06
+    },
+    {
+      "start": {
+        "x": 15,
+        "y": 6
+      },
+      "end": {
+        "x": 17,
+        "y": 6
+      },
+      "thickness": 0.2,
+      "offset": -0.01,
+      "startExtension": 0.09,
+      "endExtension": 0.1
+    },
+    {
+      "start": {
+        "x": 8,
+        "y": 10
+      },
+      "end": {
+        "x": 10,
+        "y": 10
+      },
+      "thickness": 0.2,
+      "offset": -0.01,
+      "startExtension": 0,
+      "endExtension": 0
+    }
+  ],
+  "windows": [
+    {
+      "start": {
+        "x": 1,
+        "y": 1
+      },
+      "end": {
+        "x": 1,
+        "y": 2
+      },
+      "thickness": 0.2,
+      "offset": 0.02,
+      "startExtension": 0,
+      "endExtension": 0
+    },
+    {
+      "start": {
+        "x": 1,
+        "y": 3
+      },
+      "end": {
+        "x": 1,
+        "y": 4
+      },
+      "thickness": 0.2,
+      "offset": 0.02,
+      "startExtension": 0,
+      "endExtension": 0
+    },
+    {
+      "start": {
+        "x": 1,
+        "y": 5
+      },
+      "end": {
+        "x": 1,
+        "y": 6
+      },
+      "thickness": 0.2,
+      "offset": 0.02,
+      "startExtension": 0,
+      "endExtension": 0
+    },
+    {
+      "start": {
+        "x": 1,
+        "y": 7
+      },
+      "end": {
+        "x": 1,
+        "y": 8
+      },
+      "thickness": 0.2,
+      "offset": 0.02,
+      "startExtension": 0,
+      "endExtension": 0
+    },
+    {
+      "start": {
+        "x": 5,
+        "y": 1
+      },
+      "end": {
+        "x": 5,
+        "y": 2
+      },
+      "thickness": 0.2,
+      "offset": 0.02,
+      "startExtension": 0.05,
+      "endExtension": 0.15
+    }
+  ]
 }
