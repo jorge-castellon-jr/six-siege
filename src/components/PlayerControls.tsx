@@ -229,28 +229,25 @@ const PlayerControls: React.FC<PlayerControlsProps> = ({
             </div>
           </button>
         </div>
-
-        {selectedSmokePattern && (
-          <div className="instructions" style={{ marginTop: "10px" }}>
-            Click on the map to place the {selectedSmokePattern.width}×
-            {selectedSmokePattern.height} smoke
-          </div>
-        )}
-
-        {smokesCount > 0 && (
-          <>
-            <div
-              className="instructions"
-              style={{ marginTop: "5px", marginBottom: "10px" }}
-            >
-              Click on a deployed smoke to remove it
-            </div>
-            <button onClick={clearSmokes} className="clear-smokes-button">
-              Clear All Smokes ({smokesCount})
-            </button>
-          </>
-        )}
       </div>
+
+      {selectedSmokePattern && (
+        <div className="instructions" style={{ marginTop: "10px" }}>
+          Click on the map to place the {selectedSmokePattern.width}×
+          {selectedSmokePattern.height} smoke
+        </div>
+      )}
+
+      {smokesCount > 0 && (
+        <>
+          <div className="instructions">
+            Click on a deployed smoke to remove it
+          </div>
+          <button onClick={clearSmokes} className="clear-smokes-button">
+            Clear All Smokes ({smokesCount})
+          </button>
+        </>
+      )}
     </div>
   );
 };

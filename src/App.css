@@ -409,7 +409,6 @@ input[type="number"]:focus {
 
 /* Helper UI elements */
 .instructions {
-  margin-top: 10px;
   font-style: italic;
   color: var(--text-secondary);
 }
@@ -937,7 +936,6 @@ canvas {
 }
 
 .clear-smokes-button {
-  margin-top: 10px;
   width: 100%;
   padding: 8px;
   background-color: var(--accent-blue);
