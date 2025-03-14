@@ -150,7 +150,7 @@
   {
     "id": "maps-17",
     "description": "Adds Breakable walls to Kafe",
-    "completed": false,
+    "completed": true,
     "category": "maps"
   },
   {
