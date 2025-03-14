@@ -1,5 +1,5 @@
 // src/utils/lineOfSight.ts
-import { Position, Wall } from "../types";
+import { Position, Wall, BrokenWalls } from "../types";
 
 // Default line thickness in grid units (can be adjusted)
 export const DEFAULT_LINE_THICKNESS = 0.03;
@@ -364,7 +364,8 @@ function doesLineIntersectPolygon(
 
 /**
  * Check if there's a clear line of sight between two positions,
- * considering wall thickness, offset, extensions, and protrusion
+ * considering wall thickness, offset, extensions, and protrusion.
+ * Also takes broken walls into account.
  */
 export function hasLineOfSight(
   pos1: Position,
@@ -377,7 +378,8 @@ export function hasLineOfSight(
 }
 
 /**
- * Get detailed information about the line of sight check
+ * Get detailed information about the line of sight check,
+ * taking into account broken walls.
  */
 export function getLineOfSightDetails(
   pos1: Position,
@@ -461,4 +463,46 @@ export function getLineOfSightDetails(
     intersections: allIntersections,
     protrudingWalls,
   };
+}
+
+/**
+ * Modified line of sight function that takes into account broken walls.
+ * It filters out broken walls from the calculation.
+ */
+export function hasLineOfSightWithBreakableWalls(
+  pos1: Position,
+  pos2: Position,
+  mainWalls: Wall[],
+  redWalls: Wall[] = [],
+  orangeWalls: Wall[] = [],
+  windows: Wall[] = [],
+  brokenWalls: BrokenWalls,
+  lineThickness: number = DEFAULT_LINE_THICKNESS,
+): boolean {
+  // Start with all main walls (unbreakable)
+  const activeWalls = [...mainWalls];
+
+  // Add only the red walls that aren't broken
+  redWalls.forEach((wall, index) => {
+    if (!brokenWalls.red.includes(index)) {
+      activeWalls.push(wall);
+    }
+  });
+
+  // Add only the orange walls that aren't broken
+  orangeWalls.forEach((wall, index) => {
+    if (!brokenWalls.orange.includes(index)) {
+      activeWalls.push(wall);
+    }
+  });
+
+  // Add only the windows that aren't broken
+  windows.forEach((wall, index) => {
+    if (!brokenWalls.windows.includes(index)) {
+      activeWalls.push(wall);
+    }
+  });
+
+  // Run the standard line of sight check with only the active walls
+  return hasLineOfSight(pos1, pos2, activeWalls, lineThickness);
 }

@@ -1,5 +1,4 @@
 // src/types.ts
-// Existing types
 export type AppPage = "home" | "calculator" | "admin";
 
 export interface Position {
@@ -33,17 +32,35 @@ export interface Player {
   team: "blue" | "orange";
 }
 
+// Wall type enum for differentiating between wall types
+export enum WallType {
+  MAIN = "main",
+  RED = "red",
+  ORANGE = "orange",
+  WINDOW = "window",
+}
+
+// Track broken walls
+export interface BrokenWalls {
+  red: number[];
+  orange: number[];
+  windows: number[];
+}
+
 export interface MapData {
   id: string;
   name: string;
-  walls: Wall[];
+  walls: Wall[]; // Main (unbreakable) walls
+  redWalls?: Wall[]; // Red breakable walls
+  orangeWalls?: Wall[]; // Orange breakable walls
+  windows?: Wall[]; // Windows/barricades
   gridSize: GridSize;
   gridOffset: GridOffset;
- cellSize?: number;
+  cellSize?: number;
   version: number;
 }
 
-// New types for the improvement checklist
+// Checklist types
 export interface ChecklistItem {
   id: string;
   description: string;

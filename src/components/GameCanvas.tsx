@@ -1,6 +1,13 @@
-// src/components/GameCanvas.tsx - updated with zoom controls
+// src/components/GameCanvas.tsx - updated for admin mode with breakable walls
 import React, { useState, useEffect, useRef } from "react";
-import { Position, Player, MapData, Wall } from "../types";
+import {
+  Position,
+  Player,
+  MapData,
+  Wall,
+  WallType,
+  BrokenWalls,
+} from "../types";
 import { DEFAULT_LINE_THICKNESS, Intersection } from "../utils/lineOfSight";
 import { isAdmin } from "../utils/admin";
 
@@ -19,11 +26,16 @@ interface GameCanvasProps {
   ) => void;
   setImageDimensions?: (dimensions: { width: number; height: number }) => void;
   selectedWallIndex: number | null;
+  selectedWallType?: WallType | null;
   setSelectedWallIndex: React.Dispatch<React.SetStateAction<number | null>>;
+  setSelectedWallType?: React.Dispatch<React.SetStateAction<WallType | null>>;
   setBluePlayer?: React.Dispatch<React.SetStateAction<Player | null>>;
   setOrangePlayer?: React.Dispatch<React.SetStateAction<Player | null>>;
   setHasLos?: React.Dispatch<React.SetStateAction<boolean | null>>;
   intersections?: Intersection[]; // For line of sight intersections
+  brokenWalls?: BrokenWalls; // For broken walls
+  onBrokenWallsUpdate?: (brokenWalls: BrokenWalls) => void; // For updating broken walls
+  currentWallType?: WallType; // Current wall type being placed
 }
 
 const GameCanvas: React.FC<GameCanvasProps> = ({
@@ -36,15 +48,21 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
   onCanvasClick,
   setImageDimensions,
   selectedWallIndex,
+  selectedWallType = null,
   setSelectedWallIndex,
+  setSelectedWallType = () => { },
   setBluePlayer,
   setOrangePlayer,
   setHasLos,
   intersections = [],
+  brokenWalls = { red: [], orange: [], windows: [] },
+  onBrokenWallsUpdate = () => { },
+  currentWallType = WallType.MAIN,
 }) => {
   // State for panning
   const [mousePosition, setMousePosition] = useState<Position | null>(null);
   const [hoveredWallIndex, setHoveredWallIndex] = useState<number | null>(null);
+  const [hoveredWallType, setHoveredWallType] = useState<WallType | null>(null);
 
   // State for image
   const [mapImage, setMapImage] = useState<HTMLImageElement | null>(null);
@@ -164,7 +182,7 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
       console.error(`Failed to load image: ${mapData.id}`);
       console.error(error);
     };
-  }, [mapData.id, setImageDimensions]);
+  }, [mapData.id, setImageDimensions, mapData.version]);
 
   // Execute the render function when relevant state changes
   useEffect(() => {
@@ -178,11 +196,15 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
     isAdminMode,
     mapImage,
     selectedWallIndex,
+    selectedWallType,
     mousePosition,
     draggingPlayer,
     dragPosition,
     hoveredWallIndex,
+    hoveredWallType,
+    brokenWalls,
     intersections,
+    currentWallType,
   ]);
 
   // New function: check if a point is inside a player token
@@ -213,9 +235,15 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
     startX: number,
     startY: number,
     cellSize: number,
+    type: WallType = WallType.MAIN,
+    index: number,
     isSelected: boolean = false,
     isHovered: boolean = false,
+    isBroken: boolean = false,
   ) => {
+    // Skip drawing broken walls if it's marked as broken and not in admin mode
+    if (isBroken && !isAdminMode) return;
+
     // Get wall endpoints in canvas coordinates
     const x1 = startX + wall.start.x * cellSize;
     const y1 = startY + wall.start.y * cellSize;
@@ -280,18 +308,99 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
     ctx.lineTo(bottomLeft.x, bottomLeft.y);
     ctx.closePath();
 
-    // Fill with color
-    ctx.fillStyle = isSelected ? "#b71c1c" : isHovered ? "#ffcc80" : "#ff5252";
-    ctx.fill();
+    // Determine wall color based on type
+    let fillColor;
 
-    // Add outline
-    ctx.strokeStyle = isSelected
-      ? "#b71c1c"
-      : isHovered
-        ? "#ffb74d"
-        : "#ff5252";
-    ctx.lineWidth = 1;
-    ctx.stroke();
+    if (isSelected) {
+      // Selected wall colors (brighter versions of the regular colors)
+      switch (type) {
+        case WallType.MAIN:
+          fillColor = "#b71c1c"; // Bright red for selected main walls
+          break;
+        case WallType.RED:
+          fillColor = "#f44336"; // Bright red for selected red walls
+          break;
+        case WallType.ORANGE:
+          fillColor = "#ff9800"; // Bright orange for selected orange walls
+          break;
+        case WallType.WINDOW:
+          fillColor = "#0288d1"; // Bright blue for selected windows
+          break;
+        default:
+          fillColor = "#b71c1c";
+      }
+    } else if (isHovered) {
+      // Hovered wall colors (lighter versions of the regular colors)
+      switch (type) {
+        case WallType.MAIN:
+          fillColor = "#ef5350"; // Light red for hovered main walls
+          break;
+        case WallType.RED:
+          fillColor = "#ef5350"; // Light red for hovered red walls
+          break;
+        case WallType.ORANGE:
+          fillColor = "#ffb74d"; // Light orange for hovered orange walls
+          break;
+        case WallType.WINDOW:
+          fillColor = "#81d4fa"; // Light blue for hovered windows
+          break;
+        default:
+          fillColor = "#ef5350";
+      }
+    } else {
+      // Default colors based on wall type
+      switch (type) {
+        case WallType.MAIN:
+          fillColor = "#ff5252"; // Regular main wall color
+          break;
+        case WallType.RED:
+          fillColor = "#d32f2f"; // Deep red for red walls
+          break;
+        case WallType.ORANGE:
+          fillColor = "#f57c00"; // Deep orange for orange walls
+          break;
+        case WallType.WINDOW:
+          fillColor = "#0288d1"; // Deep blue for windows/barricades
+          break;
+        default:
+          fillColor = "#ff5252";
+      }
+    }
+
+    // Add striped pattern for broken walls in admin mode
+    if (isBroken && isAdminMode) {
+      // Create striped pattern for broken walls
+      const patternCanvas = document.createElement("canvas");
+      const patternContext = patternCanvas.getContext("2d");
+
+      if (patternContext) {
+        const patternSize = 10;
+        patternCanvas.width = patternSize;
+        patternCanvas.height = patternSize;
+
+        // Draw background
+        patternContext.fillStyle = fillColor;
+        patternContext.fillRect(0, 0, patternSize, patternSize);
+
+        // Draw stripes
+        patternContext.beginPath();
+        patternContext.strokeStyle = "rgba(0, 0, 0, 0.5)";
+        patternContext.lineWidth = 2;
+        patternContext.moveTo(0, 0);
+        patternContext.lineTo(patternSize, patternSize);
+        patternContext.stroke();
+
+        // Create pattern
+        const pattern = ctx.createPattern(patternCanvas, "repeat");
+        if (pattern) {
+          fillColor = pattern;
+        }
+      }
+    }
+
+    // Fill with color
+    ctx.fillStyle = fillColor;
+    ctx.fill();
 
     // If selected, draw the endpoints as circles
     if (isSelected) {
@@ -329,8 +438,144 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
 
   // Check if mouse is over a wall for hover effect
   const handleMouseMoveOverWalls = (clientX: number, clientY: number) => {
-    const index = getWallIndexAtPoint(clientX, clientY);
-    setHoveredWallIndex(index);
+    if (isAdminMode) {
+      // Admin mode: Check all wall types for hovering
+      // Check main walls first
+      const mainWallIndex = getWallIndexAtPoint(
+        clientX,
+        clientY,
+        WallType.MAIN,
+      );
+      if (mainWallIndex !== null) {
+        setHoveredWallIndex(mainWallIndex);
+        setHoveredWallType(WallType.MAIN);
+        return;
+      }
+
+      // Check red walls
+      const redWallIndex = getWallIndexAtPoint(clientX, clientY, WallType.RED);
+      if (redWallIndex !== null) {
+        setHoveredWallIndex(redWallIndex);
+        setHoveredWallType(WallType.RED);
+        return;
+      }
+
+      // Check orange walls
+      const orangeWallIndex = getWallIndexAtPoint(
+        clientX,
+        clientY,
+        WallType.ORANGE,
+      );
+      if (orangeWallIndex !== null) {
+        setHoveredWallIndex(orangeWallIndex);
+        setHoveredWallType(WallType.ORANGE);
+        return;
+      }
+
+      // Check windows
+      const windowWallIndex = getWallIndexAtPoint(
+        clientX,
+        clientY,
+        WallType.WINDOW,
+      );
+      if (windowWallIndex !== null) {
+        setHoveredWallIndex(windowWallIndex);
+        setHoveredWallType(WallType.WINDOW);
+        return;
+      }
+
+      // Reset if not hovering over any wall
+      setHoveredWallIndex(null);
+      setHoveredWallType(null);
+    } else {
+      // Player mode: Check breakable walls for hover
+      // Check red walls first
+      const redWallIndex = getWallIndexAtPoint(clientX, clientY, WallType.RED);
+      if (redWallIndex !== null) {
+        setHoveredWallIndex(redWallIndex);
+        setHoveredWallType(WallType.RED);
+        return;
+      }
+
+      // Check orange walls
+      const orangeWallIndex = getWallIndexAtPoint(
+        clientX,
+        clientY,
+        WallType.ORANGE,
+      );
+      if (orangeWallIndex !== null) {
+        setHoveredWallIndex(orangeWallIndex);
+        setHoveredWallType(WallType.ORANGE);
+        return;
+      }
+
+      // Check windows
+      const windowWallIndex = getWallIndexAtPoint(
+        clientX,
+        clientY,
+        WallType.WINDOW,
+      );
+      if (windowWallIndex !== null) {
+        setHoveredWallIndex(windowWallIndex);
+        setHoveredWallType(WallType.WINDOW);
+        return;
+      }
+
+      // Reset if not hovering over any breakable wall
+      setHoveredWallIndex(null);
+      setHoveredWallType(null);
+    }
+  };
+
+  // Toggle a breakable wall's state (broken or not)
+  const toggleBreakableWall = (type: WallType, index: number) => {
+    if (type === WallType.MAIN || isAdminMode) return; // Main walls can't be toggled, and no toggling in admin mode
+
+    const newBrokenWalls = { ...brokenWalls };
+
+    switch (type) {
+      case WallType.RED:
+        if (newBrokenWalls.red.includes(index)) {
+          // Remove from broken walls
+          newBrokenWalls.red = newBrokenWalls.red.filter((i) => i !== index);
+        } else {
+          // Add to broken walls
+          newBrokenWalls.red.push(index);
+        }
+        break;
+      case WallType.ORANGE:
+        if (newBrokenWalls.orange.includes(index)) {
+          // Remove from broken walls
+          newBrokenWalls.orange = newBrokenWalls.orange.filter(
+            (i) => i !== index,
+          );
+        } else {
+          // Add to broken walls
+          newBrokenWalls.orange.push(index);
+        }
+        break;
+      case WallType.WINDOW:
+        if (newBrokenWalls.windows.includes(index)) {
+          // Remove from broken walls
+          newBrokenWalls.windows = newBrokenWalls.windows.filter(
+            (i) => i !== index,
+          );
+        } else {
+          // Add to broken walls
+          newBrokenWalls.windows.push(index);
+        }
+        break;
+    }
+
+    // Update broken walls state
+    if (onBrokenWallsUpdate) {
+      onBrokenWallsUpdate(newBrokenWalls);
+    }
+
+    // Reset line of sight
+    if (setHasLos) {
+      setHasLos(null);
+    }
   };
 
   // Check if a point is inside a wall (for selection)
@@ -428,6 +673,68 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
     );
   };
 
+  // Check if a mouse click hits a wall of a specific type
+  const getWallIndexAtPoint = (
+    clientX: number,
+    clientY: number,
+    wallType: WallType = WallType.MAIN,
+  ): number | null => {
+    if (!canvasRef.current) return null;
+
+    const canvas = canvasRef.current;
+    const rect = canvas.getBoundingClientRect();
+
+    // Calculate actual position considering zoom and pan
+    const mouseX = clientX - rect.left;
+    const mouseY = clientY - rect.top;
+
+    // Convert screen coordinates to canvas coordinates
+    const canvasX = (mouseX / rect.width) * canvas.width;
+    const canvasY = (mouseY / rect.height) * canvas.height;
+
+    // Apply pan transformation
+    const transformedX = canvasX;
+    const transformedY = canvasY;
+
+    const { gridOffset } = mapData;
+    const cellSize = getCellSize();
+    const startX = gridOffset.x;
+    const startY = gridOffset.y;
+
+    // Determine which wall array to check based on type
+    let wallArray: Wall[] = [];
+    switch (wallType) {
+      case WallType.RED:
+        wallArray = mapData.redWalls || [];
+        break;
+      case WallType.ORANGE:
+        wallArray = mapData.orangeWalls || [];
+        break;
+      case WallType.WINDOW:
+        wallArray = mapData.windows || [];
+        break;
+      default:
+        wallArray = mapData.walls;
+    }
+
+    // Check each wall from last to first (for correct layering/selection)
+    for (let i = wallArray.length - 1; i >= 0; i--) {
+      if (
+        isPointInWall(
+          { x: transformedX, y: transformedY },
+          wallArray[i],
+          startX,
+          startY,
+          cellSize,
+        )
+      ) {
+        return i;
+      }
+    }
+
+    return null;
+  };
+
   // Render the canvas content
   const renderCanvas = () => {
     if (!canvasRef.current) return;
@@ -482,16 +789,94 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
       ctx.stroke();
     }
 
-    // Draw walls with new properties
+    // Draw breakable walls first (they should be underneath main walls)
+
+    // Draw red walls
+    if (mapData.redWalls) {
+      mapData.redWalls.forEach((wall, index) => {
+        const isBroken = brokenWalls.red.includes(index);
+        const isHovered =
+          hoveredWallType === WallType.RED && hoveredWallIndex === index;
+        const isSelected =
+          selectedWallType === WallType.RED && selectedWallIndex === index;
+        drawWall(
+          ctx,
+          wall,
+          startX,
+          startY,
+          cellSize,
+          WallType.RED,
+          index,
+          isSelected,
+          isHovered,
+          isBroken,
+        );
+      });
+    }
+
+    // Draw orange walls
+    if (mapData.orangeWalls) {
+      mapData.orangeWalls.forEach((wall, index) => {
+        const isBroken = brokenWalls.orange.includes(index);
+        const isHovered =
+          hoveredWallType === WallType.ORANGE && hoveredWallIndex === index;
+        const isSelected =
+          selectedWallType === WallType.ORANGE && selectedWallIndex === index;
+        drawWall(
+          ctx,
+          wall,
+          startX,
+          startY,
+          cellSize,
+          WallType.ORANGE,
+          index,
+          isSelected,
+          isHovered,
+          isBroken,
+        );
+      });
+    }
+
+    // Draw windows/barricades
+    if (mapData.windows) {
+      mapData.windows.forEach((wall, index) => {
+        const isBroken = brokenWalls.windows.includes(index);
+        const isHovered =
+          hoveredWallType === WallType.WINDOW && hoveredWallIndex === index;
+        const isSelected =
+          selectedWallType === WallType.WINDOW && selectedWallIndex === index;
+        drawWall(
+          ctx,
+          wall,
+          startX,
+          startY,
+          cellSize,
+          WallType.WINDOW,
+          index,
+          isSelected,
+          isHovered,
+          isBroken,
+        );
+      });
+    }
+
+    // Draw main walls (these are always on top)
     mapData.walls.forEach((wall, index) => {
+      const isHovered =
+        hoveredWallType === WallType.MAIN && hoveredWallIndex === index;
+      const isSelected =
+        selectedWallType === WallType.MAIN && selectedWallIndex === index;
       drawWall(
         ctx,
         wall,
         startX,
         startY,
         cellSize,
-        index === selectedWallIndex,
-        index === hoveredWallIndex,
+        WallType.MAIN,
+        index,
+        isSelected,
+        isHovered,
+        false, // Main walls can't be broken
       );
     });
 
@@ -502,8 +887,45 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
 
       ctx.beginPath();
       ctx.arc(mouseX, mouseY, 5, 0, Math.PI * 2);
-      ctx.fillStyle = "#ffeb3b";
+
+      // Color the start point based on the current wall type
+      switch (currentWallType) {
+        case WallType.MAIN:
+          ctx.fillStyle = "#ff5252";
+          break;
+        case WallType.RED:
+          ctx.fillStyle = "#f44336";
+          break;
+        case WallType.ORANGE:
+          ctx.fillStyle = "#ff9800";
+          break;
+        case WallType.WINDOW:
+          ctx.fillStyle = "#29b6f6";
+          break;
+        default:
+          ctx.fillStyle = "#ffeb3b";
+      }
+
       ctx.fill();
+
+      // If we also have a mouse position, draw a preview line
+      if (mousePosition) {
+        const mousePos = getGridIntersectionFromMouse(
+          mousePosition.x,
+          mousePosition.y,
+        );
+        const previewX = startX + mousePos.x * cellSize;
+        const previewY = startY + mousePos.y * cellSize;
+
+        ctx.beginPath();
+        ctx.moveTo(mouseX, mouseY);
+        ctx.lineTo(previewX, previewY);
+        ctx.strokeStyle = "#ffeb3b";
+        ctx.lineWidth = 2;
+        ctx.setLineDash([5, 5]);
+        ctx.stroke();
+        ctx.setLineDash([]);
+      }
     }
 
     // Draw players
@@ -768,51 +1190,6 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
     return { x: gridX, y: gridY };
   };
 
-  // Check if a mouse click hits a wall
-  const getWallIndexAtPoint = (
-    clientX: number,
-    clientY: number,
-  ): number | null => {
-    if (!canvasRef.current || !isAdminMode) return null;
-
-    const canvas = canvasRef.current;
-    const rect = canvas.getBoundingClientRect();
-
-    // Calculate actual position considering zoom and pan
-    const mouseX = clientX - rect.left;
-    const mouseY = clientY - rect.top;
-
-    // Convert screen coordinates to canvas coordinates
-    const canvasX = (mouseX / rect.width) * canvas.width;
-    const canvasY = (mouseY / rect.height) * canvas.height;
-
-    // Apply pan transformation
-    const transformedX = canvasX;
-    const transformedY = canvasY;
-
-    const { gridOffset } = mapData;
-    const cellSize = getCellSize();
-    const startX = gridOffset.x;
-    const startY = gridOffset.y;
-
-    // Check each wall from last to first (for correct layering/selection)
-    for (let i = mapData.walls.length - 1; i >= 0; i--) {
-      if (
-        isPointInWall(
-          { x: transformedX, y: transformedY },
-          mapData.walls[i],
-          startX,
-          startY,
-          cellSize,
-        )
-      ) {
-        return i;
-      }
-    }
-
-    return null;
-  };
-
   const handleMouseMove = (event: React.MouseEvent<HTMLCanvasElement>) => {
     // Update mouse position for temporary wall preview
     setMousePosition({
@@ -821,11 +1198,10 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
     });
 
     // Check for wall hover effect
-    if (isAdminMode) {
-      handleMouseMoveOverWalls(event.clientX, event.clientY);
-    }
+    handleMouseMoveOverWalls(event.clientX, event.clientY);
+
     // Handle player dragging in calculator mode
-    else if (draggingPlayer) {
+    if (!isAdminMode && draggingPlayer) {
       const gridPosition = getGridPositionFromMouse(
         event.clientX,
         event.clientY,
@@ -923,6 +1299,8 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
     setMousePosition(null);
     setDraggingPlayer(null);
     setDragPosition(null);
+    setHoveredWallIndex(null);
+    setHoveredWallType(null);
   };
 
   // Handle canvas click but check if we're dragging first
@@ -932,18 +1310,96 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
 
     // If in admin mode, handle wall placement or selection
     if (isAdminMode) {
+      // FIX: Don't re-select the wall if it's already selected - prevents update loop
       // Check if we clicked on an existing wall
-      const clickedWallIndex = getWallIndexAtPoint(
-        event.clientX,
-        event.clientY,
-      );
-
-      if (clickedWallIndex !== null && wallStart === null) {
-        // Select the wall
-        setSelectedWallIndex(
-          clickedWallIndex === selectedWallIndex ? null : clickedWallIndex,
+      if (wallStart === null) {
+        // Check main walls first
+        const mainWallIndex = getWallIndexAtPoint(
+          event.clientX,
+          event.clientY,
+          WallType.MAIN,
         );
-        return;
+
+        if (mainWallIndex !== null) {
+          // Select the main wall only if it's not already selected or deselect if clicking the same wall
+          if (
+            mainWallIndex === selectedWallIndex &&
+            selectedWallType === WallType.MAIN
+          ) {
+            setSelectedWallIndex(null);
+            setSelectedWallType(null);
+          } else {
+            setSelectedWallIndex(mainWallIndex);
+            setSelectedWallType(WallType.MAIN);
+          }
+          return;
+        }
+
+        // Check red walls
+        const redWallIndex = getWallIndexAtPoint(
+          event.clientX,
+          event.clientY,
+          WallType.RED,
+        );
+
+        if (redWallIndex !== null) {
+          // Select the red wall only if it's not already selected or deselect if clicking the same wall
+          if (
+            redWallIndex === selectedWallIndex &&
+            selectedWallType === WallType.RED
+          ) {
+            setSelectedWallIndex(null);
+            setSelectedWallType(null);
+          } else {
+            setSelectedWallIndex(redWallIndex);
+            setSelectedWallType(WallType.RED);
+          }
+          return;
+        }
+
+        // Check orange walls
+        const orangeWallIndex = getWallIndexAtPoint(
+          event.clientX,
+          event.clientY,
+          WallType.ORANGE,
+        );
+
+        if (orangeWallIndex !== null) {
+          // Select the orange wall only if it's not already selected or deselect if clicking the same wall
+          if (
+            orangeWallIndex === selectedWallIndex &&
+            selectedWallType === WallType.ORANGE
+          ) {
+            setSelectedWallIndex(null);
+            setSelectedWallType(null);
+          } else {
+            setSelectedWallIndex(orangeWallIndex);
+            setSelectedWallType(WallType.ORANGE);
+          }
+          return;
+        }
+
+        // Check windows
+        const windowIndex = getWallIndexAtPoint(
+          event.clientX,
+          event.clientY,
+          WallType.WINDOW,
+        );
+
+        if (windowIndex !== null) {
+          // Select the window only if it's not already selected or deselect if clicking the same wall
+          if (
+            windowIndex === selectedWallIndex &&
+            selectedWallType === WallType.WINDOW
+          ) {
+            setSelectedWallIndex(null);
+            setSelectedWallType(null);
+          } else {
+            setSelectedWallIndex(windowIndex);
+            setSelectedWallType(WallType.WINDOW);
+          }
+          return;
+        }
       }
 
       // If we didn't click on a wall, or if we're in the middle of creating a wall,
@@ -956,6 +1412,7 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
       // Deselect any selected wall when starting a new wall
       if (wallStart === null) {
         setSelectedWallIndex(null);
+        setSelectedWallType(null);
       }
 
       onCanvasClick({
@@ -963,7 +1420,16 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
         gridIntersection: intersectionPos,
       });
     } else {
-      // If in player mode, handle player placement
+      // If in player mode
+
+      // First check if we clicked on a breakable wall
+      if (hoveredWallType && hoveredWallIndex !== null) {
+        // Toggle the breakable wall on/off
+        toggleBreakableWall(hoveredWallType, hoveredWallIndex);
+        return;
+      }
+
+      // If not clicking a breakable wall, handle player placement
       const gridPosition = getGridPositionFromMouse(
         event.clientX,
         event.clientY,
@@ -998,14 +1464,22 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
           onMouseLeave={handleMouseLeave}
           style={{
             cursor: isAdminMode
-              ? "crosshair"
-              : draggingPlayer
-                ? "grabbing"
-                : "pointer",
+              ? wallStart
+                ? "crosshair"
+                : "pointer"
+              : hoveredWallType !== null
+                ? "pointer"
+                : draggingPlayer
+                  ? "grabbing"
+                  : "pointer",
           }}
         />
         <div className="drag-tooltip">
-          {isAdminMode ? "Click to place walls" : "Drag players to move them"}
+          {isAdminMode
+            ? wallStart
+              ? "Click to place the end point of the wall"
+              : `Click to place walls (${currentWallType}) or select an existing wall to edit`
+            : "Click breakable walls to toggle them, or drag players to move them"}
         </div>
       </div>
 

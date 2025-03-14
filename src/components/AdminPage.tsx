@@ -1,6 +1,6 @@
 // src/components/AdminPage.tsx
 import React, { useState } from "react";
-import { MapData, Position, Wall, AppPage } from "../types";
+import { MapData, Position, Wall, AppPage, WallType } from "../types";
 import AdminPanel from "./AdminPanel";
 import GameCanvas from "./GameCanvas";
 
@@ -35,15 +35,29 @@ const AdminPage: React.FC<AdminPageProps> = ({
     offset: 0,
     startExtension: 0,
     endExtension: 0,
+    type: WallType.MAIN,
   });
 
   // State for selected wall (for editing)
   const [selectedWallIndex, setSelectedWallIndex] = useState<number | null>(
     null,
   );
+  const [selectedWallType, setSelectedWallType] = useState<WallType | null>(
+    null,
+  );
 
   // State for zoom (now passed to GameCanvas)
   const [zoomLevel, setZoomLevel] = useState<number>(100);
+
+  // Initialize the map data with empty arrays for new wall types if they don't exist
+  const ensureWallArraysExist = (map: MapData): MapData => {
+    return {
+      ...map,
+      redWalls: map.redWalls || [],
+      orangeWalls: map.orangeWalls || [],
+      windows: map.windows || [],
+    };
+  };
 
   // Handle canvas click - this is passed to GameCanvas
   const handleCanvasClick = (
@@ -74,15 +88,41 @@ const AdminPage: React.FC<AdminPageProps> = ({
           wallStart.x !== intersectionPos.x ||
           wallStart.y !== intersectionPos.y
         ) {
-          const updatedMap = {
-            ...mapData,
-            walls: [...mapData.walls, newWall],
-          };
+          // Ensure the map has all wall arrays
+          const updatedMap = ensureWallArraysExist({ ...mapData });
+
+          // Add the wall to the appropriate array based on the selected type
+          switch (currentWallProps.type) {
+            case WallType.MAIN:
+              updatedMap.walls = [...updatedMap.walls, newWall];
+              // Select the newly created wall
+              setSelectedWallIndex(updatedMap.walls.length - 1);
+              setSelectedWallType(WallType.MAIN);
+              break;
+
+            case WallType.RED:
+              updatedMap.redWalls = [...updatedMap.redWalls!, newWall];
+              // Select the newly created wall
+              setSelectedWallIndex(updatedMap.redWalls!.length - 1);
+              setSelectedWallType(WallType.RED);
+              break;
+
+            case WallType.ORANGE:
+              updatedMap.orangeWalls = [...updatedMap.orangeWalls!, newWall];
+              // Select the newly created wall
+              setSelectedWallIndex(updatedMap.orangeWalls!.length - 1);
+              setSelectedWallType(WallType.ORANGE);
+              break;
+
+            case WallType.WINDOW:
+              updatedMap.windows = [...updatedMap.windows!, newWall];
+              // Select the newly created wall
+              setSelectedWallIndex(updatedMap.windows!.length - 1);
+              setSelectedWallType(WallType.WINDOW);
+              break;
+          }
 
           onUpdateMap(updatedMap);
-
-          // Select the newly created wall
-          setSelectedWallIndex(updatedMap.walls.length - 1);
         }
 
         setWallStart(null);
@@ -91,16 +131,52 @@ const AdminPage: React.FC<AdminPageProps> = ({
   };
 
   // Update a wall's properties
-  const updateWall = (index: number, props: Partial<Wall>) => {
-    if (index < 0 || index >= mapData.walls.length) return;
+  const updateWall = (index: number, type: WallType, props: Partial<Wall>) => {
+    if (index < 0) return;
 
-    const updatedWalls = [...mapData.walls];
-    updatedWalls[index] = { ...updatedWalls[index], ...props };
+    // Create a deep copy of mapData
+    const updatedMap = ensureWallArraysExist({ ...mapData });
 
-    onUpdateMap({
-      ...mapData,
-      walls: updatedWalls,
-    });
+    // Get the appropriate wall array
+    let wallArray: Wall[] = [];
+    switch (type) {
+      case WallType.MAIN:
+        wallArray = updatedMap.walls;
+        break;
+      case WallType.RED:
+        wallArray = updatedMap.redWalls!;
+        break;
+      case WallType.ORANGE:
+        wallArray = updatedMap.orangeWalls!;
+        break;
+      case WallType.WINDOW:
+        wallArray = updatedMap.windows!;
+        break;
+    }
+
+    // Check if the index is valid
+    if (index >= wallArray.length) return;
+
+    // Update the wall properties
+    const updatedWall = { ...wallArray[index], ...props };
+
+    // Update the array
+    switch (type) {
+      case WallType.MAIN:
+        updatedMap.walls[index] = updatedWall;
+        break;
+      case WallType.RED:
+        updatedMap.redWalls![index] = updatedWall;
+        break;
+      case WallType.ORANGE:
+        updatedMap.orangeWalls![index] = updatedWall;
+        break;
+      case WallType.WINDOW:
+        updatedMap.windows![index] = updatedWall;
+        break;
+    }
+
+    onUpdateMap(updatedMap);
   };
 
   return (
@@ -126,7 +202,7 @@ const AdminPage: React.FC<AdminPageProps> = ({
       </div>
 
       <GameCanvas
-        mapData={mapData}
+        mapData={ensureWallArraysExist(mapData)}
         bluePlayer={null}
         orangePlayer={null}
         hasLos={null}
@@ -135,20 +211,25 @@ const AdminPage: React.FC<AdminPageProps> = ({
         onCanvasClick={handleCanvasClick}
         setImageDimensions={setImageDimensions}
         selectedWallIndex={selectedWallIndex}
+        selectedWallType={selectedWallType}
         setSelectedWallIndex={setSelectedWallIndex}
+        setSelectedWallType={setSelectedWallType}
+        currentWallType={currentWallProps.type}
       />
       <div className="admin-spacer" />
 
       <div className="controls">
         <AdminPanel
-          mapData={mapData}
+          mapData={ensureWallArraysExist(mapData)}
           setMapData={onUpdateMap}
           wallStart={wallStart}
           imageDimensions={imageDimensions}
           currentWallProps={currentWallProps}
           setCurrentWallProps={setCurrentWallProps}
           selectedWallIndex={selectedWallIndex}
+          selectedWallType={selectedWallType}
           setSelectedWallIndex={setSelectedWallIndex}
+          setSelectedWallType={setSelectedWallType}
           updateWall={updateWall}
           zoomLevel={zoomLevel}
           setZoomLevel={setZoomLevel}

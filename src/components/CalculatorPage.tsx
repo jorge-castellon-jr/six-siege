@@ -1,7 +1,11 @@
 // src/components/CalculatorPage.tsx
 import React, { useState } from "react";
-import { MapData, Position, Player, AppPage } from "../types";
-import { getLineOfSightDetails, Intersection } from "../utils/lineOfSight";
+import { MapData, Position, Player, AppPage, BrokenWalls } from "../types";
+import {
+  getLineOfSightDetails,
+  Intersection,
+  hasLineOfSightWithBreakableWalls,
+} from "../utils/lineOfSight";
 import GameCanvas from "./GameCanvas";
 import PlayerControls from "./PlayerControls";
 
@@ -29,6 +33,13 @@ const CalculatorPage: React.FC<CalculatorPageProps> = ({
 
   // State for protruding walls
   const [protrudingWalls, setProtrudingWalls] = useState<number[]>([]);
+
+  // State for broken walls
+  const [brokenWalls, setBrokenWalls] = useState<BrokenWalls>({
+    red: [],
+    orange: [],
+    windows: [],
+  });
 
   // Handle canvas click - this is passed to GameCanvas
   const handleCanvasClick = (
@@ -87,19 +98,38 @@ const CalculatorPage: React.FC<CalculatorPageProps> = ({
     }
   };
 
-  // Check line of sight
+  // Check line of sight including breakable walls
   const checkLineOfSight = () => {
     if (!bluePlayer || !orangePlayer) return;
 
+    // First run standard line of sight analysis (for visualization purposes)
     const result = getLineOfSightDetails(
       bluePlayer.position,
       orangePlayer.position,
       mapData.walls,
     );
 
-    setHasLos(result.hasLineOfSight);
     setIntersections(result.intersections);
     setProtrudingWalls(result.protrudingWalls);
+
+    // Then calculate actual line of sight using all active walls (non-broken)
+    const hasLineOfSight = hasLineOfSightWithBreakableWalls(
+      bluePlayer.position,
+      orangePlayer.position,
+      mapData.walls,
+      mapData.redWalls || [],
+      mapData.orangeWalls || [],
+      mapData.windows || [],
+      brokenWalls,
+    );
+
+    setHasLos(hasLineOfSight);
+  };
+
+  // Handle update of the broken walls state
+  const handleBrokenWallsUpdate = (updatedBrokenWalls: BrokenWalls) => {
+    setBrokenWalls(updatedBrokenWalls);
+    setHasLos(null); // Reset line of sight whenever walls are toggled
   };
 
   return (
@@ -125,6 +155,8 @@ const CalculatorPage: React.FC<CalculatorPageProps> = ({
         setOrangePlayer={setOrangePlayer}
         setHasLos={setHasLos}
         intersections={intersections}
+        brokenWalls={brokenWalls}
+        onBrokenWallsUpdate={handleBrokenWallsUpdate}
       />
       <div className="player-spacer" />
 
@@ -138,6 +170,7 @@ const CalculatorPage: React.FC<CalculatorPageProps> = ({
           checkLineOfSight={checkLineOfSight}
           intersections={intersections}
           protrudingWalls={protrudingWalls}
+          brokenWalls={brokenWalls}
         />
       </div>
     </div>
