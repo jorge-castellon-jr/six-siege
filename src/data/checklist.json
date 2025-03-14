@@ -56,12 +56,6 @@
     "category": "player"
   },
   {
-    "id": "player-9",
-    "description": "Ability to add different type of wals (red, orange, gadgets)",
-    "completed": false,
-    "category": "player"
-  },
-  {
     "id": "player-10",
     "description": "Auto place blue team on first click",
     "completed": true,
