@@ -2,7 +2,7 @@
 import { Position, Wall, BrokenWalls, Smoke } from "../types";
 
 // Default line thickness in grid units (can be adjusted)
-export const DEFAULT_LINE_THICKNESS = 0.03;
+export const DEFAULT_LINE_THICKNESS = 0.05;
 
 // Tolerance for considering multiple intersections as one
 export const INTERSECTION_TOLERANCE = 0.05;
