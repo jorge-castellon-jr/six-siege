@@ -174,7 +174,7 @@
   {
     "id": "maps-21",
     "description": "Adds Breakable walls to Border",
-    "completed": false,
+    "completed": true,
     "category": "maps"
   },
 
