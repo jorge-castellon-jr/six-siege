@@ -771,7 +771,7 @@
         "x": 9,
         "y": 4
       },
-      "thickness": 0.2,
+      "thickness": 0.14,
       "offset": 0,
       "startExtension": 0.08,
       "endExtension": 0.06
@@ -785,7 +785,7 @@
         "x": 4,
         "y": 6
       },
-      "thickness": 0.2,
+      "thickness": 0.14,
       "offset": 0,
       "startExtension": 0.09,
       "endExtension": 0.04
@@ -799,7 +799,7 @@
         "x": 7,
         "y": 17
       },
-      "thickness": 0.2,
+      "thickness": 0.14,
       "offset": 0,
       "startExtension": 0.09,
       "endExtension": 0.05

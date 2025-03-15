@@ -883,7 +883,7 @@
         "x": 9,
         "y": 1
       },
-      "thickness": 0.2,
+      "thickness": 0.14,
       "offset": -0.01,
       "startExtension": 0,
       "endExtension": 0
@@ -897,7 +897,7 @@
         "x": 6,
         "y": 11
       },
-      "thickness": 0.2,
+      "thickness": 0.14,
       "offset": 0.03,
       "startExtension": 0,
       "endExtension": 0
@@ -911,7 +911,7 @@
         "x": 9,
         "y": 11
       },
-      "thickness": 0.2,
+      "thickness": 0.14,
       "offset": 0.03,
       "startExtension": 0,
       "endExtension": 0
@@ -925,7 +925,7 @@
         "x": 15,
         "y": 14
       },
-      "thickness": 0.2,
+      "thickness": 0.14,
       "offset": -0.01,
       "startExtension": 0,
       "endExtension": 0
@@ -939,7 +939,7 @@
         "x": 15,
         "y": 17
       },
-      "thickness": 0.2,
+      "thickness": 0.14,
       "offset": -0.01,
       "startExtension": 0,
       "endExtension": 0

@@ -1023,7 +1023,7 @@
         "x": 3,
         "y": 7
       },
-      "thickness": 0.2,
+      "thickness": 0.14,
       "offset": 0.01,
       "startExtension": 0,
       "endExtension": 0.07
@@ -1037,7 +1037,7 @@
         "x": 11,
         "y": 15
       },
-      "thickness": 0.2,
+      "thickness": 0.14,
       "offset": 0.01,
       "startExtension": 0,
       "endExtension": 0.07
