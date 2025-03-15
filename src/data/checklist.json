@@ -156,7 +156,7 @@
   {
     "id": "maps-18",
     "description": "Adds Breakable walls to Chalet",
-    "completed": false,
+    "completed": true,
     "category": "maps"
   },
   {
