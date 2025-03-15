@@ -49,6 +49,7 @@ export interface BrokenWalls {
 
 // Smoke overlay patterns
 export interface SmokePattern {
+  name: string;
   width: number;
   height: number;
 }

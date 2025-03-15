@@ -19,6 +19,7 @@ interface PlayerControlsProps {
   >;
   clearSmokes: () => void;
   smokesCount: number;
+  resetWalls?: () => void; // Add resetWalls function
 }
 
 const PlayerControls: React.FC<PlayerControlsProps> = ({
@@ -34,6 +35,7 @@ const PlayerControls: React.FC<PlayerControlsProps> = ({
   setSelectedSmokePattern,
   clearSmokes,
   smokesCount,
+  resetWalls,
 }) => {
   // Group intersections by wall
   const wallIntersections = new Map<number, Intersection[]>();
@@ -75,32 +77,6 @@ const PlayerControls: React.FC<PlayerControlsProps> = ({
 
   return (
     <div className="player-controls">
-      <div className="controls-main">
-        <button
-          onClick={() => setActiveTeam("blue")}
-          disabled={activeTeam === "blue"}
-          className={`blue-button ${bluePlayer ? "player-placed" : ""}`}
-        >
-          {bluePlayer ? "Blue Player ✓" : "Place Blue Player"}
-        </button>
-
-        <button
-          onClick={() => setActiveTeam("orange")}
-          disabled={activeTeam === "orange"}
-          className={`orange-button ${orangePlayer ? "player-placed" : ""}`}
-        >
-          {orangePlayer ? "Orange Player ✓" : "Place Orange Player"}
-        </button>
-
-        <button
-          onClick={checkLineOfSight}
-          disabled={!bluePlayer || !orangePlayer}
-          className="check-los-button"
-        >
-          Check Line of Sight
-        </button>
-      </div>
-
       {hasLos !== null && (
         <div className={`los-result ${hasLos ? "has-los" : "no-los"}`}>
           {hasLos ? "Line of Sight: YES" : "Line of Sight: NO"}
@@ -195,6 +171,24 @@ const PlayerControls: React.FC<PlayerControlsProps> = ({
         </div>
       )}
 
+      <div className="controls-main">
+        <button
+          onClick={() => setActiveTeam("blue")}
+          disabled={activeTeam === "blue"}
+          className={`blue-button ${bluePlayer ? "player-placed" : ""}`}
+        >
+          {bluePlayer ? "Blue Player ✓" : "Place Blue Player"}
+        </button>
+
+        <button
+          onClick={() => setActiveTeam("orange")}
+          disabled={activeTeam === "orange"}
+          className={`orange-button ${orangePlayer ? "player-placed" : ""}`}
+        >
+          {orangePlayer ? "Orange Player ✓" : "Place Orange Player"}
+        </button>
+      </div>
+
       {/* Smoke Overlay Controls */}
       <div className="smoke-controls flex gap-5 items-center">
         <h4>Deploy Smoke</h4>
@@ -248,6 +242,16 @@ const PlayerControls: React.FC<PlayerControlsProps> = ({
           </button>
         </>
       )}
+
+      <div className="controls-main ">
+        <button
+          onClick={checkLineOfSight}
+          disabled={!bluePlayer || !orangePlayer}
+          className="check-los-button"
+        >
+          Check Line of Sight
+        </button>
+      </div>
     </div>
   );
 };

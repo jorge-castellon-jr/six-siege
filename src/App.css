@@ -359,6 +359,7 @@ button:disabled {
 .check-los-button {
   background-color: var(--accent-green);
   color: #ffffff;
+  grid-column: 1 / 3;
 }
 
 .check-los-button:hover {
@@ -959,7 +960,8 @@ canvas {
 }
 
 .controls-main {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 10px;
   flex-wrap: wrap;
 }

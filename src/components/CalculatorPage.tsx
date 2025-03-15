@@ -1,5 +1,5 @@
 // src/components/CalculatorPage.tsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   MapData,
   Position,
@@ -42,7 +42,7 @@ const CalculatorPage: React.FC<CalculatorPageProps> = ({
   // State for protruding walls
   const [protrudingWalls, setProtrudingWalls] = useState<number[]>([]);
 
-  // State for broken walls
+  // Initialize broken walls with empty arrays
   const [brokenWalls, setBrokenWalls] = useState<BrokenWalls>({
     red: [],
     orange: [],
@@ -53,6 +53,37 @@ const CalculatorPage: React.FC<CalculatorPageProps> = ({
   const [selectedSmokePattern, setSelectedSmokePattern] =
     useState<SmokePattern | null>(null);
   const [smokes, setSmokes] = useState<Smoke[]>([]);
+
+  // Initialize all breakable walls as broken when map data changes
+  useEffect(() => {
+    // Get the indices of all breakable walls
+    const redWallIndices = mapData.redWalls
+      ? Array.from({ length: mapData.redWalls.length }, (_, i) => i)
+      : [];
+
+    const orangeWallIndices = mapData.orangeWalls
+      ? Array.from({ length: mapData.orangeWalls.length }, (_, i) => i)
+      : [];
+
+    const windowIndices = mapData.windows
+      ? Array.from({ length: mapData.windows.length }, (_, i) => i)
+      : [];
+
+    // Set all walls as broken by default
+    setBrokenWalls({
+      red: redWallIndices,
+      orange: orangeWallIndices,
+      windows: windowIndices,
+    });
+
+    // Reset other related states when map changes
+    setHasLos(null);
+    setIntersections([]);
+    setProtrudingWalls([]);
+    setBluePlayer(null);
+    setOrangePlayer(null);
+    setSmokes([]);
+  }, [mapData]);
 
   // Handle canvas click - this is passed to GameCanvas
   const handleCanvasClick = (
@@ -174,6 +205,31 @@ const CalculatorPage: React.FC<CalculatorPageProps> = ({
     setHasLos(null); // Reset line of sight when clearing smokes
   };
 
+  // Reset walls to default (all broken)
+  const resetWalls = () => {
+    // Get the indices of all breakable walls
+    const redWallIndices = mapData.redWalls
+      ? Array.from({ length: mapData.redWalls.length }, (_, i) => i)
+      : [];
+
+    const orangeWallIndices = mapData.orangeWalls
+      ? Array.from({ length: mapData.orangeWalls.length }, (_, i) => i)
+      : [];
+
+    const windowIndices = mapData.windows
+      ? Array.from({ length: mapData.windows.length }, (_, i) => i)
+      : [];
+
+    // Set all walls as broken
+    setBrokenWalls({
+      red: redWallIndices,
+      orange: orangeWallIndices,
+      windows: windowIndices,
+    });
+
+    setHasLos(null); // Reset line of sight
+  };
+
   return (
     <div className="calculator-page">
       <div className="page-header">
@@ -200,9 +256,9 @@ const CalculatorPage: React.FC<CalculatorPageProps> = ({
         brokenWalls={brokenWalls}
         onBrokenWallsUpdate={handleBrokenWallsUpdate}
         smokes={smokes}
-        setSmokes={setSmokes} // Add this prop
+        setSmokes={setSmokes}
         selectedSmokePattern={selectedSmokePattern}
-        activeTeam={activeTeam} // Pass active team to know when player placement is happening
+        activeTeam={activeTeam}
       />
       <div className="player-spacer" />
 
@@ -220,6 +276,7 @@ const CalculatorPage: React.FC<CalculatorPageProps> = ({
           setSelectedSmokePattern={setSelectedSmokePattern}
           clearSmokes={clearSmokes}
           smokesCount={smokes.length}
+          resetWalls={resetWalls} // Add this prop for resetting walls
         />
       </div>
     </div>
