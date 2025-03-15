@@ -19,7 +19,6 @@ interface PlayerControlsProps {
   >;
   clearSmokes: () => void;
   smokesCount: number;
-  resetWalls?: () => void; // Add resetWalls function
 }
 
 const PlayerControls: React.FC<PlayerControlsProps> = ({
@@ -35,7 +34,6 @@ const PlayerControls: React.FC<PlayerControlsProps> = ({
   setSelectedSmokePattern,
   clearSmokes,
   smokesCount,
-  resetWalls,
 }) => {
   // Group intersections by wall
   const wallIntersections = new Map<number, Intersection[]>();

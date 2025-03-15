@@ -205,31 +205,6 @@ const CalculatorPage: React.FC<CalculatorPageProps> = ({
     setHasLos(null); // Reset line of sight when clearing smokes
   };
 
-  // Reset walls to default (all broken)
-  const resetWalls = () => {
-    // Get the indices of all breakable walls
-    const redWallIndices = mapData.redWalls
-      ? Array.from({ length: mapData.redWalls.length }, (_, i) => i)
-      : [];
-
-    const orangeWallIndices = mapData.orangeWalls
-      ? Array.from({ length: mapData.orangeWalls.length }, (_, i) => i)
-      : [];
-
-    const windowIndices = mapData.windows
-      ? Array.from({ length: mapData.windows.length }, (_, i) => i)
-      : [];
-
-    // Set all walls as broken
-    setBrokenWalls({
-      red: redWallIndices,
-      orange: orangeWallIndices,
-      windows: windowIndices,
-    });
-
-    setHasLos(null); // Reset line of sight
-  };
-
   return (
     <div className="calculator-page">
       <div className="page-header">
@@ -276,7 +251,6 @@ const CalculatorPage: React.FC<CalculatorPageProps> = ({
           setSelectedSmokePattern={setSelectedSmokePattern}
           clearSmokes={clearSmokes}
           smokesCount={smokes.length}
-          resetWalls={resetWalls} // Add this prop for resetting walls
         />
       </div>
     </div>
