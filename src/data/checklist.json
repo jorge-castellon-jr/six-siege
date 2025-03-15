@@ -168,7 +168,7 @@
   {
     "id": "maps-20",
     "description": "Adds Breakable walls to Coastline",
-    "completed": false,
+    "completed": true,
     "category": "maps"
   },
   {
