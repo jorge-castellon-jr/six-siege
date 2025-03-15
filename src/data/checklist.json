@@ -162,7 +162,7 @@
   {
     "id": "maps-19",
     "description": "Adds Breakable walls to Oregon",
-    "completed": false,
+    "completed": true,
     "category": "maps"
   },
   {
