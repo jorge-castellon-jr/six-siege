@@ -515,114 +515,180 @@ function doesLinePassThroughSmoke(
   lineEnd: Position,
   smokes: Smoke[],
 ): boolean {
+  const epsilon = 0.001; // Small value for numerical stability
+
+  // Special case for horizontal and vertical lines
+  const isHorizontalLine = Math.abs(lineEnd.y - lineStart.y) < epsilon;
+  const isVerticalLine = Math.abs(lineEnd.x - lineStart.x) < epsilon;
+
   // For each smoke
   for (const smoke of smokes) {
     // For each cell in the smoke pattern
     for (let x = 0; x < smoke.pattern.width; x++) {
       for (let y = 0; y < smoke.pattern.height; y++) {
-        // Get cell corners
+        // Get absolute cell position
         const cellX = smoke.position.x + x;
         const cellY = smoke.position.y + y;
 
-        // Create the four corners of the cell
-        const topLeft = getCellCenter({ x: cellX, y: cellY });
-        const topRight = getCellCenter({ x: cellX + 1, y: cellY });
-        const bottomLeft = getCellCenter({ x: cellX, y: cellY + 1 });
-        const bottomRight = getCellCenter({ x: cellX + 1, y: cellY + 1 });
-
-        // Check if the line passes through this cell
-        // Check if line intersects with any of the cell edges
+        // CRITICAL FIX 1: Skip cells that contain players
+        // This is the most important part - smoke in a player's cell never blocks
         if (
-          doLinesIntersect(lineStart, lineEnd, topLeft, topRight).intersects ||
-          doLinesIntersect(lineStart, lineEnd, topRight, bottomRight)
-            .intersects ||
-          doLinesIntersect(lineStart, lineEnd, bottomRight, bottomLeft)
-            .intersects ||
-          doLinesIntersect(lineStart, lineEnd, bottomLeft, topLeft).intersects
+          (Math.floor(lineStart.x) === cellX &&
+            Math.floor(lineStart.y) === cellY) ||
+          (Math.floor(lineEnd.x) === cellX && Math.floor(lineEnd.y) === cellY)
         ) {
-          return true;
+          continue;
         }
 
-        // Also check if either end point is inside the cell
-        // We need to adjust to the actual cell boundaries, not the centers
-        const actualCellX = cellX + 0.5 - 0.5; // Adjusted for center coordinates
-        const actualCellY = cellY + 0.5 - 0.5;
-        const actualCellWidth = 1;
-        const actualCellHeight = 1;
+        // CRITICAL FIX 2: Skip cells adjacent to players (only for horizontal/vertical lines)
+        // This addresses the issue with smoke next to players falsely blocking line of sight
+        if (isHorizontalLine) {
+          // For horizontal lines, smoke in a cell horizontally adjacent to a player's cell
+          // shouldn't block line of sight
+          const playerStartX = Math.floor(lineStart.x);
+          const playerStartY = Math.floor(lineStart.y);
+          const playerEndX = Math.floor(lineEnd.x);
+          const playerEndY = Math.floor(lineEnd.y);
 
-        if (
-          (lineStart.x >= actualCellX &&
-            lineStart.x <= actualCellX + actualCellWidth &&
-            lineStart.y >= actualCellY &&
-            lineStart.y <= actualCellY + actualCellHeight) ||
-          (lineEnd.x >= actualCellX &&
-            lineEnd.x <= actualCellX + actualCellWidth &&
-            lineEnd.y >= actualCellY &&
-            lineEnd.y <= actualCellY + actualCellHeight)
-        ) {
-          return true;
+          // Check if smoke is horizontally adjacent to either player
+          if (
+            (Math.abs(cellX - playerStartX) === 1 && cellY === playerStartY) ||
+            (Math.abs(cellX - playerEndX) === 1 && cellY === playerEndY)
+          ) {
+            continue;
+          }
+        } else if (isVerticalLine) {
+          // Similar logic for vertical lines
+          const playerStartX = Math.floor(lineStart.x);
+          const playerStartY = Math.floor(lineStart.y);
+          const playerEndX = Math.floor(lineEnd.x);
+          const playerEndY = Math.floor(lineEnd.y);
+
+          // Check if smoke is vertically adjacent to either player
+          if (
+            (Math.abs(cellY - playerStartY) === 1 && cellX === playerStartX) ||
+            (Math.abs(cellY - playerEndY) === 1 && cellX === playerEndX)
+          ) {
+            continue;
+          }
         }
 
-        // Check if line passes through the cell (even if it doesn't intersect any edge)
-        // This can happen when a line passes diagonally through a cell
-        // const pointInsideCell = {
-        //   x: actualCellX + actualCellWidth / 2,
-        //   y: actualCellY + actualCellHeight / 2,
-        // };
+        // FIX 3: More accurate detection for whether line passes through cell
+        // For horizontal lines
+        if (isHorizontalLine) {
+          const lineY = lineStart.y;
+          const minX = Math.min(lineStart.x, lineEnd.x);
+          const maxX = Math.max(lineStart.x, lineEnd.x);
 
-        // Check which side of the line this point is on
-        // const side = getSideOfLine(pointInsideCell, lineStart, lineEnd);
+          // Cell fully contains the line segment's Y coordinate AND
+          // X range overlaps with the line segment's X range
+          if (
+            lineY > cellY &&
+            lineY < cellY + 1 &&
+            cellX < maxX &&
+            cellX + 1 > minX
+          ) {
+            return true; // Smoke blocks line of sight
+          }
 
-        // Check points on the cell's corners to see if they're on different sides of the line
-        const cornerTopLeft = { x: actualCellX, y: actualCellY };
-        const cornerTopRight = {
-          x: actualCellX + actualCellWidth,
-          y: actualCellY,
-        };
-        const cornerBottomLeft = {
-          x: actualCellX,
-          y: actualCellY + actualCellHeight,
-        };
-        const cornerBottomRight = {
-          x: actualCellX + actualCellWidth,
-          y: actualCellY + actualCellHeight,
-        };
+          continue; // Skip remaining checks for horizontal lines
+        }
 
-        const sideTopLeft = getSideOfLine(cornerTopLeft, lineStart, lineEnd);
-        const sideTopRight = getSideOfLine(cornerTopRight, lineStart, lineEnd);
-        const sideBottomLeft = getSideOfLine(
-          cornerBottomLeft,
-          lineStart,
-          lineEnd,
-        );
-        const sideBottomRight = getSideOfLine(
-          cornerBottomRight,
-          lineStart,
-          lineEnd,
-        );
+        // For vertical lines
+        if (isVerticalLine) {
+          const lineX = lineStart.x;
+          const minY = Math.min(lineStart.y, lineEnd.y);
+          const maxY = Math.max(lineStart.y, lineEnd.y);
 
-        // If points are on different sides, line passes through the cell
+          // Cell fully contains the line segment's X coordinate AND
+          // Y range overlaps with the line segment's Y range
+          if (
+            lineX > cellX &&
+            lineX < cellX + 1 &&
+            cellY < maxY &&
+            cellY + 1 > minY
+          ) {
+            return true; // Smoke blocks line of sight
+          }
+
+          continue; // Skip remaining checks for vertical lines
+        }
+
+        // For diagonal lines - more general case
+        // Check if the line passes through the interior of the cell
+        // This uses a simplified approach checking if the line intersects opposite sides
+
+        // Cell boundaries
+        const cellMinX = cellX;
+        const cellMinY = cellY;
+        const cellMaxX = cellX + 1;
+        const cellMaxY = cellY + 1;
+
+        // First, check if either endpoint is inside the cell
+        const startInside =
+          lineStart.x > cellMinX &&
+          lineStart.x < cellMaxX &&
+          lineStart.y > cellMinY &&
+          lineStart.y < cellMaxY;
+
+        const endInside =
+          lineEnd.x > cellMinX &&
+          lineEnd.x < cellMaxX &&
+          lineEnd.y > cellMinY &&
+          lineEnd.y < cellMaxY;
+
+        if (startInside || endInside) {
+          return true; // Line definitely passes through the cell
+        }
+
+        // Check line intersection with cell boundaries
+        // This is a simplified algorithm to detect if a line passes through a cell
+
+        // Line equation: ax + by + c = 0
+        const a = lineEnd.y - lineStart.y;
+        const b = lineStart.x - lineEnd.x;
+        const c = lineEnd.x * lineStart.y - lineStart.x * lineEnd.y;
+
+        // Calculate the sign of the line equation for each corner
+        const topLeft = Math.sign(a * cellMinX + b * cellMinY + c);
+        const topRight = Math.sign(a * cellMaxX + b * cellMinY + c);
+        const bottomLeft = Math.sign(a * cellMinX + b * cellMaxY + c);
+        const bottomRight = Math.sign(a * cellMaxX + b * cellMaxY + c);
+
+        // If all corners have the same sign, the line doesn't pass through the cell
+        // If signs differ, the line passes through the cell
         if (
-          (sideTopLeft !== sideTopRight &&
-            sideTopLeft !== 0 &&
-            sideTopRight !== 0) ||
-          (sideTopLeft !== sideBottomLeft &&
-            sideTopLeft !== 0 &&
-            sideBottomLeft !== 0) ||
-          (sideTopRight !== sideBottomRight &&
-            sideTopRight !== 0 &&
-            sideBottomRight !== 0) ||
-          (sideBottomLeft !== sideBottomRight &&
-            sideBottomLeft !== 0 &&
-            sideBottomRight !== 0)
+          !(
+            topLeft === topRight &&
+            topRight === bottomLeft &&
+            bottomLeft === bottomRight &&
+            topLeft !== 0
+          )
         ) {
-          return true;
+          // Additional check: make sure the line segment actually intersects the cell
+          // and isn't just passing through an extended line
+          const minLineX = Math.min(lineStart.x, lineEnd.x);
+          const maxLineX = Math.max(lineStart.x, lineEnd.x);
+          const minLineY = Math.min(lineStart.y, lineEnd.y);
+          const maxLineY = Math.max(lineStart.y, lineEnd.y);
+
+          // Check if the cell overlaps with the bounding box of the line segment
+          if (
+            !(
+              maxLineX < cellMinX ||
+              minLineX > cellMaxX ||
+              maxLineY < cellMinY ||
+              minLineY > cellMaxY
+            )
+          ) {
+            return true; // Line passes through the cell
+          }
         }
       }
     }
   }
 
-  return false;
+  return false; // No smoke blocks line of sight
 }
 
 /**
