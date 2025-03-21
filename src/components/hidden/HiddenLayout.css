@@ -1,0 +1,99 @@
+/* src/components/hidden/HiddenLayout.css */
+
+.hidden-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.hidden-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background-color: var(--bg-secondary);
+  border-bottom: 1px solid var(--border);
+}
+
+.hidden-header h1 {
+  margin: 0;
+  font-size: 24px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.back-home-link {
+  color: var(--accent-blue);
+  text-decoration: none;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  transition: all 0.2s;
+}
+
+.back-home-link:hover {
+  color: var(--accent-green);
+  transform: translateX(-5px);
+}
+
+.hidden-nav {
+  background-color: var(--bg-secondary);
+  padding: 10px 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.hidden-nav ul {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 20px;
+}
+
+.hidden-nav a {
+  color: var(--text-primary);
+  text-decoration: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  transition: all 0.2s;
+  display: block;
+}
+
+.hidden-nav a:hover {
+  background-color: var(--bg-tertiary);
+}
+
+.hidden-nav a.active-nav-link {
+  background-color: var(--accent-blue);
+  color: #ffffff;
+}
+
+.hidden-content {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.hidden-footer {
+  padding: 15px;
+  background-color: var(--bg-secondary);
+  text-align: center;
+  font-size: 14px;
+  color: var(--text-secondary);
+  border-top: 1px solid var(--border);
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 768px) {
+  .hidden-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .hidden-nav ul {
+    flex-direction: column;
+    gap: 5px;
+  }
+}

@@ -1,0 +1,357 @@
+/* src/components/hidden/OperatorDatabase.css */
+
+.operator-database {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.operator-database h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: var(--text-primary);
+}
+
+.operator-filters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding: 20px;
+  background-color: var(--bg-secondary);
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.search-box input {
+  padding: 10px 15px;
+  width: 300px;
+  background-color: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text-primary);
+  font-size: 16px;
+}
+
+.search-box input:focus {
+  outline: none;
+  border-color: var(--accent-blue);
+}
+
+.team-filter {
+  display: flex;
+  gap: 10px;
+}
+
+.team-filter button {
+  padding: 8px 15px;
+  background-color: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.team-filter button:hover {
+  background-color: var(--bg-tertiary);
+  border-color: var(--accent-blue);
+}
+
+.team-filter button.active {
+  background-color: var(--accent-blue);
+  color: white;
+  border-color: var(--accent-blue);
+}
+
+.operator-content {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 30px;
+}
+
+.operators-list {
+  height: 600px;
+  overflow-y: auto;
+  padding: 15px;
+  background-color: var(--bg-secondary);
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 15px;
+  align-content: start;
+}
+
+.operator-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 15px 10px;
+  background-color: var(--bg-tertiary);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.operator-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.operator-card.selected {
+  background-color: var(--accent-blue);
+  color: white;
+}
+
+.operator-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.operator-icon.attacker {
+  background-color: #3f51b5;
+}
+
+.operator-icon.defender {
+  background-color: #ff9800;
+}
+
+.placeholder-image {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 50%;
+  color: white;
+}
+
+.operator-name {
+  font-weight: bold;
+  margin-bottom: 5px;
+  text-align: center;
+}
+
+.operator-team {
+  font-size: 14px;
+  padding: 3px 8px;
+  border-radius: 12px;
+  color: white;
+}
+
+.operator-team.attacker {
+  background-color: #3f51b5;
+}
+
+.operator-team.defender {
+  background-color: #ff9800;
+}
+
+.no-results {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 30px;
+  color: var(--text-secondary);
+  font-size: 18px;
+}
+
+.operator-details {
+  background-color: var(--bg-secondary);
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  padding: 20px;
+  height: 600px;
+  overflow-y: auto;
+}
+
+.no-selection {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--text-secondary);
+  font-size: 18px;
+  text-align: center;
+}
+
+.operator-profile {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.operator-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 15px;
+}
+
+.operator-header h3 {
+  margin: 0;
+  font-size: 24px;
+  color: var(--text-primary);
+}
+
+.team-badge {
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-weight: bold;
+  color: white;
+}
+
+.team-badge.attacker {
+  background-color: #3f51b5;
+}
+
+.team-badge.defender {
+  background-color: #ff9800;
+}
+
+.operator-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.stat-group {
+  flex: 1;
+  min-width: 120px;
+}
+
+.stat-group label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  display: block;
+  color: var(--text-primary);
+}
+
+.rating-bars {
+  display: flex;
+  gap: 5px;
+}
+
+.rating-bar {
+  height: 8px;
+  flex: 1;
+  border-radius: 4px;
+}
+
+.rating-bar.filled.attacker,
+.rating-bar.filled {
+  background-color: var(--accent-blue);
+}
+
+.rating-bar.filled.defender {
+  background-color: var(--accent-orange);
+}
+
+.rating-bar.empty {
+  background-color: var(--bg-tertiary);
+}
+
+.operator-image {
+  margin: 20px 0;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.placeholder-portrait {
+  width: 150px;
+  height: 150px;
+  background-color: var(--bg-tertiary);
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--text-secondary);
+  font-weight: bold;
+}
+
+.operator-loadout {
+  background-color: var(--bg-tertiary);
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.operator-loadout h4,
+.operator-bio h4 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 5px;
+}
+
+.weapon-group,
+.gadget-group,
+.ability-group {
+  margin-bottom: 15px;
+}
+
+.weapon-group label,
+.gadget-group label,
+.ability-group label {
+  font-weight: bold;
+  color: var(--text-primary);
+  display: block;
+  margin-bottom: 5px;
+}
+
+.weapon-group ul {
+  list-style: disc;
+  padding-left: 20px;
+  margin: 0;
+  color: var(--text-secondary);
+}
+
+.gadget-group p,
+.ability-group p {
+  margin: 0;
+  color: var(--text-secondary);
+}
+
+.operator-bio {
+  background-color: var(--bg-tertiary);
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.operator-bio p {
+  margin: 0;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+  .operator-filters {
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-start;
+  }
+
+  .search-box input {
+    width: 100%;
+  }
+
+  .operator-content {
+    grid-template-columns: 1fr;
+  }
+
+  .operators-list {
+    height: 300px;
+  }
+}
