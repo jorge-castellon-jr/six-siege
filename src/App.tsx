@@ -103,7 +103,7 @@ const AppContent: React.FC = () => {
 
   // For existing routes, use the current state-based routing
   return (
-    <div className="app">
+    <div className="app old">
       {currentPage === "home" && (
         <HomePage
           maps={maps}
