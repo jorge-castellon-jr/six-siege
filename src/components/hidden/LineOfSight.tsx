@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import TacticalHeader from "./TacticalHeader";
 import "./LineOfSight.css";
-import CalculatorPage from "../CalculatorPage";
 
 import consulateData from "../../data/consulate.json";
 import clubhouseData from "../../data/clubhouse.json";
@@ -55,6 +54,8 @@ const LineOfSight: React.FC = () => {
     setBluePlayer(null);
     setOrangePlayer(null);
     setActiveTeam("blue");
+    clearSmokes();
+    console.log(protrudingWalls);
   };
 
   // State for players
