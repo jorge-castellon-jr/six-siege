@@ -14,7 +14,7 @@ interface TacticalHeaderProps {
  */
 const TacticalHeader: React.FC<TacticalHeaderProps> = ({ title }) => {
   // Use typing animation if animate is true
-  const animatedTitle = useTypewriter(title, 30);
+  const animatedTitle = useTypewriter(title);
 
   return (
     <div className={`tactical-header`}>

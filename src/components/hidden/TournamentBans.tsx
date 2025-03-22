@@ -1,6 +1,7 @@
 // src/components/hidden/TournamentBans.tsx
 import React, { useState } from "react";
 import "./TournamentBans.css";
+import TacticalHeader from "./TacticalHeader";
 
 interface Map {
   id: string;
@@ -85,7 +86,7 @@ const TournamentBans: React.FC = () => {
 
   return (
     <div className="tournament-bans">
-      <h2>Tournament Bans</h2>
+      <TacticalHeader title="Tournament Bans" />
 
       <div className="ban-settings">
         <div className="team-names">

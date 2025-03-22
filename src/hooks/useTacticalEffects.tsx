@@ -10,8 +10,8 @@ import { useState, useEffect, useRef } from "react";
  */
 export const useTypewriter = (
   text: string,
-  speed: number = 30,
-  delay: number = 500,
+  speed: number = 50,
+  delay: number = 200,
 ) => {
   const [displayText, setDisplayText] = useState("");
   const index = useRef(0);

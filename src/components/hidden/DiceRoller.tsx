@@ -1,6 +1,7 @@
 // src/components/hidden/DiceRoller.tsx
 import React, { useState } from "react";
 import "./DiceRoller.css";
+import TacticalHeader from "./TacticalHeader";
 
 interface DiceResult {
   id: number;
@@ -135,7 +136,7 @@ const DiceRoller: React.FC = () => {
 
   return (
     <div className="dice-roller">
-      <h2>Dice Roller</h2>
+      <TacticalHeader title="Dice Roller" />
 
       <div className="dice-controls">
         <div className="dice-buttons">

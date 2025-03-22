@@ -1,6 +1,7 @@
 // src/components/hidden/OperatorDatabase.tsx
 import React, { useState } from "react";
 import "./OperatorDatabase.css";
+import TacticalHeader from "./TacticalHeader";
 
 interface Operator {
   id: string;
@@ -121,7 +122,7 @@ const OperatorDatabase: React.FC = () => {
 
   return (
     <div className="operator-database">
-      <h2>Operator Database</h2>
+      <TacticalHeader title="Operator Database" />
 
       <div className="operator-filters">
         <div className="search-box">
