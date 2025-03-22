@@ -15,6 +15,8 @@ import HiddenLayout from "./components/hidden/HiddenLayout";
 import TournamentBans from "./components/hidden/TournamentBans";
 import OperatorDatabase from "./components/hidden/OperatorDatabase";
 import DiceRoller from "./components/hidden/DiceRoller";
+import LineOfSight from "./components/hidden/LineOfSight";
+import R6SStyles from "./components/hidden/R6SStyles";
 import "./App.css";
 
 import consulateData from "./data/consulate.json";
@@ -85,25 +87,31 @@ const AppContent: React.FC = () => {
   // Get selected map data
   const selectedMap = maps.find((map) => map.id === selectedMapId) || maps[0];
 
-  // For hidden routes, use React Router
+  // For hidden routes, use React Router with R6S styling
   if (isHiddenRoute) {
     return (
       <div className="app">
-        <Routes>
-          <Route path="/hidden" element={<HiddenLayout />}>
-            <Route index element={<Navigate to="tournament-bans" replace />} />
-            <Route path="tournament-bans" element={<TournamentBans />} />
-            <Route path="operator-database" element={<OperatorDatabase />} />
-            <Route path="dice-roller" element={<DiceRoller />} />
-          </Route>
-        </Routes>
+        <R6SStyles>
+          <Routes>
+            <Route path="/hidden" element={<HiddenLayout />}>
+              <Route
+                index
+                element={<Navigate to="tournament-bans" replace />}
+              />
+              <Route path="tournament-bans" element={<TournamentBans />} />
+              <Route path="operator-database" element={<OperatorDatabase />} />
+              <Route path="dice-roller" element={<DiceRoller />} />
+              <Route path="los" element={<LineOfSight />} />
+            </Route>
+          </Routes>
+        </R6SStyles>
       </div>
     );
   }
 
   // For existing routes, use the current state-based routing
   return (
-    <div className="app old">
+    <div className="app">
       {currentPage === "home" && (
         <HomePage
           maps={maps}

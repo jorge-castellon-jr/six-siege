@@ -1,0 +1,211 @@
+/* src/components/hidden/TacticalPanel.css */
+
+/* Base tactical panel */
+.tactical-panel {
+  background-color: var(--r6s-dark);
+  border-radius: 4px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--r6s-border);
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 30px;
+}
+
+.tactical-panel::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: var(--r6s-accent);
+  z-index: 2;
+}
+
+/* Panel with angle cut */
+.tactical-panel-angled {
+  clip-path: polygon(0% 0%, 97% 0%, 100% 3%, 100% 100%, 0% 100%);
+}
+
+/* Panel with hex patterns on borders */
+.tactical-panel-hex {
+  position: relative;
+}
+
+.tactical-panel-hex::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 0;
+  right: 0;
+  height: 10px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill-rule='evenodd'%3E%3Cg id='hexagons' fill='%232196f3' fill-opacity='0.4' fill-rule='nonzero'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L12.98 41v8h-2v-6.85L0 35.81v-2.3zM15 0v7.5L27.99 15H28v-2.31h-.01L17 6.35V0h-2zm0 49v-8l12.99-7.5H28v2.31h-.01L17 42.15V49h-2z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  background-size: 20px;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Panel header */
+.tactical-panel-header {
+  padding: 20px 25px 15px;
+  border-bottom: 1px solid var(--r6s-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tactical-panel-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--r6s-text);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  position: relative;
+  padding-left: 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.tactical-panel-title::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 70%;
+  background-color: var(--r6s-accent);
+}
+
+/* Panel body */
+.tactical-panel-body {
+  padding: 20px 25px;
+}
+
+/* Panel with status color indicators */
+.tactical-panel-blue::before {
+  background-color: var(--r6s-blue);
+}
+
+.tactical-panel-blue .tactical-panel-title::before {
+  background-color: var(--r6s-blue);
+}
+
+.tactical-panel-orange::before {
+  background-color: var(--r6s-orange);
+}
+
+.tactical-panel-orange .tactical-panel-title::before {
+  background-color: var(--r6s-orange);
+}
+
+.tactical-panel-green::before {
+  background-color: var(--r6s-green);
+}
+
+.tactical-panel-green .tactical-panel-title::before {
+  background-color: var(--r6s-green);
+}
+
+.tactical-panel-red::before {
+  background-color: var(--r6s-red);
+}
+
+.tactical-panel-red .tactical-panel-title::before {
+  background-color: var(--r6s-red);
+}
+
+.tactical-panel-highlight::before {
+  background-color: var(--r6s-highlight);
+}
+
+.tactical-panel-highlight .tactical-panel-title::before {
+  background-color: var(--r6s-highlight);
+}
+
+/* Panel footer */
+.tactical-panel-footer {
+  padding: 15px 25px;
+  border-top: 1px solid var(--r6s-border);
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+/* Panel scroll area */
+.tactical-panel-scroll {
+  max-height: 400px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--r6s-border) var(--r6s-gray);
+}
+
+.tactical-panel-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+
+.tactical-panel-scroll::-webkit-scrollbar-track {
+  background: var(--r6s-gray);
+}
+
+.tactical-panel-scroll::-webkit-scrollbar-thumb {
+  background-color: var(--r6s-border);
+  border-radius: 4px;
+  border: 2px solid var(--r6s-gray);
+}
+
+/* Loading state */
+.tactical-panel-loading {
+  position: relative;
+  min-height: 200px;
+}
+
+.tactical-panel-loading::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.tactical-panel-loading::before {
+  content: "LOADING...";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--r6s-accent);
+  font-weight: 700;
+  letter-spacing: 2px;
+  z-index: 11;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+/* Tactical panel grid layout */
+.tactical-panel-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .tactical-panel-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .tactical-panel-footer {
+    flex-direction: column;
+  }
+}

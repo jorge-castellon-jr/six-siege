@@ -85,7 +85,7 @@ const TournamentBans: React.FC = () => {
 
   return (
     <div className="tournament-bans">
-      <h2>Tournament Map Bans</h2>
+      <h2>Tournament Bans</h2>
 
       <div className="ban-settings">
         <div className="team-names">

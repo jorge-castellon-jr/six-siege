@@ -1,0 +1,186 @@
+/* src/components/hidden/TacticalHeader.css */
+
+.tactical-header {
+  margin-bottom: 35px;
+  position: relative;
+}
+
+.tactical-header-content {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.tactical-header-icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  background-color: var(--r6s-accent);
+  color: white;
+  border-radius: 4px;
+  box-shadow: 0 0 15px rgba(33, 150, 243, 0.4);
+}
+
+.tactical-header-text {
+  flex: 1;
+}
+
+.tactical-header-title {
+  margin: 0 0 5px 0;
+  font-size: 28px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 700;
+  color: var(--r6s-text);
+  position: relative;
+  display: inline-block;
+}
+
+.tactical-header-title::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--r6s-accent);
+}
+
+.tactical-header-subtitle {
+  margin: 0;
+  font-size: 14px;
+  color: #aaa;
+  max-width: 600px;
+}
+
+.tactical-header-decoration {
+  position: relative;
+  margin-top: 10px;
+}
+
+.tactical-header-line {
+  height: 1px;
+  width: 100%;
+  background-color: var(--r6s-border);
+  position: relative;
+  overflow: hidden;
+}
+
+.tactical-header-line::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100px;
+  height: 100%;
+  background: linear-gradient(90deg, var(--r6s-accent) 0%, transparent 100%);
+  animation: moveGradient 3s infinite ease-in-out;
+}
+
+@keyframes moveGradient {
+  0% {
+    transform: translateX(-100px);
+  }
+  100% {
+    transform: translateX(100vw);
+  }
+}
+
+.tactical-header-dot {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--r6s-accent);
+  transform: translate(-50%, -50%);
+  animation: pulseDot 2s infinite;
+}
+
+@keyframes pulseDot {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.5);
+    opacity: 0.5;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+}
+
+/* Color variants */
+.tactical-header-blue .tactical-header-icon {
+  background-color: var(--r6s-blue);
+  box-shadow: 0 0 15px rgba(33, 150, 243, 0.4);
+}
+
+.tactical-header-blue .tactical-header-title::after,
+.tactical-header-blue .tactical-header-dot,
+.tactical-header-blue .tactical-header-line::before {
+  background-color: var(--r6s-blue);
+}
+
+.tactical-header-orange .tactical-header-icon {
+  background-color: var(--r6s-orange);
+  box-shadow: 0 0 15px rgba(255, 152, 0, 0.4);
+}
+
+.tactical-header-orange .tactical-header-title::after,
+.tactical-header-orange .tactical-header-dot,
+.tactical-header-orange .tactical-header-line::before {
+  background-color: var(--r6s-orange);
+}
+
+.tactical-header-green .tactical-header-icon {
+  background-color: var(--r6s-green);
+  box-shadow: 0 0 15px rgba(76, 175, 80, 0.4);
+}
+
+.tactical-header-green .tactical-header-title::after,
+.tactical-header-green .tactical-header-dot,
+.tactical-header-green .tactical-header-line::before {
+  background-color: var(--r6s-green);
+}
+
+.tactical-header-red .tactical-header-icon {
+  background-color: var(--r6s-red);
+  box-shadow: 0 0 15px rgba(244, 67, 54, 0.4);
+}
+
+.tactical-header-red .tactical-header-title::after,
+.tactical-header-red .tactical-header-dot,
+.tactical-header-red .tactical-header-line::before {
+  background-color: var(--r6s-red);
+}
+
+.tactical-header-highlight .tactical-header-icon {
+  background-color: var(--r6s-highlight);
+  box-shadow: 0 0 15px rgba(254, 204, 9, 0.4);
+  color: var(--r6s-dark);
+}
+
+.tactical-header-highlight .tactical-header-title::after,
+.tactical-header-highlight .tactical-header-dot,
+.tactical-header-highlight .tactical-header-line::before {
+  background-color: var(--r6s-highlight);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .tactical-header-content {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .tactical-header-icon {
+    margin-bottom: 10px;
+  }
+}

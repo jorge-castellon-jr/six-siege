@@ -1,0 +1,308 @@
+/* src/components/hidden/TacticalData.css */
+
+/* Base data display element */
+.data-display {
+  background-color: var(--r6s-gray);
+  padding: 15px;
+  border-radius: 4px;
+  position: relative;
+  margin-bottom: 15px;
+  border-left: 3px solid var(--r6s-accent);
+}
+
+/* Data label */
+.data-label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #aaa;
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+
+/* Data value */
+.data-value {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--r6s-text);
+}
+
+/* Data value large */
+.data-value-lg {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+/* Data value small */
+.data-value-sm {
+  font-size: 14px;
+}
+
+/* Color variations */
+.data-blue {
+  border-left-color: var(--r6s-blue);
+}
+
+.data-orange {
+  border-left-color: var(--r6s-orange);
+}
+
+.data-green {
+  border-left-color: var(--r6s-green);
+}
+
+.data-red {
+  border-left-color: var(--r6s-red);
+}
+
+.data-highlight {
+  border-left-color: var(--r6s-highlight);
+}
+
+.data-positive {
+  color: var(--r6s-green) !important;
+}
+
+.data-negative {
+  color: var(--r6s-red) !important;
+}
+
+.data-neutral {
+  color: var(--r6s-highlight) !important;
+}
+
+/* Statistic block with icon */
+.stat-block {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background-color: var(--r6s-gray);
+  padding: 15px;
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-block::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 5px;
+  height: 100%;
+  background-color: var(--r6s-accent);
+}
+
+.stat-icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  background-color: rgba(33, 150, 243, 0.2);
+  border-radius: 4px;
+  color: var(--r6s-accent);
+}
+
+.stat-content {
+  flex: 1;
+}
+
+.stat-title {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #aaa;
+  margin-bottom: 5px;
+}
+
+.stat-value {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--r6s-text);
+}
+
+/* Tactical progress bar */
+.tactical-progress {
+  width: 100%;
+  height: 8px;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+  margin: 5px 0 10px;
+}
+
+.tactical-progress-fill {
+  height: 100%;
+  background-color: var(--r6s-accent);
+  border-radius: 4px;
+  position: relative;
+  transition: width 0.3s ease;
+}
+
+.tactical-progress-fill::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    transparent 100%
+  );
+  animation: progressShine 2s infinite linear;
+  transform: translateX(-100%);
+}
+
+@keyframes progressShine {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+/* Color variations for progress */
+.tactical-progress-blue .tactical-progress-fill {
+  background-color: var(--r6s-blue);
+}
+
+.tactical-progress-orange .tactical-progress-fill {
+  background-color: var(--r6s-orange);
+}
+
+.tactical-progress-green .tactical-progress-fill {
+  background-color: var(--r6s-green);
+}
+
+.tactical-progress-red .tactical-progress-fill {
+  background-color: var(--r6s-red);
+}
+
+.tactical-progress-highlight .tactical-progress-fill {
+  background-color: var(--r6s-highlight);
+}
+
+/* Stats grid layout */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 15px;
+}
+
+/* Data badges */
+.data-badge {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 2px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 12px;
+  font-weight: 600;
+  background-color: var(--r6s-gray);
+  color: var(--r6s-text);
+  margin-right: 5px;
+  margin-bottom: 5px;
+}
+
+.data-badge-blue {
+  background-color: rgba(33, 150, 243, 0.2);
+  color: var(--r6s-blue);
+}
+
+.data-badge-orange {
+  background-color: rgba(255, 152, 0, 0.2);
+  color: var(--r6s-orange);
+}
+
+.data-badge-green {
+  background-color: rgba(76, 175, 80, 0.2);
+  color: var(--r6s-green);
+}
+
+.data-badge-red {
+  background-color: rgba(244, 67, 54, 0.2);
+  color: var(--r6s-red);
+}
+
+.data-badge-highlight {
+  background-color: rgba(254, 204, 9, 0.2);
+  color: var(--r6s-highlight);
+}
+
+/* Rating system (like armor/speed ratings) */
+.rating-system {
+  display: flex;
+  gap: 5px;
+  margin: 10px 0;
+}
+
+.rating-bar {
+  height: 8px;
+  flex: 1;
+  max-width: 30px;
+  border-radius: 2px;
+  background-color: rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.rating-bar.filled {
+  background-color: var(--r6s-accent);
+  box-shadow: 0 0 8px rgba(33, 150, 243, 0.3);
+}
+
+.rating-bar.filled::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.2) 50%,
+    transparent 100%
+  );
+}
+
+/* Statistical comparison */
+.stat-comparison {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.compare-label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #aaa;
+}
+
+.compare-values {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.compare-divider {
+  height: 20px;
+  width: 1px;
+  background-color: var(--r6s-border);
+}
+
+.compare-value-left {
+  font-weight: 600;
+  color: var(--r6s-blue);
+}
+
+.compare-value-right {
+  font-weight: 600;
+  color: var(--r6s-orange);
+}

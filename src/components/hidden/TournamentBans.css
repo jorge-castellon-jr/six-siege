@@ -26,8 +26,8 @@
   height: 3px;
   background: linear-gradient(
     90deg,
-    var(--r6s-accent) 0%,
-    var(--r6s-highlight) 100%
+    var(--r6s-blue) 0%,
+    var(--r6s-orange) 100%
   );
 }
 

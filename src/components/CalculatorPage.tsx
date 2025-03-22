@@ -19,12 +19,14 @@ import PlayerControls from "./PlayerControls";
 
 interface CalculatorPageProps {
   mapData: MapData;
-  onNavigate: (page: AppPage) => void;
+  onNavigate?: (page: AppPage) => void;
+  isNew?: boolean;
 }
 
 const CalculatorPage: React.FC<CalculatorPageProps> = ({
   mapData,
   onNavigate,
+  isNew,
 }) => {
   // State for players
   const [bluePlayer, setBluePlayer] = useState<Player | null>(null);
@@ -207,12 +209,17 @@ const CalculatorPage: React.FC<CalculatorPageProps> = ({
 
   return (
     <div className="calculator-page">
-      <div className="page-header">
-        <button onClick={() => onNavigate("home")} className="back-button">
-          ← Back to Map Selection
-        </button>
-        <h1>{mapData.name}</h1>
-      </div>
+      {!isNew && (
+        <div className="page-header">
+          <button
+            onClick={() => onNavigate && onNavigate("home")}
+            className="back-button"
+          >
+            ← Back to Map Selection
+          </button>
+          <h1>{mapData.name}</h1>
+        </div>
+      )}
 
       <GameCanvas
         mapData={mapData}
@@ -235,7 +242,8 @@ const CalculatorPage: React.FC<CalculatorPageProps> = ({
         selectedSmokePattern={selectedSmokePattern}
         activeTeam={activeTeam}
       />
-      <div className="player-spacer" />
+
+      {!isNew && <div className="player-spacer" />}
 
       <div className="calculator-controls">
         <PlayerControls

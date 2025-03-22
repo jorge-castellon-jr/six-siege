@@ -1,0 +1,179 @@
+/* src/components/hidden/TacticalButtons.css */
+
+/* Tactical button base style */
+.tactical-btn {
+  position: relative;
+  padding: 12px 20px;
+  background-color: var(--r6s-gray);
+  color: var(--r6s-text);
+  border: none;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  border-radius: 2px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.tactical-btn::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.1);
+  transition: width 0.2s ease;
+}
+
+.tactical-btn::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: transparent;
+  transition: background-color 0.2s ease;
+}
+
+.tactical-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+.tactical-btn:hover::before {
+  width: 100%;
+}
+
+.tactical-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Primary tactical button */
+.tactical-btn-primary {
+  background-color: var(--r6s-accent);
+  color: white;
+}
+
+.tactical-btn-primary::after {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Success tactical button */
+.tactical-btn-success {
+  background-color: var(--r6s-green);
+  color: white;
+}
+
+.tactical-btn-success::after {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Danger tactical button */
+.tactical-btn-danger {
+  background-color: var(--r6s-red);
+  color: white;
+}
+
+.tactical-btn-danger::after {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Orange team (Defender) button */
+.tactical-btn-defender {
+  background-color: var(--r6s-orange);
+  color: white;
+}
+
+.tactical-btn-defender::after {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Blue team (Attacker) button */
+.tactical-btn-attacker {
+  background-color: var(--r6s-blue);
+  color: white;
+}
+
+.tactical-btn-attacker::after {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Highlight button */
+.tactical-btn-highlight {
+  background-color: var(--r6s-highlight);
+  color: var(--r6s-dark);
+}
+
+.tactical-btn-highlight::after {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+/* Outline tactical button */
+.tactical-btn-outline {
+  background-color: transparent;
+  border: 1px solid var(--r6s-border);
+}
+
+.tactical-btn-outline::after {
+  background-color: var(--r6s-accent);
+}
+
+.tactical-btn-outline:hover {
+  border-color: var(--r6s-accent);
+}
+
+/* Button with icon */
+.tactical-btn-icon {
+  padding: 8px 12px;
+  min-width: 40px;
+  height: 40px;
+}
+
+/* Small tactical button */
+.tactical-btn-sm {
+  padding: 6px 12px;
+  font-size: 12px;
+}
+
+/* Large tactical button */
+.tactical-btn-lg {
+  padding: 14px 24px;
+  font-size: 16px;
+}
+
+/* Disabled state */
+.tactical-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.tactical-btn:disabled::before {
+  display: none;
+}
+
+/* Corner notch design (hex cutout in corner) */
+.tactical-btn-notched {
+  clip-path: polygon(0% 0%, 85% 0%, 100% 15%, 100% 100%, 0% 100%);
+}
+
+.tactical-btn-notched-reverse {
+  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 15% 100%, 0% 85%);
+}
+
+/* Full width button */
+.tactical-btn-block {
+  display: block;
+  width: 100%;
+}

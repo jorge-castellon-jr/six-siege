@@ -162,8 +162,13 @@
   position: absolute;
   width: 120%;
   height: 2px;
-  background-color: var(--r6s-highlight);
   bottom: -5px;
+  background: linear-gradient(
+    90deg,
+    var(--r6s-orange) 0%,
+    var(--r6s-highlight) 100%
+  );
+
   left: -10%;
   box-shadow: 0 0 10px rgba(254, 204, 9, 0.6);
 }
