@@ -207,7 +207,7 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
     img.src =
       mapData.version > 1
         ? `src/assets/${mapData.id}.png`
-        : `./assets/${mapData.id}.jpg`;
+        : `/./assets/${mapData.id}.jpg`;
 
     img.onload = () => {
       setMapImage(img);
@@ -223,6 +223,8 @@ const GameCanvas: React.FC<GameCanvasProps> = ({
     img.onerror = (error) => {
       console.error(`Failed to load image: ${mapData.id}`);
       console.error(error);
+      console.log(img);
+      console.log(img.src);
     };
   }, [mapData.id, setImageDimensions, mapData.version]);
 
