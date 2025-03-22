@@ -18,29 +18,31 @@ export const useTypewriter = (
   const [started, setStarted] = useState(false);
 
   useEffect(() => {
+    // Create a function that will handle the typing animation
+    const typeNextCharacter = () => {
+      if (index.current < text.length) {
+        setDisplayText(text.substring(0, index.current + 1));
+        index.current += 1;
+
+        setTimeout(typeNextCharacter, speed);
+      }
+    };
+
+    // Handle initial delay
     let timer: ReturnType<typeof setTimeout>;
 
-    // Initial delay
     if (!started) {
       timer = setTimeout(() => {
         setStarted(true);
+        // Start typing after delay
+        typeNextCharacter();
       }, delay);
+
       return () => clearTimeout(timer);
     }
 
-    // If we've finished typing, stop
-    if (index.current >= text.length) {
-      return;
-    }
-
-    // Add another character
-    timer = setTimeout(() => {
-      setDisplayText((prev) => prev + text.charAt(index.current));
-      index.current += 1;
-    }, speed);
-
-    return () => clearTimeout(timer);
-  }, [displayText, text, speed, delay, started]);
+    return () => { };
+  }, [text, speed, delay, started]);
 
   // Reset when text changes
   useEffect(() => {

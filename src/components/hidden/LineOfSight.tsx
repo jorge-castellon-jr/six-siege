@@ -57,31 +57,9 @@ const LineOfSight: React.FC = () => {
     setActivePlayer(1);
   };
 
-  // Handle grid click in the tactical panel
-  const handleGridClick = (x: number, y: number) => {
-    if (activePlayer === 1) {
-      setPlayer1Position({ x, y });
-      setActivePlayer(2);
-    } else {
-      setPlayer2Position({ x, y });
-
-      // After both players are positioned, we could calculate line of sight
-      // For now we'll just randomly determine it
-      setTimeout(() => {
-        // Simulate LOS calculation
-        const hasLOS = Math.random() > 0.5;
-        setHasLineOfSight(hasLOS);
-      }, 500);
-    }
-  };
-
   return (
     <div className="los-tool">
-      <TacticalHeader
-        title="Line of Sight Calculator"
-        subtitle="Determine visibility between operators on tactical maps"
-        color="blue"
-      />
+      <TacticalHeader title="Line of Sight Calculator" />
 
       <div className="tactical-panel tactical-panel-hex">
         <div className="tactical-panel-header">

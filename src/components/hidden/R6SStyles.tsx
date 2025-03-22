@@ -4,6 +4,7 @@ import "./HiddenLayout.css";
 import "./TacticalButtons.css";
 import "./TacticalPanel.css";
 import "./TacticalData.css";
+import "./TacticalHeader.css";
 
 /**
  * R6SStyles is a component that imports all Rainbow Six Siege styled CSS components
