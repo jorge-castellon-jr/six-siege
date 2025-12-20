@@ -2,7 +2,7 @@
 import { Position, Wall, BrokenWalls, Smoke } from "../types";
 
 // Default line thickness in grid units (can be adjusted)
-export const DEFAULT_LINE_THICKNESS = 0.05;
+export const DEFAULT_LINE_THICKNESS = 0.025;
 
 // Tolerance for considering multiple intersections as one
 export const INTERSECTION_TOLERANCE = 0.05;
@@ -259,7 +259,8 @@ function checkWallProtrusion(
   let hasNegativeSide = false;
 
   // Check each corner of the wall
-  for (const corner of wallCorners) {
+  for (let idx = 0; idx < wallCorners.length; idx++) {
+    const corner = wallCorners[idx];
     // First, calculate the distance to the line
     const distance = distanceFromPointToLine(corner, lineStart, lineEnd);
 
@@ -391,25 +392,83 @@ export function getLineOfSightDetails(
   const center1 = getCellCenter(pos1);
   const center2 = getCellCenter(pos2);
 
+  // Create two parallel lines offset by half thickness on each side
+  const direction = getNormalizedDirection(center1, center2);
+  const perpendicular = getPerpendicularVector(direction);
+  const halfThickness = lineThickness / 2;
+  
+  // Offset lines: one on each side of the center line
+  const offset1 = {
+    x: perpendicular.x * halfThickness,
+    y: perpendicular.y * halfThickness
+  };
+  const offset2 = {
+    x: -perpendicular.x * halfThickness,
+    y: -perpendicular.y * halfThickness
+  };
+  
+  const line1Start = { x: center1.x + offset1.x, y: center1.y + offset1.y };
+  const line1End = { x: center2.x + offset1.x, y: center2.y + offset1.y };
+  const line2Start = { x: center1.x + offset2.x, y: center1.y + offset2.y };
+  const line2End = { x: center2.x + offset2.x, y: center2.y + offset2.y };
+
   const allIntersections: Intersection[] = [];
   const protrudingWalls: number[] = [];
+  const wallsBlockingBothLines: number[] = [];
 
-  // Check each wall for intersections
+  // Check each wall for intersections with center line and both offset lines
   for (let i = 0; i < walls.length; i++) {
     const wall = walls[i];
     const corners = getWallCorners(wall);
 
+    // Check center line (for visualization/intersection data)
     const { intersections, protrudes } = doesLineIntersectPolygon(
       center1,
       center2,
       corners,
       i,
-      lineThickness,
+      0, // No thickness for center line check
     );
     allIntersections.push(...intersections);
 
     if (protrudes) {
       protrudingWalls.push(i);
+    }
+    
+    // Check if wall intersects BOTH offset lines (thin lines, no thickness)
+    // We need actual edge intersections, not just protrusion
+    // Check each edge of the wall against each offset line
+    let line1HasIntersection = false;
+    let line2HasIntersection = false;
+    
+    for (let j = 0; j < corners.length; j++) {
+      const k = (j + 1) % corners.length;
+      const edgeStart = corners[j];
+      const edgeEnd = corners[k];
+      
+      // Check if line1 intersects this edge
+      const line1EdgeResult = doLinesIntersect(line1Start, line1End, edgeStart, edgeEnd);
+      if (line1EdgeResult.intersects) {
+        line1HasIntersection = true;
+      }
+      
+      // Check if line2 intersects this edge
+      const line2EdgeResult = doLinesIntersect(line2Start, line2End, edgeStart, edgeEnd);
+      if (line2EdgeResult.intersects) {
+        line2HasIntersection = true;
+      }
+      
+      // If both lines have intersections, we can break early
+      if (line1HasIntersection && line2HasIntersection) {
+        break;
+      }
+    }
+    
+    const blocksLine1 = line1HasIntersection;
+    const blocksLine2 = line2HasIntersection;
+    
+    if (blocksLine1 && blocksLine2) {
+      wallsBlockingBothLines.push(i);
     }
   }
 
@@ -423,40 +482,9 @@ export function getLineOfSightDetails(
     wallIntersections.get(intersection.wallIndex)!.push(intersection);
   }
 
-  // Block line of sight only if:
-  // 1. Wall protrudes through both sides of the line, AND
-  // 2. The line passes through two points of the same wall that are separated by more than the tolerance
-  let blocked = false;
-
-  for (const wallIndex of protrudingWalls) {
-    const intersections = wallIntersections.get(wallIndex) || [];
-
-    if (intersections.length >= 2) {
-      // Check if any pair of points is separated by more than the tolerance
-      let validIntersection = true;
-
-      // If all points are close to each other, consider them as a single intersection
-      for (let i = 0; i < intersections.length; i++) {
-        for (let j = i + 1; j < intersections.length; j++) {
-          const dist = getDistance(
-            intersections[i].point,
-            intersections[j].point,
-          );
-          if (dist > INTERSECTION_TOLERANCE) {
-            // Points are far enough apart to be considered separate intersections
-            validIntersection = false;
-            break;
-          }
-        }
-        if (!validIntersection) break;
-      }
-
-      if (!validIntersection) {
-        blocked = true;
-        break;
-      }
-    }
-  }
+  // Block line of sight if any wall blocks BOTH offset lines
+  // This is more accurate than using a single thick line
+  const blocked = wallsBlockingBothLines.length > 0;
 
   return {
     hasLineOfSight: !blocked,
@@ -733,7 +761,9 @@ export function hasLineOfSightWithSmoke(
   const wallResult = hasLineOfSight(pos1, pos2, activeWalls, lineThickness);
 
   // If already blocked by walls, no need to check smoke
-  if (!wallResult) return false;
+  if (!wallResult) {
+    return false;
+  }
 
   // Check if line passes through any smoke
   const center1 = getCellCenter(pos1);
