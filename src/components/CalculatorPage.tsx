@@ -9,9 +9,12 @@ import {
   SmokePattern,
   Smoke,
 } from "../types";
+import { canonicalPairKey, pairKeyToLabel } from "../losGolden/mainWallsBaseline";
 import {
+  DEFAULT_LINE_THICKNESS,
   getLineOfSightDetails,
   Intersection,
+  hasLineOfSight as hasMainWallsLineOfSight,
   hasLineOfSightWithSmoke,
 } from "../utils/lineOfSight";
 import GameCanvas from "./GameCanvas";
@@ -181,7 +184,7 @@ const CalculatorPage: React.FC<CalculatorPageProps> = ({
     setProtrudingWalls(result.protrudingWalls);
 
     // Then calculate actual line of sight using all active walls (non-broken) and smoke
-    const hasLineOfSight = hasLineOfSightWithSmoke(
+    const hasLosFull = hasLineOfSightWithSmoke(
       bluePlayer.position,
       orangePlayer.position,
       mapData.walls,
@@ -192,7 +195,29 @@ const CalculatorPage: React.FC<CalculatorPageProps> = ({
       brokenWalls,
     );
 
-    setHasLos(hasLineOfSight);
+    const pairKey = canonicalPairKey(
+      bluePlayer.position,
+      orangePlayer.position,
+    );
+    const mainWallsOnlyLos = hasMainWallsLineOfSight(
+      bluePlayer.position,
+      orangePlayer.position,
+      mapData.walls,
+      DEFAULT_LINE_THICKNESS,
+    );
+    console.log("[Check LOS]", {
+      mapId: mapData.id,
+      pairKey,
+      pair: pairKeyToLabel(pairKey),
+      blue: bluePlayer.position,
+      orange: orangePlayer.position,
+      mainWallsOnlyLos,
+      fullCalculatorLos: hasLosFull,
+      intersections: result.intersections,
+      protrudingWallIndices: result.protrudingWalls,
+    });
+
+    setHasLos(hasLosFull);
   };
 
   // Handle update of the broken walls state

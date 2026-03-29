@@ -19,28 +19,7 @@ import LineOfSight from "./components/hidden/LineOfSight";
 import R6SStyles from "./components/hidden/R6SStyles";
 import "./App.css";
 
-import consulateData from "./data/consulate.json";
-import clubhouseData from "./data/clubhouse.json";
-// import clubhouseData2 from "./data/clubhouse2.json";
-import bankData from "./data/bank.json";
-import kafeData from "./data/kafe.json";
-import chaletData from "./data/chalet.json";
-import oregonData from "./data/oregon.json";
-import coastlineData from "./data/coastline.json";
-import borderData from "./data/border.json";
-
-// Default maps data
-const DEFAULT_MAPS: MapData[] = [
-  consulateData,
-  clubhouseData,
-  // clubhouseData2,
-  bankData,
-  kafeData,
-  chaletData,
-  oregonData,
-  coastlineData,
-  borderData,
-];
+import { DEFAULT_MAPS } from "./data/defaultMaps";
 
 // The original App component wrapped with BrowserRouter
 const App: React.FC = () => {
