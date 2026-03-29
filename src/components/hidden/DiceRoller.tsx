@@ -2,153 +2,166 @@
 import React, { useState } from "react";
 import "./DiceRoller.css";
 import TacticalHeader from "./TacticalHeader";
+import {
+  CombatDiceTier,
+  COMBAT_DICE_FACES,
+  COMBAT_DICE_META,
+} from "../../data/combatDice";
 
-interface DiceResult {
+const TIERS: CombatDiceTier[] = ["yellow", "orange", "red"];
+
+interface CombatDie {
   id: number;
-  sides: number;
-  value: number;
-  color: string;
+  tier: CombatDiceTier;
+  damage: number;
+  rolled: boolean;
 }
 
 interface RollHistory {
   id: number;
-  dice: DiceResult[];
+  dice: CombatDie[];
   timestamp: Date;
   total: number;
 }
 
-// Available dice colors
-const diceColors = [
-  "#4f8bff", // Blue
-  "#ff7f50", // Orange
-  "#50c878", // Green
-  "#ff5252", // Red
-  "#9370db", // Purple
-  "#ffd700", // Gold
-];
+/** Renders bullet-hole pips for a given damage amount. */
+const BulletHoles: React.FC<{ damage: number; tier: CombatDiceTier }> = ({
+  damage,
+  tier,
+}) => {
+  const hole = (key: number) => (
+    <span key={key} className={`bullet-hole bullet-hole--${tier}`} />
+  );
+
+  if (damage === 0) {
+    return <span className="no-damage">—</span>;
+  }
+
+  // 3 damage: upside-down triangle (2 on top, 1 centred below)
+  if (damage === 3) {
+    return (
+      <div className="bullet-holes bullet-holes--triangle">
+        <div className="bullet-holes-row">{hole(0)}{hole(1)}</div>
+        <div className="bullet-holes-row">{hole(2)}</div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="bullet-holes">
+      {Array.from({ length: damage }).map((_, i) => hole(i))}
+    </div>
+  );
+};
 
 const DiceRoller: React.FC = () => {
-  const [dicePool, setDicePool] = useState<DiceResult[]>([]);
-  const [nextDiceId, setNextDiceId] = useState<number>(1);
-  const [rollResults, setRollResults] = useState<DiceResult[]>([]);
+  const [dicePool, setDicePool] = useState<CombatDie[]>([]);
+  const [nextId, setNextId] = useState<number>(1);
+  const [rollResults, setRollResults] = useState<CombatDie[]>([]);
   const [showResults, setShowResults] = useState<boolean>(false);
   const [rolling, setRolling] = useState<boolean>(false);
   const [rollHistory, setRollHistory] = useState<RollHistory[]>([]);
   const [historyId, setHistoryId] = useState<number>(1);
 
-  // Available dice types
-  const diceTypes = [4, 6, 8, 10, 12, 20, 100];
-
-  // Add a die to the pool
-  const addDie = (sides: number) => {
-    const newDie: DiceResult = {
-      id: nextDiceId,
-      sides,
-      value: 0,
-      color: diceColors[Math.floor(Math.random() * diceColors.length)],
-    };
-
-    setDicePool([...dicePool, newDie]);
-    setNextDiceId((prevId) => prevId + 1);
+  const addDie = (tier: CombatDiceTier) => {
+    setDicePool((prev) => [
+      ...prev,
+      { id: nextId, tier, damage: 0, rolled: false },
+    ]);
+    setNextId((n) => n + 1);
   };
 
-  // Remove a die from the pool
   const removeDie = (id: number) => {
-    setDicePool(dicePool.filter((die) => die.id !== id));
+    setDicePool((prev) => prev.filter((d) => d.id !== id));
   };
 
-  // Clear all dice from the pool
   const clearDice = () => {
     setDicePool([]);
     setRollResults([]);
     setShowResults(false);
   };
 
-  // Roll all dice in the pool
   const rollDice = () => {
     if (dicePool.length === 0) return;
-
     setRolling(true);
 
-    // Simulate rolling animation with multiple updates
-    const animationDuration = 1000;
+    const animationDuration = 900;
     const updateInterval = 100;
-    let elapsedTime = 0;
+    let elapsed = 0;
+
+    const randomDamage = (tier: CombatDiceTier) => {
+      const faces = COMBAT_DICE_FACES[tier];
+      return faces[Math.floor(Math.random() * 6)];
+    };
 
     const animateRoll = () => {
-      const tempResults = dicePool.map((die) => ({
-        ...die,
-        value: Math.floor(Math.random() * die.sides) + 1,
-      }));
+      setRollResults(
+        dicePool.map((die) => ({
+          ...die,
+          damage: randomDamage(die.tier),
+          rolled: true,
+        })),
+      );
 
-      setRollResults(tempResults);
+      elapsed += updateInterval;
 
-      elapsedTime += updateInterval;
-
-      if (elapsedTime < animationDuration) {
+      if (elapsed < animationDuration) {
         setTimeout(animateRoll, updateInterval);
       } else {
-        // Final results
         const finalResults = dicePool.map((die) => ({
           ...die,
-          value: Math.floor(Math.random() * die.sides) + 1,
+          damage: randomDamage(die.tier),
+          rolled: true,
         }));
+        const total = finalResults.reduce((sum, d) => sum + d.damage, 0);
 
         setRollResults(finalResults);
         setShowResults(true);
         setRolling(false);
 
-        // Add to history
-        const newHistory: RollHistory = {
-          id: historyId,
-          dice: [...finalResults],
-          timestamp: new Date(),
-          total: finalResults.reduce((sum, die) => sum + die.value, 0),
-        };
-
-        setRollHistory([newHistory, ...rollHistory]);
-        setHistoryId((prevId) => prevId + 1);
+        setRollHistory((prev) => [
+          { id: historyId, dice: finalResults, timestamp: new Date(), total },
+          ...prev,
+        ]);
+        setHistoryId((n) => n + 1);
       }
     };
 
-    // Start animation
     animateRoll();
   };
 
-  // Format timestamp for history display
-  const formatTimestamp = (date: Date): string => {
-    return date.toLocaleTimeString([], {
+  const clearHistory = () => setRollHistory([]);
+
+  const formatTimestamp = (date: Date) =>
+    date.toLocaleTimeString([], {
       hour: "2-digit",
       minute: "2-digit",
       second: "2-digit",
     });
-  };
 
-  // Clear roll history
-  const clearHistory = () => {
-    setRollHistory([]);
-  };
-
-  // Calculate total of current roll
-  const calculateTotal = (): number => {
-    return rollResults.reduce((sum, die) => sum + die.value, 0);
-  };
+  const currentTotal = rollResults.reduce((sum, d) => sum + d.damage, 0);
 
   return (
     <div className="dice-roller">
       <TacticalHeader title="Dice Roller" />
 
       <div className="dice-controls">
-        <div className="dice-buttons">
-          {diceTypes.map((sides) => (
-            <button
-              key={sides}
-              onClick={() => addDie(sides)}
-              className="add-die-button"
-            >
-              D{sides}
-            </button>
-          ))}
+        <div className="tier-buttons">
+          {TIERS.map((tier) => {
+            const meta = COMBAT_DICE_META[tier];
+            return (
+              <button
+                key={tier}
+                className={`tier-button tier-button--${tier}`}
+                onClick={() => addDie(tier)}
+                style={{ "--tier-color": meta.color } as React.CSSProperties}
+              >
+                <span className="tier-pip" />
+                <span className="tier-label">{meta.label}</span>
+                <span className="tier-sublabel">D6</span>
+              </button>
+            );
+          })}
         </div>
 
         <div className="control-buttons">
@@ -159,7 +172,6 @@ const DiceRoller: React.FC = () => {
           >
             {rolling ? "Rolling..." : "Roll Dice"}
           </button>
-
           <button
             onClick={clearDice}
             disabled={dicePool.length === 0}
@@ -173,7 +185,8 @@ const DiceRoller: React.FC = () => {
       <div className="dice-section">
         <div className="dice-pool">
           <h3>
-            Dice Pool {dicePool.length > 0 && <span>({dicePool.length})</span>}
+            Dice Pool{" "}
+            {dicePool.length > 0 && <span>({dicePool.length})</span>}
           </h3>
 
           {dicePool.length === 0 ? (
@@ -185,14 +198,17 @@ const DiceRoller: React.FC = () => {
               {dicePool.map((die) => (
                 <div
                   key={die.id}
-                  className="die"
-                  style={{ backgroundColor: die.color }}
+                  className={`die die--${die.tier}`}
+                  style={
+                    {
+                      "--tier-color": COMBAT_DICE_META[die.tier].color,
+                    } as React.CSSProperties
+                  }
                 >
-                  <div className="die-sides">D{die.sides}</div>
-                  <button
-                    className="remove-die"
-                    onClick={() => removeDie(die.id)}
-                  >
+                  <div className="die-label">
+                    {COMBAT_DICE_META[die.tier].label}
+                  </div>
+                  <button className="remove-die" onClick={() => removeDie(die.id)}>
                     ×
                   </button>
                 </div>
@@ -208,17 +224,23 @@ const DiceRoller: React.FC = () => {
               {rollResults.map((die) => (
                 <div
                   key={die.id}
-                  className="die result-die"
-                  style={{ backgroundColor: die.color }}
+                  className={`die result-die die--${die.tier}`}
+                  style={
+                    {
+                      "--tier-color": COMBAT_DICE_META[die.tier].color,
+                    } as React.CSSProperties
+                  }
                 >
-                  <div className="die-sides">D{die.sides}</div>
-                  <div className="die-value">{die.value}</div>
+                  <div className="die-label">
+                    {COMBAT_DICE_META[die.tier].label}
+                  </div>
+                  <BulletHoles damage={die.damage} tier={die.tier} />
                 </div>
               ))}
             </div>
 
             <div className="total-result">
-              Total: <span>{calculateTotal()}</span>
+              Total Damage: <span>{currentTotal}</span>
             </div>
           </div>
         )}
@@ -249,11 +271,17 @@ const DiceRoller: React.FC = () => {
                   {entry.dice.map((die) => (
                     <div
                       key={die.id}
-                      className="history-die"
-                      style={{ backgroundColor: die.color }}
+                      className={`history-die history-die--${die.tier}`}
+                      style={
+                        {
+                          "--tier-color": COMBAT_DICE_META[die.tier].color,
+                        } as React.CSSProperties
+                      }
                     >
-                      <span className="history-die-sides">D{die.sides}</span>
-                      <span className="history-die-value">{die.value}</span>
+                      <span className="history-die-tier">
+                        {COMBAT_DICE_META[die.tier].label.charAt(0)}
+                      </span>
+                      <span className="history-die-value">{die.damage}</span>
                     </div>
                   ))}
                 </div>
@@ -264,6 +292,29 @@ const DiceRoller: React.FC = () => {
             ))}
           </div>
         )}
+      </div>
+
+      <div className="dice-rules">
+        <p>
+          Each die rolls one of its six faces at random. Damage is the value on
+          that face. The total is the sum of all damage rolled.
+        </p>
+        <div className="dice-rules-tiers">
+          {TIERS.map((tier) => (
+            <div key={tier} className={`rules-tier rules-tier--${tier}`}>
+              <span
+                className="rules-pip"
+                style={{ background: COMBAT_DICE_META[tier].color }}
+              />
+              <span className="rules-tier-name">
+                {COMBAT_DICE_META[tier].label}
+              </span>
+              <span className="rules-faces">
+                [{COMBAT_DICE_FACES[tier].join(", ")}]
+              </span>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

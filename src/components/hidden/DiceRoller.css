@@ -46,6 +46,8 @@
   font-weight: normal;
 }
 
+/* ── Controls ─────────────────────────────────────────────────────────── */
+
 .dice-controls {
   display: flex;
   flex-direction: column;
@@ -68,62 +70,81 @@
   height: 3px;
   background: linear-gradient(
     90deg,
-    var(--r6s-blue) 0%,
-    var(--r6s-orange) 100%
+    #f5c518 0%,
+    #ff7b00 50%,
+    #e53935 100%
   );
 }
 
-.dice-buttons {
+/* ── Tier buttons ─────────────────────────────────────────────────────── */
+
+.tier-buttons {
   display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
+  gap: 16px;
 }
 
-.add-die-button {
+.tier-button {
   flex: 1;
-  min-width: 90px;
-  padding: 14px 10px;
-  font-size: 18px;
-  font-weight: 600;
-  background-color: var(--r6s-gray);
-  color: var(--r6s-text);
-  border: 1px solid var(--r6s-border);
-  border-radius: 2px;
-  cursor: pointer;
-  transition: all 0.2s ease;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  gap: 6px;
+  padding: 18px 10px;
+  background-color: var(--r6s-gray);
+  border: 2px solid var(--tier-color, #888);
+  border-radius: 4px;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
   position: relative;
   overflow: hidden;
+}
+
+.tier-button::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.05) 0%,
+    transparent 60%
+  );
+}
+
+.tier-button:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.5),
+    0 0 12px color-mix(in srgb, var(--tier-color, #888) 40%, transparent);
+  background-color: var(--r6s-light-gray);
+}
+
+.tier-pip {
+  display: block;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: var(--tier-color, #888);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--tier-color, #888) 60%, transparent);
+}
+
+.tier-label {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--tier-color, #ccc);
   text-transform: uppercase;
   letter-spacing: 1px;
 }
 
-.add-die-button::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 0;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.1) 0%,
-    transparent 100%
-  );
-  transition: height 0.2s ease;
+.tier-sublabel {
+  font-size: 12px;
+  color: #aaa;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
-.add-die-button:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
-  border-color: var(--r6s-accent);
-}
-
-.add-die-button:hover::before {
-  height: 100%;
-}
+/* ── Roll / Clear buttons ─────────────────────────────────────────────── */
 
 .control-buttons {
   display: flex;
@@ -221,6 +242,8 @@
   box-shadow: none;
 }
 
+/* ── Pool / Results panels ────────────────────────────────────────────── */
+
 .dice-section {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -266,57 +289,65 @@
 .dice-grid,
 .results-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
   gap: 15px;
   margin-top: 20px;
 }
 
+/* ── Dice tiles ───────────────────────────────────────────────────────── */
+
 .die {
   position: relative;
-  width: 80px;
-  height: 80px;
-  border-radius: 4px;
+  width: 90px;
+  height: 90px;
+  border-radius: 6px;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  color: white;
-  font-weight: bold;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  gap: 6px;
+  background-color: var(--r6s-gray);
+  border: 2px solid var(--tier-color, #888);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.06);
   transition: all 0.2s ease;
 }
 
 .die::after {
   content: "";
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
+  border-radius: 4px;
   background: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.2) 0%,
+    rgba(255, 255, 255, 0.08) 0%,
     transparent 50%
   );
+  pointer-events: none;
 }
 
 .die:hover {
-  transform: translateY(-5px) rotate(5deg);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+  transform: translateY(-5px) rotate(3deg);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.6),
+    0 0 14px color-mix(in srgb, var(--tier-color, #888) 50%, transparent);
 }
 
-.die-sides {
-  font-size: 16px;
+.die-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--tier-color, #ccc);
   position: absolute;
-  top: 8px;
+  top: 7px;
   left: 8px;
   z-index: 2;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
 }
 
 .remove-die {
   position: absolute;
-  top: -8px;
-  right: -8px;
+  top: -9px;
+  right: -9px;
   width: 22px;
   height: 22px;
   border-radius: 50%;
@@ -334,6 +365,7 @@
     transform 0.2s ease;
   z-index: 3;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+  line-height: 1;
 }
 
 .die:hover .remove-die {
@@ -345,18 +377,95 @@
 }
 
 .result-die {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
+  cursor: default;
 }
 
-.die-value {
-  font-size: 30px;
-  font-weight: 700;
-  z-index: 2;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+.result-die:hover {
+  transform: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
 }
+
+/* ── Bullet holes ─────────────────────────────────────────────────────── */
+
+.bullet-holes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  justify-content: center;
+  align-items: center;
+  padding: 4px 2px;
+  z-index: 2;
+}
+
+.bullet-holes--triangle {
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.bullet-holes-row {
+  display: flex;
+  gap: 5px;
+  justify-content: center;
+}
+
+/*
+ * Starburst bullet-hole impact mark.
+ * Shape: 12-point irregular star via clip-path.
+ * Hole:  dark center via radial-gradient — no pseudo-element needed
+ *        because clip-path would cut it off anyway.
+ */
+.bullet-hole {
+  display: block;
+  width: 24px;
+  height: 24px;
+  /* white starburst with dark hollow center */
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(10, 10, 10, 0.9) 0%,
+    rgba(10, 10, 10, 0.9) 24%,
+    rgba(255, 255, 255, 0.08) 26%,
+    rgba(255, 255, 255, 0.95) 30%,
+    rgba(255, 255, 255, 0.95) 100%
+  );
+  /* 12-point irregular starburst */
+  clip-path: polygon(
+    50%  0%,
+    53%  30%,
+    68%  8%,
+    60%  36%,
+    92%  24%,
+    65%  46%,
+    100% 50%,
+    64%  54%,
+    86%  76%,
+    60%  63%,
+    68%  92%,
+    54%  70%,
+    50%  100%,
+    46%  70%,
+    32%  92%,
+    40%  63%,
+    14%  76%,
+    36%  54%,
+    0%   50%,
+    35%  46%,
+    8%   24%,
+    40%  36%,
+    32%  8%,
+    47%  30%
+  );
+  filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.4));
+}
+
+.no-damage {
+  font-size: 20px;
+  color: #555;
+  z-index: 2;
+  line-height: 1;
+}
+
+/* ── Total ────────────────────────────────────────────────────────────── */
 
 .total-result {
   margin-top: 25px;
@@ -388,6 +497,8 @@
   margin-left: 8px;
 }
 
+/* ── History ──────────────────────────────────────────────────────────── */
+
 .roll-history {
   background-color: var(--r6s-dark);
   border-radius: 4px;
@@ -395,6 +506,7 @@
   padding: 25px;
   border: 1px solid var(--r6s-border);
   position: relative;
+  margin-bottom: 30px;
 }
 
 .roll-history::before {
@@ -428,30 +540,11 @@
   overflow: hidden;
 }
 
-.clear-history-button::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 0;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.1) 0%,
-    transparent 100%
-  );
-  transition: height 0.2s ease;
-}
-
 .clear-history-button:hover {
   background-color: var(--r6s-red);
   color: white;
   transform: translateY(-3px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-}
-
-.clear-history-button:hover::before {
-  height: 100%;
 }
 
 .empty-history {
@@ -519,7 +612,7 @@
 .history-dice {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 8px;
   flex: 1;
 }
 
@@ -528,48 +621,37 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 2px;
-  color: white;
+  width: 44px;
+  height: 44px;
+  border-radius: 4px;
+  background-color: var(--r6s-gray);
+  border: 1.5px solid var(--tier-color, #888);
   font-size: 12px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
   position: relative;
   transition: transform 0.2s ease;
 }
 
-.history-die::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.2) 0%,
-    transparent 50%
-  );
-}
-
 .history-entry:hover .history-die {
-  transform: rotate(5deg);
+  transform: rotate(4deg);
 }
 
-.history-die-sides {
+.history-die-tier {
   font-size: 9px;
-  opacity: 0.8;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--tier-color, #ccc);
   position: absolute;
   top: 3px;
-  left: 3px;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+  left: 4px;
   z-index: 2;
 }
 
 .history-die-value {
+  font-size: 16px;
   font-weight: 700;
+  color: var(--r6s-text);
   z-index: 2;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
 }
 
 .history-total {
@@ -587,7 +669,62 @@
   margin-left: 5px;
 }
 
+/* ── Dice rules / face table ──────────────────────────────────────────── */
+
+.dice-rules {
+  background-color: var(--r6s-dark);
+  border: 1px solid var(--r6s-border);
+  border-radius: 4px;
+  padding: 20px 25px;
+  font-size: 14px;
+  color: #aaa;
+  line-height: 1.6;
+}
+
+.dice-rules p {
+  margin: 0 0 16px;
+}
+
+.dice-rules-tiers {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.rules-tier {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.rules-pip {
+  display: block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.rules-tier-name {
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  min-width: 60px;
+  color: var(--r6s-text);
+}
+
+.rules-faces {
+  font-family: monospace;
+  color: #888;
+}
+
+/* ── Responsive ───────────────────────────────────────────────────────── */
+
 @media (max-width: 768px) {
+  .tier-buttons {
+    flex-direction: column;
+  }
+
   .dice-section {
     grid-template-columns: 1fr;
     gap: 20px;
