@@ -536,13 +536,35 @@ export function hasLineOfSightWithBreakableWalls(
 }
 
 /**
- * Checks if a line passes through any smoke
+ * Checks if a line passes through any smoke using dual-line approach
+ * Smoke must cross both offset lines to block (same as walls)
  */
 function doesLinePassThroughSmoke(
   lineStart: Position,
   lineEnd: Position,
   smokes: Smoke[],
+  lineThickness: number = DEFAULT_LINE_THICKNESS,
 ): boolean {
+  // Create two parallel lines offset by half thickness on each side (same as walls)
+  const direction = getNormalizedDirection(lineStart, lineEnd);
+  const perpendicular = getPerpendicularVector(direction);
+  const halfThickness = lineThickness / 2;
+  
+  // Offset lines: one on each side of the center line
+  const offset1 = {
+    x: perpendicular.x * halfThickness,
+    y: perpendicular.y * halfThickness
+  };
+  const offset2 = {
+    x: -perpendicular.x * halfThickness,
+    y: -perpendicular.y * halfThickness
+  };
+  
+  const line1Start = { x: lineStart.x + offset1.x, y: lineStart.y + offset1.y };
+  const line1End = { x: lineEnd.x + offset1.x, y: lineEnd.y + offset1.y };
+  const line2Start = { x: lineStart.x + offset2.x, y: lineStart.y + offset2.y };
+  const line2End = { x: lineEnd.x + offset2.x, y: lineEnd.y + offset2.y };
+
   const epsilon = 0.001; // Small value for numerical stability
 
   // Special case for horizontal and vertical lines
@@ -601,116 +623,59 @@ function doesLinePassThroughSmoke(
           }
         }
 
-        // FIX 3: More accurate detection for whether line passes through cell
-        // For horizontal lines
-        if (isHorizontalLine) {
-          const lineY = lineStart.y;
-          const minX = Math.min(lineStart.x, lineEnd.x);
-          const maxX = Math.max(lineStart.x, lineEnd.x);
-
-          // Cell fully contains the line segment's Y coordinate AND
-          // X range overlaps with the line segment's X range
-          if (
-            lineY > cellY &&
-            lineY < cellY + 1 &&
-            cellX < maxX &&
-            cellX + 1 > minX
-          ) {
-            return true; // Smoke blocks line of sight
-          }
-
-          continue; // Skip remaining checks for horizontal lines
-        }
-
-        // For vertical lines
-        if (isVerticalLine) {
-          const lineX = lineStart.x;
-          const minY = Math.min(lineStart.y, lineEnd.y);
-          const maxY = Math.max(lineStart.y, lineEnd.y);
-
-          // Cell fully contains the line segment's X coordinate AND
-          // Y range overlaps with the line segment's Y range
-          if (
-            lineX > cellX &&
-            lineX < cellX + 1 &&
-            cellY < maxY &&
-            cellY + 1 > minY
-          ) {
-            return true; // Smoke blocks line of sight
-          }
-
-          continue; // Skip remaining checks for vertical lines
-        }
-
-        // For diagonal lines - more general case
-        // Check if the line passes through the interior of the cell
-        // This uses a simplified approach checking if the line intersects opposite sides
-
-        // Cell boundaries
+        // Use dual-line approach: smoke must cross BOTH offset lines to block
+        // Check if both offset lines pass through this smoke cell
         const cellMinX = cellX;
         const cellMinY = cellY;
         const cellMaxX = cellX + 1;
         const cellMaxY = cellY + 1;
 
-        // First, check if either endpoint is inside the cell
-        const startInside =
-          lineStart.x > cellMinX &&
-          lineStart.x < cellMaxX &&
-          lineStart.y > cellMinY &&
-          lineStart.y < cellMaxY;
+        // Helper function to check if a line segment intersects a cell
+        const lineIntersectsCell = (
+          segStart: Position,
+          segEnd: Position,
+        ): boolean => {
+          // Check if line segment intersects any edge of the cell
+          const cellEdges = [
+            // Top edge
+            { start: { x: cellMinX, y: cellMinY }, end: { x: cellMaxX, y: cellMinY } },
+            // Right edge
+            { start: { x: cellMaxX, y: cellMinY }, end: { x: cellMaxX, y: cellMaxY } },
+            // Bottom edge
+            { start: { x: cellMaxX, y: cellMaxY }, end: { x: cellMinX, y: cellMaxY } },
+            // Left edge
+            { start: { x: cellMinX, y: cellMaxY }, end: { x: cellMinX, y: cellMinY } },
+          ];
 
-        const endInside =
-          lineEnd.x > cellMinX &&
-          lineEnd.x < cellMaxX &&
-          lineEnd.y > cellMinY &&
-          lineEnd.y < cellMaxY;
-
-        if (startInside || endInside) {
-          return true; // Line definitely passes through the cell
-        }
-
-        // Check line intersection with cell boundaries
-        // This is a simplified algorithm to detect if a line passes through a cell
-
-        // Line equation: ax + by + c = 0
-        const a = lineEnd.y - lineStart.y;
-        const b = lineStart.x - lineEnd.x;
-        const c = lineEnd.x * lineStart.y - lineStart.x * lineEnd.y;
-
-        // Calculate the sign of the line equation for each corner
-        const topLeft = Math.sign(a * cellMinX + b * cellMinY + c);
-        const topRight = Math.sign(a * cellMaxX + b * cellMinY + c);
-        const bottomLeft = Math.sign(a * cellMinX + b * cellMaxY + c);
-        const bottomRight = Math.sign(a * cellMaxX + b * cellMaxY + c);
-
-        // If all corners have the same sign, the line doesn't pass through the cell
-        // If signs differ, the line passes through the cell
-        if (
-          !(
-            topLeft === topRight &&
-            topRight === bottomLeft &&
-            bottomLeft === bottomRight &&
-            topLeft !== 0
-          )
-        ) {
-          // Additional check: make sure the line segment actually intersects the cell
-          // and isn't just passing through an extended line
-          const minLineX = Math.min(lineStart.x, lineEnd.x);
-          const maxLineX = Math.max(lineStart.x, lineEnd.x);
-          const minLineY = Math.min(lineStart.y, lineEnd.y);
-          const maxLineY = Math.max(lineStart.y, lineEnd.y);
-
-          // Check if the cell overlaps with the bounding box of the line segment
-          if (
-            !(
-              maxLineX < cellMinX ||
-              minLineX > cellMaxX ||
-              maxLineY < cellMinY ||
-              minLineY > cellMaxY
-            )
-          ) {
-            return true; // Line passes through the cell
+          for (const edge of cellEdges) {
+            const result = doLinesIntersect(segStart, segEnd, edge.start, edge.end);
+            if (result.intersects) {
+              return true;
+            }
           }
+
+          // Also check if line segment endpoints are inside the cell
+          const startInside =
+            segStart.x > cellMinX &&
+            segStart.x < cellMaxX &&
+            segStart.y > cellMinY &&
+            segStart.y < cellMaxY;
+          const endInside =
+            segEnd.x > cellMinX &&
+            segEnd.x < cellMaxX &&
+            segEnd.y > cellMinY &&
+            segEnd.y < cellMaxY;
+
+          return startInside || endInside;
+        };
+
+        // Check if both offset lines intersect this cell
+        const line1Intersects = lineIntersectsCell(line1Start, line1End);
+        const line2Intersects = lineIntersectsCell(line2Start, line2End);
+
+        // Smoke blocks only if BOTH offset lines pass through the cell
+        if (line1Intersects && line2Intersects) {
+          return true; // Smoke blocks line of sight
         }
       }
     }
@@ -765,11 +730,11 @@ export function hasLineOfSightWithSmoke(
     return false;
   }
 
-  // Check if line passes through any smoke
+  // Check if line passes through any smoke using dual-line approach
   const center1 = getCellCenter(pos1);
   const center2 = getCellCenter(pos2);
 
-  const smokeBlocks = doesLinePassThroughSmoke(center1, center2, smokes);
+  const smokeBlocks = doesLinePassThroughSmoke(center1, center2, smokes, lineThickness);
 
   // Line of sight exists if not blocked by walls AND not blocked by smoke
   return !smokeBlocks;
