@@ -1,10 +1,5 @@
 /* src/components/hidden/LineOfSight.css */
 
-.los-tool {
-  max-width: 1100px;
-  margin: 0 auto;
-}
-
 .los-map-selector {
   display: flex;
   align-items: center;
@@ -252,6 +247,15 @@
 
 .tactical-list li::marker {
   color: var(--r6s-accent);
+}
+
+/* Public calculator (fixed bottom controls) embedded in tactical panel */
+.los-calculator-embed {
+  padding-bottom: 160px;
+}
+
+.los-calculator-embed .calculator-page {
+  max-width: 100%;
 }
 
 @media (max-width: 768px) {

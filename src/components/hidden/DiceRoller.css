@@ -1,10 +1,5 @@
 /* src/components/hidden/DiceRoller.css */
 
-.dice-roller {
-  max-width: 1100px;
-  margin: 0 auto;
-}
-
 .dice-roller h2 {
   text-align: center;
   margin-bottom: 35px;

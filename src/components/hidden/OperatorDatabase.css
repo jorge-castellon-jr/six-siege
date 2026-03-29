@@ -1,10 +1,5 @@
 /* src/components/hidden/OperatorDatabase.css */
 
-.operator-database {
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
 .operator-database h2 {
   text-align: center;
   margin-bottom: 35px;

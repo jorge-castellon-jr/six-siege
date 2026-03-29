@@ -1,10 +1,5 @@
 /* src/components/hidden/TournamentBans.css */
 
-.tournament-bans {
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
 .tournament-bans h2 {
   text-align: center;
   margin-bottom: 35px;

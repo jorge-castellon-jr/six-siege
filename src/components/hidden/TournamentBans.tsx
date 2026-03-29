@@ -53,26 +53,26 @@ const TournamentBans: React.FC = () => {
   const banMap = (mapId: string) => {
     if (currentBans >= banCount) return;
 
-    setMaps((prevMaps) =>
-      prevMaps.map((map) => {
-        if (map.id === mapId) {
-          return { ...map, banned: true, bannedBy: currentTeam };
-        }
-        return map;
-      }),
-    );
+    const nextMaps = maps.map((map) => {
+      if (map.id === mapId) {
+        return { ...map, banned: true, bannedBy: currentTeam };
+      }
+      return map;
+    });
 
-    // Switch teams after each ban
+    const newBanCount = nextMaps.filter((m) => m.banned).length;
+
+    setMaps(nextMaps);
     setCurrentTeam((current) => (current === "team1" ? "team2" : "team1"));
 
-    // Check if bans are complete
-    if (currentBans === banCount - 1) {
+    if (newBanCount === banCount) {
+      const leftovers = nextMaps.filter((m) => !m.banned);
+      const pickedId =
+        leftovers.length > 0
+          ? leftovers[Math.floor(Math.random() * leftovers.length)].id
+          : null;
+      setSelectedMap(pickedId);
       setBansComplete(true);
-
-      // Find the remaining map
-      const remainingMap =
-        maps.find((map) => !map.banned && map.id !== mapId)?.id || null;
-      setSelectedMap(remainingMap);
     }
   };
 

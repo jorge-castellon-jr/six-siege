@@ -1,6 +1,7 @@
 // src/components/hidden/HiddenLayout.tsx
 import React from "react";
 import { Outlet, NavLink } from "react-router-dom";
+import { isAdmin } from "../../utils/admin";
 import "./HiddenLayout.css";
 
 const HiddenLayout: React.FC = () => {
@@ -17,7 +18,7 @@ const HiddenLayout: React.FC = () => {
         <ul>
           <li>
             <NavLink
-              to="/hidden/los"
+              to="/los"
               className={({ isActive }) => (isActive ? "active-nav-link" : "")}
             >
               Line of Sight
@@ -25,7 +26,7 @@ const HiddenLayout: React.FC = () => {
           </li>
           <li>
             <NavLink
-              to="/hidden/tournament-bans"
+              to="/tournament-bans"
               className={({ isActive }) => (isActive ? "active-nav-link" : "")}
             >
               Tournament Bans
@@ -33,7 +34,7 @@ const HiddenLayout: React.FC = () => {
           </li>
           <li>
             <NavLink
-              to="/hidden/operator-database"
+              to="/operator-database"
               className={({ isActive }) => (isActive ? "active-nav-link" : "")}
             >
               Operator Database
@@ -41,12 +42,24 @@ const HiddenLayout: React.FC = () => {
           </li>
           <li>
             <NavLink
-              to="/hidden/dice-roller"
+              to="/dice-roller"
               className={({ isActive }) => (isActive ? "active-nav-link" : "")}
             >
               Dice Roller
             </NavLink>
           </li>
+          {isAdmin() && (
+            <li>
+              <NavLink
+                to="/admin"
+                className={({ isActive }) =>
+                  isActive ? "active-nav-link" : ""
+                }
+              >
+                Admin
+              </NavLink>
+            </li>
+          )}
         </ul>
       </nav>
 
