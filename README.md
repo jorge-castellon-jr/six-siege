@@ -1,54 +1,32 @@
-# React + TypeScript + Vite
+# Six Siege
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Companion tools for _Rainbow Six Siege: The Board Game_. Check line of sight on mapped floors, run tournament bans, look up operators, and roll combat dice.
 
-Currently, two official plugins are available:
+This is an unofficial fan project and is not affiliated with Ubisoft.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Tools
 
-## Expanding the ESLint configuration
+- **Line of Sight** (`/los`) — place operators on a map, break walls, drop smoke, and see whether they can see each other
+- **Tournament Bans** (`/tournament-bans`) — ban maps between two teams
+- **Operator Database** (`/operator-database`) — attacker and defender roster
+- **Dice Roller** (`/dice-roller`) — yellow, orange, and red combat dice
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Supported maps: Bank, Border, Chalet, Club House, Coastline, Consulate, Kafe, and Oregon.
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## Development
+
+```bash
+pnpm install
+pnpm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Then open the local URL Vite prints (usually `http://localhost:5173`). Useful scripts:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+```bash
+pnpm test          # vitest
+pnpm run lint      # eslint
 ```
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md). Direct pushes to `main` are not allowed. Fork the repo, open a pull request, and wait for maintainer review.
