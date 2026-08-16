@@ -536,152 +536,80 @@ export function hasLineOfSightWithBreakableWalls(
 }
 
 /**
- * Checks if a line passes through any smoke using dual-line approach
- * Smoke must cross both offset lines to block (same as walls)
+ * True if point is within INTERSECTION_TOLERANCE of any already-collected point.
+ * A corner counted on two edges must collapse to a single hit.
+ */
+function isNearExistingPoint(
+  point: Position,
+  points: Position[],
+  tolerance: number = INTERSECTION_TOLERANCE,
+): boolean {
+  return points.some((existing) => getDistance(point, existing) <= tolerance);
+}
+
+/**
+ * Smoke blocks when the center LOS segment cuts a smoke cell at two distinct
+ * points. A single corner graze is not enough.
  */
 function doesLinePassThroughSmoke(
   lineStart: Position,
   lineEnd: Position,
   smokes: Smoke[],
-  lineThickness: number = DEFAULT_LINE_THICKNESS,
 ): boolean {
-  // Create two parallel lines offset by half thickness on each side (same as walls)
-  const direction = getNormalizedDirection(lineStart, lineEnd);
-  const perpendicular = getPerpendicularVector(direction);
-  const halfThickness = lineThickness / 2;
-  
-  // Offset lines: one on each side of the center line
-  const offset1 = {
-    x: perpendicular.x * halfThickness,
-    y: perpendicular.y * halfThickness
-  };
-  const offset2 = {
-    x: -perpendicular.x * halfThickness,
-    y: -perpendicular.y * halfThickness
-  };
-  
-  const line1Start = { x: lineStart.x + offset1.x, y: lineStart.y + offset1.y };
-  const line1End = { x: lineEnd.x + offset1.x, y: lineEnd.y + offset1.y };
-  const line2Start = { x: lineStart.x + offset2.x, y: lineStart.y + offset2.y };
-  const line2End = { x: lineEnd.x + offset2.x, y: lineEnd.y + offset2.y };
+  const startCellX = Math.floor(lineStart.x);
+  const startCellY = Math.floor(lineStart.y);
+  const endCellX = Math.floor(lineEnd.x);
+  const endCellY = Math.floor(lineEnd.y);
 
-  const epsilon = 0.001; // Small value for numerical stability
-
-  // Special case for horizontal and vertical lines
-  const isHorizontalLine = Math.abs(lineEnd.y - lineStart.y) < epsilon;
-  const isVerticalLine = Math.abs(lineEnd.x - lineStart.x) < epsilon;
-
-  // For each smoke
   for (const smoke of smokes) {
-    // For each cell in the smoke pattern
     for (let x = 0; x < smoke.pattern.width; x++) {
       for (let y = 0; y < smoke.pattern.height; y++) {
-        // Get absolute cell position
         const cellX = smoke.position.x + x;
         const cellY = smoke.position.y + y;
 
-        // CRITICAL FIX 1: Skip cells that contain players
-        // This is the most important part - smoke in a player's cell never blocks
+        // Smoke in an operator's own cell never blocks
         if (
-          (Math.floor(lineStart.x) === cellX &&
-            Math.floor(lineStart.y) === cellY) ||
-          (Math.floor(lineEnd.x) === cellX && Math.floor(lineEnd.y) === cellY)
+          (startCellX === cellX && startCellY === cellY) ||
+          (endCellX === cellX && endCellY === cellY)
         ) {
           continue;
         }
 
-        // CRITICAL FIX 2: Skip cells adjacent to players (only for horizontal/vertical lines)
-        // This addresses the issue with smoke next to players falsely blocking line of sight
-        if (isHorizontalLine) {
-          // For horizontal lines, smoke in a cell horizontally adjacent to a player's cell
-          // shouldn't block line of sight
-          const playerStartX = Math.floor(lineStart.x);
-          const playerStartY = Math.floor(lineStart.y);
-          const playerEndX = Math.floor(lineEnd.x);
-          const playerEndY = Math.floor(lineEnd.y);
-
-          // Check if smoke is horizontally adjacent to either player
-          if (
-            (Math.abs(cellX - playerStartX) === 1 && cellY === playerStartY) ||
-            (Math.abs(cellX - playerEndX) === 1 && cellY === playerEndY)
-          ) {
-            continue;
-          }
-        } else if (isVerticalLine) {
-          // Similar logic for vertical lines
-          const playerStartX = Math.floor(lineStart.x);
-          const playerStartY = Math.floor(lineStart.y);
-          const playerEndX = Math.floor(lineEnd.x);
-          const playerEndY = Math.floor(lineEnd.y);
-
-          // Check if smoke is vertically adjacent to either player
-          if (
-            (Math.abs(cellY - playerStartY) === 1 && cellX === playerStartX) ||
-            (Math.abs(cellY - playerEndY) === 1 && cellX === playerEndX)
-          ) {
-            continue;
-          }
-        }
-
-        // Use dual-line approach: smoke must cross BOTH offset lines to block
-        // Check if both offset lines pass through this smoke cell
         const cellMinX = cellX;
         const cellMinY = cellY;
         const cellMaxX = cellX + 1;
         const cellMaxY = cellY + 1;
 
-        // Helper function to check if a line segment intersects a cell
-        const lineIntersectsCell = (
-          segStart: Position,
-          segEnd: Position,
-        ): boolean => {
-          // Check if line segment intersects any edge of the cell
-          const cellEdges = [
-            // Top edge
-            { start: { x: cellMinX, y: cellMinY }, end: { x: cellMaxX, y: cellMinY } },
-            // Right edge
-            { start: { x: cellMaxX, y: cellMinY }, end: { x: cellMaxX, y: cellMaxY } },
-            // Bottom edge
-            { start: { x: cellMaxX, y: cellMaxY }, end: { x: cellMinX, y: cellMaxY } },
-            // Left edge
-            { start: { x: cellMinX, y: cellMaxY }, end: { x: cellMinX, y: cellMinY } },
-          ];
+        const cellEdges = [
+          { start: { x: cellMinX, y: cellMinY }, end: { x: cellMaxX, y: cellMinY } },
+          { start: { x: cellMaxX, y: cellMinY }, end: { x: cellMaxX, y: cellMaxY } },
+          { start: { x: cellMaxX, y: cellMaxY }, end: { x: cellMinX, y: cellMaxY } },
+          { start: { x: cellMinX, y: cellMaxY }, end: { x: cellMinX, y: cellMinY } },
+        ];
 
-          for (const edge of cellEdges) {
-            const result = doLinesIntersect(segStart, segEnd, edge.start, edge.end);
-            if (result.intersects) {
-              return true;
+        const distinctPoints: Position[] = [];
+        for (const edge of cellEdges) {
+          const result = doLinesIntersect(
+            lineStart,
+            lineEnd,
+            edge.start,
+            edge.end,
+          );
+          if (result.intersects && result.point) {
+            if (!isNearExistingPoint(result.point, distinctPoints)) {
+              distinctPoints.push(result.point);
             }
           }
+        }
 
-          // Also check if line segment endpoints are inside the cell
-          const startInside =
-            segStart.x > cellMinX &&
-            segStart.x < cellMaxX &&
-            segStart.y > cellMinY &&
-            segStart.y < cellMaxY;
-          const endInside =
-            segEnd.x > cellMinX &&
-            segEnd.x < cellMaxX &&
-            segEnd.y > cellMinY &&
-            segEnd.y < cellMaxY;
-
-          return startInside || endInside;
-        };
-
-        // Check if both offset lines intersect this cell
-        const line1Intersects = lineIntersectsCell(line1Start, line1End);
-        const line2Intersects = lineIntersectsCell(line2Start, line2End);
-
-        // Smoke blocks only if BOTH offset lines pass through the cell
-        if (line1Intersects && line2Intersects) {
-          return true; // Smoke blocks line of sight
+        if (distinctPoints.length >= 2) {
+          return true;
         }
       }
     }
   }
 
-  return false; // No smoke blocks line of sight
+  return false;
 }
 
 /**
@@ -730,11 +658,10 @@ export function hasLineOfSightWithSmoke(
     return false;
   }
 
-  // Check if line passes through any smoke using dual-line approach
   const center1 = getCellCenter(pos1);
   const center2 = getCellCenter(pos2);
 
-  const smokeBlocks = doesLinePassThroughSmoke(center1, center2, smokes, lineThickness);
+  const smokeBlocks = doesLinePassThroughSmoke(center1, center2, smokes);
 
   // Line of sight exists if not blocked by walls AND not blocked by smoke
   return !smokeBlocks;
