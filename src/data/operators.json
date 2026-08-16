@@ -1,0 +1,1019 @@
+[
+  {
+    "id": "ash",
+    "name": "Ash",
+    "team": "Attacker",
+    "source": "core",
+    "gadgetName": "Breaching Rounds",
+    "gadgetKind": "action",
+    "gadget": [
+      "Action, line of sight, ignoring at most one barricade: perform a Destroy action in the targeted space and one orthogonally adjacent space.",
+      "2 charges."
+    ],
+    "stamina": 4,
+    "run": 5,
+    "destroy": "orange",
+    "ranges": [
+      { "id": "short", "spaces": "1–3", "dice": ["yellow", "red", "red"] },
+      { "id": "medium", "spaces": "4–6", "dice": ["yellow", "orange", "red", "red"] },
+      { "id": "long", "spaces": "7+", "dice": ["orange", "red"] }
+    ],
+    "statsVerified": true
+  },
+  {
+    "id": "sledge",
+    "name": "Sledge",
+    "team": "Attacker",
+    "source": "core",
+    "gadgetName": "Tactical Breaching Hammer",
+    "gadgetKind": "action",
+    "gadget": [
+      "Cannot be used while leaning.",
+      "Action, deployable, ignoring at most one light wall or barricade: Destroy the targeted space, then place Sledge in it. You may then Shoot and/or Destroy in one adjacent space.",
+      "3 charges."
+    ],
+    "stamina": 5,
+    "run": 2,
+    "destroy": "orange",
+    "ranges": [
+      { "id": "short", "spaces": "1–3", "dice": ["yellow", "orange", "red", "red"] },
+      { "id": "medium", "spaces": "4–6", "dice": ["yellow", "yellow", "orange", "orange"] },
+      { "id": "long", "spaces": "7+", "dice": ["yellow", "orange", "orange"] }
+    ],
+    "statsVerified": true
+  },
+  {
+    "id": "thatcher",
+    "name": "Thatcher",
+    "team": "Attacker",
+    "source": "core",
+    "gadgetName": "EMP Grenades",
+    "gadgetKind": "action",
+    "gadget": [
+      "Action, throwable: Destroy all Electronics gadgets in the room containing the targeted space.",
+      "2 charges."
+    ],
+    "stamina": 5,
+    "run": 2,
+    "destroy": "yellow",
+    "ranges": [
+      { "id": "short", "spaces": "1–3", "dice": ["orange", "orange", "red"] },
+      { "id": "medium", "spaces": "4–6", "dice": ["yellow", "orange", "orange", "red"] },
+      { "id": "long", "spaces": "7+", "dice": ["orange", "red"] }
+    ],
+    "notes": [
+      "One orange hit die at range 4–6 is marked Electronics."
+    ],
+    "statsVerified": true
+  },
+  {
+    "id": "thermite",
+    "name": "Thermite",
+    "team": "Attacker",
+    "source": "core",
+    "gadgetName": "Exothermic Charges",
+    "gadgetKind": "action",
+    "gadget": [
+      "Action, deployable: Destroy the targeted space and adjacent spaces. Partitions do not block the area of effect.",
+      "2 charges."
+    ],
+    "stamina": 5,
+    "run": 2,
+    "destroy": "orange",
+    "ranges": [
+      { "id": "short", "spaces": "1–3", "dice": ["yellow", "orange", "red"] },
+      { "id": "medium", "spaces": "4–6", "dice": ["yellow", "orange", "orange", "red"] },
+      { "id": "long", "spaces": "7+", "dice": ["yellow", "yellow", "red"] }
+    ],
+    "notes": [
+      "One yellow hit die at range 4–6 is marked Electronics."
+    ],
+    "statsVerified": true
+  },
+  {
+    "id": "twitch",
+    "name": "Twitch",
+    "team": "Attacker",
+    "source": "core",
+    "gadgetName": "Shock Drones",
+    "gadgetKind": "action",
+    "gadget": [
+      "Action, drone: after completing a scan, roll a red die. For each hit, Destroy an Electronics gadget in the scanned room.",
+      "2 charges."
+    ],
+    "stamina": 5,
+    "run": 2,
+    "destroy": "yellow",
+    "ranges": [
+      { "id": "short", "spaces": "1–3", "dice": ["yellow", "orange", "red", "red"] },
+      { "id": "medium", "spaces": "4–6", "dice": ["orange", "red", "red"] },
+      { "id": "long", "spaces": "7+", "dice": ["yellow", "red"] }
+    ],
+    "notes": [
+      "Short-range yellow and medium-range orange dice are marked Electronics."
+    ],
+    "statsVerified": true
+  },
+  {
+    "id": "montagne",
+    "name": "Montagne",
+    "team": "Attacker",
+    "source": "core",
+    "gadgetName": "'Le Roc' Shield",
+    "gadgetKind": "action",
+    "gadget": [
+      "If Montagne has multiple sources of protection, cancel up to 4 hits from shots targeting him instead of the usual 3.",
+      "Action: Montagne has heavy protection rather than light. A leaning operator protected by his shield also receives heavy protection.",
+      "Shield refreshes during upkeep."
+    ],
+    "stamina": 6,
+    "destroy": "yellow",
+    "ranges": [
+      { "id": "short", "spaces": "1–3", "dice": ["yellow", "red", "red"] },
+      { "id": "medium", "spaces": "4–6", "dice": ["yellow", "yellow", "red"] },
+      { "id": "long", "spaces": "7+", "dice": ["red"] }
+    ],
+    "notes": [
+      "No Run value on the card. One short-range red die is marked Electronics."
+    ],
+    "statsVerified": true
+  },
+  {
+    "id": "glaz",
+    "name": "Glaz",
+    "team": "Attacker",
+    "source": "core",
+    "gadgetName": "Flip Sight",
+    "gadgetKind": "passive",
+    "gadget": [
+      "Glaz maintains line of sight through Smoke and Gas overlays.",
+      "Action, vertical: reveal the targeted Hidden Operator token."
+    ],
+    "stamina": 5,
+    "run": 2,
+    "destroy": "yellow",
+    "ranges": [
+      { "id": "short", "spaces": "1–3", "dice": ["yellow", "red"] },
+      { "id": "medium", "spaces": "4–6", "dice": ["red", "red"] },
+      { "id": "long", "spaces": "7+", "dice": ["yellow", "orange", "red", "red"] }
+    ],
+    "statsVerified": true
+  },
+  {
+    "id": "fuze",
+    "name": "Fuze",
+    "team": "Attacker",
+    "source": "core",
+    "gadgetName": "Cluster Charges",
+    "gadgetKind": "action",
+    "gadget": [
+      "Action, deployable ignoring at most one light wall or barricade, or vertical: Destroy all gadgets in the targeted room except Always Visible gadgets. Operators in that room sustain a yellow hit die.",
+      "2 charges."
+    ],
+    "stamina": 6,
+    "destroy": "yellow",
+    "ranges": [
+      { "id": "short", "spaces": "1–3", "dice": ["orange", "red"] },
+      { "id": "medium", "spaces": "4–6", "dice": ["orange", "orange", "red", "red"] },
+      { "id": "long", "spaces": "7+", "dice": ["yellow", "yellow", "orange", "red"] }
+    ],
+    "notes": [
+      "No Run value on the card. One medium-range orange die is marked Electronics."
+    ],
+    "statsVerified": true
+  },
+  {
+    "id": "blitz",
+    "name": "Blitz",
+    "team": "Attacker",
+    "source": "core",
+    "gadgetName": "Flash Shield Charges",
+    "gadgetKind": "action",
+    "gadget": [
+      "Action, deployable: all operators in the targeted room receive a Stunned marker, except Blitz.",
+      "2 charges."
+    ],
+    "stamina": 5,
+    "run": 2,
+    "destroy": "yellow",
+    "ranges": [
+      { "id": "short", "spaces": "1–3", "dice": ["yellow", "yellow", "orange", "orange"] },
+      { "id": "medium", "spaces": "4–6", "dice": ["yellow", "yellow", "yellow", "orange"] },
+      { "id": "long", "spaces": "7+", "dice": ["yellow", "yellow", "yellow", "orange"] }
+    ],
+    "statsVerified": true
+  },
+  {
+    "id": "iq",
+    "name": "IQ",
+    "team": "Attacker",
+    "source": "core",
+    "gadgetName": "Spectre Detector",
+    "gadgetKind": "action",
+    "gadget": [
+      "Action, wave or vertical: Destroy the targeted Electronics gadget.",
+      "Reaction: ignore special gadget effects that cost an extra action, whether they affect IQ or another operator in her squad.",
+      "2 charges."
+    ],
+    "stamina": 4,
+    "run": 5,
+    "destroy": "yellow",
+    "ranges": [
+      { "id": "short", "spaces": "1–3", "dice": ["yellow", "red"] },
+      { "id": "medium", "spaces": "4–6", "dice": ["yellow", "red", "red"] },
+      { "id": "long", "spaces": "7+", "dice": ["orange", "orange", "red"] }
+    ],
+    "statsVerified": true
+  },
+  {
+    "id": "smoke",
+    "name": "Smoke",
+    "team": "Defender",
+    "source": "core",
+    "gadgetName": "Gas Grenades",
+    "gadgetKind": "action",
+    "gadget": [
+      "Action, throwable: place a Gas overlay.",
+      "Operators except Smoke in a Gas space immediately sustain a hit. Gas blocks line of sight. Entering or ending an action in Gas also inflicts a hit.",
+      "2 charges."
+    ],
+    "stamina": 5,
+    "run": 2,
+    "destroy": "orange",
+    "ranges": [
+      { "id": "short", "spaces": "1–3", "dice": ["orange", "red", "red"] },
+      { "id": "medium", "spaces": "4–6", "dice": ["yellow", "orange", "red", "red"] },
+      { "id": "long", "spaces": "7+", "dice": ["yellow", "orange"] }
+    ],
+    "notes": [
+      "Short-range orange and medium-range yellow dice are marked Electronics."
+    ],
+    "statsVerified": true
+  },
+  {
+    "id": "mute",
+    "name": "Mute",
+    "team": "Defender",
+    "source": "core",
+    "gadgetName": "Signal Disruptors",
+    "gadgetKind": "setup",
+    "gadget": [
+      "Setup: place up to 2 Signal Disruptors on 2 sections of heavy wall.",
+      "Attacker Electronics gadgets cannot target, be deployed in, or enter spaces in rooms containing a Signal Disruptor."
+    ],
+    "stamina": 5,
+    "run": 2,
+    "destroy": "orange",
+    "ranges": [
+      { "id": "short", "spaces": "1–3", "dice": ["orange", "red", "red"] },
+      { "id": "medium", "spaces": "4–6", "dice": ["yellow", "red", "red"] },
+      { "id": "long", "spaces": "7+", "dice": ["orange", "orange"] }
+    ],
+    "notes": [
+      "Medium range shows an Electronics marker on the weapon line."
+    ],
+    "statsVerified": true
+  },
+  {
+    "id": "castle",
+    "name": "Castle",
+    "team": "Defender",
+    "source": "core",
+    "gadgetName": "Armor Panels",
+    "gadgetKind": "setup",
+    "gadget": [
+      "Setup: place up to 2 Armor Panels on 2 doors and/or windows.",
+      "Armor Panels replace barricades where applicable and are treated as fortified walls, not gadgets."
+    ],
+    "stamina": 5,
+    "run": 2,
+    "destroy": "orange",
+    "ranges": [
+      { "id": "short", "spaces": "1–3", "dice": ["yellow", "yellow", "red", "red"] },
+      { "id": "medium", "spaces": "4–6", "dice": ["yellow", "red", "red"] },
+      { "id": "long", "spaces": "7+", "dice": ["yellow", "yellow", "red"] }
+    ],
+    "notes": [
+      "One short-range yellow die is marked Electronics."
+    ],
+    "statsVerified": true
+  },
+  {
+    "id": "pulse",
+    "name": "Pulse",
+    "team": "Defender",
+    "source": "core",
+    "gadgetName": "Heartbeat Sensor",
+    "gadgetKind": "action",
+    "gadget": [
+      "Action, wave or vertical: the targeted operator receives a Located marker.",
+      "Action, vertical: perform a Shoot action (short range, light protection) targeting a Located operator.",
+      "3 charges."
+    ],
+    "stamina": 4,
+    "run": 5,
+    "destroy": "yellow",
+    "ranges": [
+      { "id": "short", "spaces": "1–3", "dice": ["yellow", "red", "red"] },
+      { "id": "medium", "spaces": "4–6", "dice": ["yellow", "red", "red"] },
+      { "id": "long", "spaces": "7+", "dice": ["yellow", "orange", "orange"] }
+    ],
+    "statsVerified": true
+  },
+  {
+    "id": "doc",
+    "name": "Doc",
+    "team": "Defender",
+    "source": "core",
+    "gadgetName": "Stim Pistol",
+    "gadgetKind": "action",
+    "gadget": [
+      "Action, line of sight: remove up to 3 hits from the targeted operator (cannot target himself).",
+      "Reaction, line of sight: when another operator is eliminated, Doc may revive them before the miniature is boxed, removing hits until they are no longer eliminated. The revived operator receives a Stunned marker.",
+      "2 charges."
+    ],
+    "stamina": 6,
+    "destroy": "yellow",
+    "ranges": [
+      { "id": "short", "spaces": "1–3", "dice": ["yellow", "orange", "red"] },
+      { "id": "medium", "spaces": "4–6", "dice": ["yellow", "orange", "red"] },
+      { "id": "long", "spaces": "7+", "dice": ["orange", "red"] }
+    ],
+    "notes": [
+      "No Run value on the card."
+    ],
+    "statsVerified": true
+  },
+  {
+    "id": "rook",
+    "name": "Rook",
+    "team": "Defender",
+    "source": "core",
+    "gadgetName": "Armor Plates",
+    "gadgetKind": "setup",
+    "gadget": [
+      "Setup: place an Armor Plate token on the profiles of 3 other operators with stamina 5 or less.",
+      "An operator must put their Armor Plate back in the box instead of taking a hit."
+    ],
+    "stamina": 6,
+    "destroy": "yellow",
+    "ranges": [
+      { "id": "short", "spaces": "1–3", "dice": ["orange", "red"] },
+      { "id": "medium", "spaces": "4–6", "dice": ["orange", "red"] },
+      { "id": "long", "spaces": "7+", "dice": ["yellow", "orange", "red"] }
+    ],
+    "notes": [
+      "No Run value on the card."
+    ],
+    "statsVerified": true
+  },
+  {
+    "id": "kapkan",
+    "name": "Kapkan",
+    "team": "Defender",
+    "source": "core",
+    "gadgetName": "Entry Denial Devices",
+    "gadgetKind": "reaction",
+    "gadget": [
+      "Reaction: after moving through a door or window, an opposing operator sustains 2 hits. They may spend an extra action to ignore this effect.",
+      "2 charges."
+    ],
+    "stamina": 5,
+    "run": 2,
+    "destroy": "yellow",
+    "ranges": [
+      { "id": "short", "spaces": "1–3", "dice": ["yellow", "orange", "red", "red"] },
+      { "id": "medium", "spaces": "4–6", "dice": ["yellow", "red", "red"] },
+      { "id": "long", "spaces": "7+", "dice": ["yellow", "yellow", "red"] }
+    ],
+    "notes": [
+      "Short- and medium-range yellow dice are marked Electronics."
+    ],
+    "statsVerified": true
+  },
+  {
+    "id": "tachanka",
+    "name": "Tachanka",
+    "team": "Defender",
+    "source": "core",
+    "gadgetName": "Shumikha Launcher",
+    "gadgetKind": "action",
+    "gadget": [
+      "Action, throwable fire overlay: operators in a Fire space immediately sustain an orange hit. Entering or ending an action in Fire also inflicts an orange hit.",
+      "3 charges."
+    ],
+    "stamina": 6,
+    "destroy": "orange",
+    "ranges": [
+      { "id": "short", "spaces": "1–3", "dice": ["red", "red"] },
+      { "id": "medium", "spaces": "4–6", "dice": ["yellow", "red", "red"] },
+      { "id": "long", "spaces": "7+", "dice": ["yellow", "red", "red"] }
+    ],
+    "notes": [
+      "No Run value on the card."
+    ],
+    "statsVerified": true
+  },
+  {
+    "id": "jager",
+    "name": "Jäger",
+    "team": "Defender",
+    "source": "core",
+    "gadgetName": "Active Defense Systems",
+    "gadgetKind": "reaction",
+    "gadget": [
+      "Reaction: when an opposing operator tosses a Throwable gadget into a room, ignore the gadget and its charge is lost. They may spend an extra action to ignore this effect.",
+      "2 charges."
+    ],
+    "stamina": 5,
+    "run": 2,
+    "destroy": "yellow",
+    "ranges": [
+      { "id": "short", "spaces": "1–3", "dice": ["yellow", "red", "red"] },
+      { "id": "medium", "spaces": "4–6", "dice": ["yellow", "orange", "orange"] },
+      { "id": "long", "spaces": "7+", "dice": ["yellow", "orange", "orange"] }
+    ],
+    "statsVerified": true
+  },
+  {
+    "id": "bandit",
+    "name": "Bandit",
+    "team": "Defender",
+    "source": "core",
+    "gadgetName": "CED-1 Shock Wires",
+    "gadgetKind": "setup",
+    "gadget": [
+      "Setup: place up to 2 CED-1 in 2 free spaces.",
+      "A CED-1 electrifies its space and all adjacent spaces. Fortified walls and Armor Panels do not block the area of effect.",
+      "When an opposing operator enters an electrified space, or targets one with a Deployable gadget, they receive a Stunned marker and sustain a hit. Opposing drones cannot be deployed in or enter electrified spaces."
+    ],
+    "stamina": 4,
+    "run": 5,
+    "destroy": "yellow",
+    "ranges": [
+      { "id": "short", "spaces": "1–3", "dice": ["yellow", "orange", "red", "red"] },
+      { "id": "medium", "spaces": "4–6", "dice": ["yellow", "yellow", "yellow", "orange"] },
+      { "id": "long", "spaces": "7+", "dice": ["yellow", "yellow", "yellow"] }
+    ],
+    "notes": [
+      "The short-range yellow die is marked Electronics."
+    ],
+    "statsVerified": true
+  },
+  {
+    "id": "ace",
+    "name": "Ace",
+    "team": "Attacker",
+    "source": "year5",
+    "gadgetName": "S.E.L.M.A. Charges",
+    "gadgetKind": "action",
+    "gadget": [
+      "Action, throwable: Destroy in the targeted space.",
+      "Action, throwable: place a Rubble standee in the targeted entryway. Rubble is an obstacle; that space is no longer an entryway.",
+      "2 charges."
+    ],
+    "stamina": 5,
+    "run": 2,
+    "destroy": "yellow",
+    "ranges": [
+      { "id": "short", "spaces": "1–3", "dice": ["yellow", "yellow", "red"] },
+      { "id": "medium", "spaces": "4–6", "dice": ["yellow", "yellow", "red", "red"] },
+      { "id": "long", "spaces": "7+", "dice": ["yellow", "yellow", "red"] }
+    ],
+    "notes": [
+      "One yellow die at medium and long range is marked Electronics."
+    ],
+    "statsVerified": true
+  },
+  {
+    "id": "iana",
+    "name": "Iana",
+    "team": "Attacker",
+    "source": "year5",
+    "gadgetName": "Gemini Replicator",
+    "gadgetKind": "reaction",
+    "gadget": [
+      "Reaction: Iana never receives a Located marker.",
+      "Reaction: Iana ignores special gadget effects that cost an extra action.",
+      "Reaction: opposing operators that Shoot at Iana must remove any one die before rolling. They may spend an extra action to ignore this.",
+      "3 charges."
+    ],
+    "stamina": 4,
+    "run": 5,
+    "destroy": "yellow",
+    "ranges": [
+      { "id": "short", "spaces": "1–3", "dice": ["yellow", "orange", "red"] },
+      { "id": "medium", "spaces": "4–6", "dice": ["yellow", "yellow", "orange", "red"] },
+      { "id": "long", "spaces": "7+", "dice": ["yellow", "orange", "red"] }
+    ],
+    "notes": [
+      "One medium-range yellow die is marked Electronics."
+    ],
+    "statsVerified": true
+  },
+  {
+    "id": "zero",
+    "name": "Zero",
+    "team": "Attacker",
+    "source": "year5",
+    "gadgetName": "Argus Cameras",
+    "gadgetKind": "action",
+    "gadget": [
+      "Action, throwable or vertical: place an Argus camera on one side of a heavy-wall section in the targeted space.",
+      "When an opposing operator enters a space in a room containing an Argus camera, or ends an action there, they receive Located and sustain a yellow hit.",
+      "2 charges."
+    ],
+    "stamina": 5,
+    "run": 2,
+    "destroy": "yellow",
+    "ranges": [
+      { "id": "short", "spaces": "1–3", "dice": ["yellow", "red", "red"] },
+      { "id": "medium", "spaces": "4–6", "dice": ["yellow", "yellow", "red", "red"] },
+      { "id": "long", "spaces": "7+", "dice": ["yellow", "orange", "orange"] }
+    ],
+    "statsVerified": true
+  },
+  {
+    "id": "flores",
+    "name": "Flores",
+    "team": "Attacker",
+    "source": "year6plus",
+    "gadgetName": "RCE-Ratero Drones",
+    "gadgetKind": "action",
+    "gadget": [
+      "Action, drone: after completing the scan, Destroy in the space where the Ratero ended its movement and adjacent spaces. Operators in those spaces sustain an orange hit.",
+      "2 charges."
+    ],
+    "stamina": 5,
+    "run": 2,
+    "destroy": "yellow",
+    "ranges": [
+      { "id": "short", "spaces": "1–3", "dice": ["orange", "red"] },
+      { "id": "medium", "spaces": "4–6", "dice": ["yellow", "orange", "orange", "red"] },
+      { "id": "long", "spaces": "7+", "dice": ["yellow", "orange", "orange"] }
+    ],
+    "notes": [
+      "One medium-range yellow die is marked Electronics."
+    ],
+    "statsVerified": true
+  },
+  {
+    "id": "oryx",
+    "name": "Oryx",
+    "team": "Defender",
+    "source": "year5",
+    "gadgetName": "Remah Tactical Gear",
+    "gadgetKind": "action",
+    "gadget": [
+      "Action: while moving, Oryx can pass through partitions along his route by Destroying them at no cost. He also ignores Stunned and can use blue entryway spaces.",
+      "Refreshes during upkeep."
+    ],
+    "stamina": 5,
+    "run": 2,
+    "destroy": "orange",
+    "ranges": [
+      { "id": "short", "spaces": "1–3", "dice": ["orange", "orange", "red"] },
+      { "id": "medium", "spaces": "4–6", "dice": ["yellow", "yellow", "red"] },
+      { "id": "long", "spaces": "7+", "dice": ["yellow", "yellow", "yellow"] }
+    ],
+    "statsVerified": true
+  },
+  {
+    "id": "melusi",
+    "name": "Melusi",
+    "team": "Defender",
+    "source": "year5",
+    "gadgetName": "Banshee Sonic Defences",
+    "gadgetKind": "setup",
+    "gadget": [
+      "Setup: place up to 2 Banshees on 2 sections of heavy wall.",
+      "Opposing operators must spend 1 extra movement point whenever they enter a space in a room containing one or more Banshees."
+    ],
+    "stamina": 4,
+    "run": 5,
+    "destroy": "orange",
+    "ranges": [
+      { "id": "short", "spaces": "1–3", "dice": ["yellow", "yellow", "orange", "red"] },
+      { "id": "medium", "spaces": "4–6", "dice": ["yellow", "orange", "red"] },
+      { "id": "long", "spaces": "7+", "dice": ["yellow", "orange", "red"] }
+    ],
+    "statsVerified": true
+  },
+  {
+    "id": "aruni",
+    "name": "Aruni",
+    "team": "Defender",
+    "source": "year5",
+    "gadgetName": "Surya Lasers",
+    "gadgetKind": "reaction",
+    "gadget": [
+      "Reaction: after moving through a door or window into a room containing a Control, Hostage, or Bomb objective, an opposing operator receives Stunned and sustains an orange hit. They may spend an extra action to ignore this.",
+      "2 charges."
+    ],
+    "stamina": 5,
+    "run": 2,
+    "destroy": "orange",
+    "ranges": [
+      { "id": "short", "spaces": "1–3", "dice": ["red"] },
+      { "id": "medium", "spaces": "4–6", "dice": ["yellow", "red", "red"] },
+      { "id": "long", "spaces": "7+", "dice": ["yellow", "orange", "red", "red"] }
+    ],
+    "notes": [
+      "The medium-range yellow die is marked Electronics."
+    ],
+    "statsVerified": true
+  },
+  {
+    "id": "thunderbird",
+    "name": "Thunderbird",
+    "team": "Defender",
+    "source": "year6plus",
+    "gadgetName": "Kóna Stations",
+    "gadgetKind": "setup",
+    "gadget": [
+      "Setup: place up to 3 Kóna Stations on 3 sections of heavy wall.",
+      "Whenever an operator in a room containing one or more Kóna Stations takes hits, they ignore one hit."
+    ],
+    "stamina": 4,
+    "run": 5,
+    "destroy": "yellow",
+    "ranges": [
+      { "id": "short", "spaces": "1–3", "dice": ["orange", "orange", "red"] },
+      { "id": "medium", "spaces": "4–6", "dice": ["orange", "orange", "red", "red"] },
+      { "id": "long", "spaces": "7+", "dice": ["orange", "red"] }
+    ],
+    "notes": [
+      "Short- and medium-range yellow dice are marked Electronics."
+    ],
+    "statsVerified": true
+  },
+  {
+    "id": "buck",
+    "name": "Buck",
+    "team": "Attacker",
+    "source": "year1",
+    "gadgetName": "Skeleton Key",
+    "gadgetKind": "action",
+    "gadget": [],
+    "ranges": [
+      { "id": "short", "spaces": "1–3", "dice": ["yellow", "orange", "red", "red"] },
+      { "id": "medium", "spaces": "4–6", "dice": ["yellow", "red", "red"] },
+      { "id": "long", "spaces": "7+", "dice": ["red", "red"] }
+    ],
+    "notes": [
+      "Profile card was not in the local TTS image cache."
+    ],
+    "statsVerified": false
+  },
+  {
+    "id": "blackbeard",
+    "name": "Blackbeard",
+    "team": "Attacker",
+    "source": "year1",
+    "gadgetName": "Rifle-Shield",
+    "gadgetKind": "passive",
+    "gadget": [],
+    "notes": [
+      "Profile card was not in the local TTS image cache."
+    ],
+    "statsVerified": false
+  },
+  {
+    "id": "capitao",
+    "name": "Capitão",
+    "team": "Attacker",
+    "source": "year1",
+    "gadgetName": "Tactical Crossbow",
+    "gadgetKind": "action",
+    "gadget": [],
+    "notes": [
+      "Profile card was not in the local TTS image cache."
+    ],
+    "statsVerified": false
+  },
+  {
+    "id": "hibana",
+    "name": "Hibana",
+    "team": "Attacker",
+    "source": "year1",
+    "gadgetName": "X-KAIROS",
+    "gadgetKind": "action",
+    "gadget": [],
+    "notes": [
+      "Profile card was not in the local TTS image cache."
+    ],
+    "statsVerified": false
+  },
+  {
+    "id": "frost",
+    "name": "Frost",
+    "team": "Defender",
+    "source": "year1",
+    "gadgetName": "Welcome Mats",
+    "gadgetKind": "setup",
+    "gadget": [],
+    "notes": [
+      "Profile card was not in the local TTS image cache."
+    ],
+    "statsVerified": false
+  },
+  {
+    "id": "valkyrie",
+    "name": "Valkyrie",
+    "team": "Defender",
+    "source": "year1",
+    "gadgetName": "Black Eye",
+    "gadgetKind": "setup",
+    "gadget": [],
+    "notes": [
+      "Profile card was not in the local TTS image cache."
+    ],
+    "statsVerified": false
+  },
+  {
+    "id": "caveira",
+    "name": "Caveira",
+    "team": "Defender",
+    "source": "year1",
+    "gadgetName": "Silent Step",
+    "gadgetKind": "action",
+    "gadget": [],
+    "notes": [
+      "Profile card was not in the local TTS image cache."
+    ],
+    "statsVerified": false
+  },
+  {
+    "id": "echo",
+    "name": "Echo",
+    "team": "Defender",
+    "source": "year1",
+    "gadgetName": "Yokai",
+    "gadgetKind": "action",
+    "gadget": [],
+    "notes": [
+      "Profile card was not in the local TTS image cache."
+    ],
+    "statsVerified": false
+  },
+  {
+    "id": "jackal",
+    "name": "Jackal",
+    "team": "Attacker",
+    "source": "year2",
+    "gadgetName": "Eyenox Model III",
+    "gadgetKind": "action",
+    "gadget": [],
+    "notes": [
+      "Profile card was not in the local TTS image cache."
+    ],
+    "statsVerified": false
+  },
+  {
+    "id": "ying",
+    "name": "Ying",
+    "team": "Attacker",
+    "source": "year2",
+    "gadgetName": "Candela",
+    "gadgetKind": "action",
+    "gadget": [],
+    "notes": [
+      "Profile card was not in the local TTS image cache."
+    ],
+    "statsVerified": false
+  },
+  {
+    "id": "zofia",
+    "name": "Zofia",
+    "team": "Attacker",
+    "source": "year2",
+    "gadgetName": "KS79 Lifeline",
+    "gadgetKind": "action",
+    "gadget": [],
+    "notes": [
+      "Profile card was not in the local TTS image cache."
+    ],
+    "statsVerified": false
+  },
+  {
+    "id": "dokkaebi",
+    "name": "Dokkaebi",
+    "team": "Attacker",
+    "source": "year2",
+    "gadgetName": "Logic Bomb",
+    "gadgetKind": "action",
+    "gadget": [],
+    "notes": [
+      "Profile card was not in the local TTS image cache."
+    ],
+    "statsVerified": false
+  },
+  {
+    "id": "mira",
+    "name": "Mira",
+    "team": "Defender",
+    "source": "year2",
+    "gadgetName": "Black Mirror",
+    "gadgetKind": "setup",
+    "gadget": [],
+    "notes": [
+      "Profile card was not in the local TTS image cache."
+    ],
+    "statsVerified": false
+  },
+  {
+    "id": "lesion",
+    "name": "Lesion",
+    "team": "Defender",
+    "source": "year2",
+    "gadgetName": "Gu Mines",
+    "gadgetKind": "setup",
+    "gadget": [],
+    "notes": [
+      "Profile card was not in the local TTS image cache."
+    ],
+    "statsVerified": false
+  },
+  {
+    "id": "ela",
+    "name": "Ela",
+    "team": "Defender",
+    "source": "year2",
+    "gadgetName": "Grzmot Mines",
+    "gadgetKind": "setup",
+    "gadget": [],
+    "notes": [
+      "Profile card was not in the local TTS image cache."
+    ],
+    "statsVerified": false
+  },
+  {
+    "id": "vigil",
+    "name": "Vigil",
+    "team": "Defender",
+    "source": "year2",
+    "gadgetName": "ERC-7",
+    "gadgetKind": "passive",
+    "gadget": [],
+    "notes": [
+      "Profile card was not in the local TTS image cache."
+    ],
+    "statsVerified": false
+  },
+  {
+    "id": "lion",
+    "name": "Lion",
+    "team": "Attacker",
+    "source": "year3",
+    "gadgetName": "EE-ONE-D",
+    "gadgetKind": "action",
+    "gadget": [],
+    "notes": [
+      "Profile card was not in the local TTS image cache."
+    ],
+    "statsVerified": false
+  },
+  {
+    "id": "finka",
+    "name": "Finka",
+    "team": "Attacker",
+    "source": "year3",
+    "gadgetName": "Adrenal Surge",
+    "gadgetKind": "action",
+    "gadget": [],
+    "notes": [
+      "Profile card was not in the local TTS image cache."
+    ],
+    "statsVerified": false
+  },
+  {
+    "id": "maverick",
+    "name": "Maverick",
+    "team": "Attacker",
+    "source": "year3",
+    "gadgetName": "Breaching Torch",
+    "gadgetKind": "action",
+    "gadget": [],
+    "notes": [
+      "Profile card was not in the local TTS image cache."
+    ],
+    "statsVerified": false
+  },
+  {
+    "id": "nomad",
+    "name": "Nomad",
+    "team": "Attacker",
+    "source": "year3",
+    "gadgetName": "Airjab Launcher",
+    "gadgetKind": "action",
+    "gadget": [],
+    "notes": [
+      "Profile card was not in the local TTS image cache."
+    ],
+    "statsVerified": false
+  },
+  {
+    "id": "maestro",
+    "name": "Maestro",
+    "team": "Defender",
+    "source": "year3",
+    "gadgetName": "Evil Eye",
+    "gadgetKind": "setup",
+    "gadget": [],
+    "notes": [
+      "Profile card was not in the local TTS image cache."
+    ],
+    "statsVerified": false
+  },
+  {
+    "id": "alibi",
+    "name": "Alibi",
+    "team": "Defender",
+    "source": "year3",
+    "gadgetName": "Prisma",
+    "gadgetKind": "setup",
+    "gadget": [],
+    "notes": [
+      "Profile card was not in the local TTS image cache."
+    ],
+    "statsVerified": false
+  },
+  {
+    "id": "clash",
+    "name": "Clash",
+    "team": "Defender",
+    "source": "year3",
+    "gadgetName": "CCE Shield",
+    "gadgetKind": "action",
+    "gadget": [],
+    "notes": [
+      "Profile card was not in the local TTS image cache."
+    ],
+    "statsVerified": false
+  },
+  {
+    "id": "kaid",
+    "name": "Kaid",
+    "team": "Defender",
+    "source": "year3",
+    "gadgetName": "Rtila Electroclaws",
+    "gadgetKind": "setup",
+    "gadget": [],
+    "notes": [
+      "Profile card was not in the local TTS image cache."
+    ],
+    "statsVerified": false
+  },
+  {
+    "id": "gridlock",
+    "name": "Gridlock",
+    "team": "Attacker",
+    "source": "year4",
+    "gadgetName": "Trax Stingers",
+    "gadgetKind": "action",
+    "gadget": [],
+    "notes": [
+      "Profile card was not in the local TTS image cache."
+    ],
+    "statsVerified": false
+  },
+  {
+    "id": "nokk",
+    "name": "Nøkk",
+    "team": "Attacker",
+    "source": "year4",
+    "gadgetName": "HEL Presence Reduction",
+    "gadgetKind": "action",
+    "gadget": [],
+    "notes": [
+      "Profile card was not in the local TTS image cache."
+    ],
+    "statsVerified": false
+  },
+  {
+    "id": "amaru",
+    "name": "Amaru",
+    "team": "Attacker",
+    "source": "year4",
+    "gadgetName": "Garra Hook",
+    "gadgetKind": "action",
+    "gadget": [],
+    "notes": [
+      "Profile card was not in the local TTS image cache."
+    ],
+    "statsVerified": false
+  },
+  {
+    "id": "kali",
+    "name": "Kali",
+    "team": "Attacker",
+    "source": "year4",
+    "gadgetName": "LV Explosive Lance",
+    "gadgetKind": "action",
+    "gadget": [],
+    "notes": [
+      "Profile card was not in the local TTS image cache."
+    ],
+    "statsVerified": false
+  }
+]

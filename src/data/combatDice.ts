@@ -1,5 +1,8 @@
 export type CombatDiceTier = "yellow" | "orange" | "red";
 
+/** sessionStorage payload used to prefill the Dice Roller from Operator Database. */
+export const DICE_POOL_STORAGE_KEY = "six-siege:dice-pool";
+
 export const COMBAT_DICE_FACES: Record<
   CombatDiceTier,
   readonly [number, number, number, number, number, number]

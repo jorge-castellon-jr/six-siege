@@ -1,123 +1,410 @@
-// src/components/hidden/OperatorDatabase.tsx
-import React, { useState } from "react";
+import { useEffect, useMemo, useState, type KeyboardEvent, type ReactNode } from "react";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import "./OperatorDatabase.css";
 import TacticalHeader from "./TacticalHeader";
+import {
+  COMBAT_DICE_META,
+  DICE_POOL_STORAGE_KEY,
+  type CombatDiceTier,
+} from "../../data/combatDice";
+import {
+  GADGET_KIND_LABELS,
+  OPERATORS,
+  OPERATOR_SOURCE_LABELS,
+  RANGE_BAND_LABELS,
+  ttsCardUrl,
+  type Operator,
+  type OperatorSource,
+  type OperatorTeam,
+  type RangeBand,
+} from "../../data/operators";
+import {
+  GadgetFields,
+  HeaderFields,
+  NotesFields,
+  RangeFields,
+  SectionEditButton,
+  StatsFields,
+  useLocalOperatorEditor,
+  useOperatorCardEditor,
+} from "./OperatorLocalEditor";
 
-interface Operator {
-  id: string;
-  name: string;
-  team: "Attacker" | "Defender";
-  armor: 1 | 2 | 3;
-  speed: 1 | 2 | 3;
-  difficulty: 1 | 2 | 3;
-  primaryWeapons: string[];
-  secondaryWeapons: string[];
-  gadget: string;
-  specialAbility: string;
-  bio: string;
-  imageUrl: string;
-}
+type TeamFilter = "All" | OperatorTeam;
+type SourceFilter = "All" | OperatorSource;
 
-// Sample operators data
-const operatorsData: Operator[] = [
-  {
-    id: "ash",
-    name: "Ash",
-    team: "Attacker",
-    armor: 1,
-    speed: 3,
-    difficulty: 1,
-    primaryWeapons: ["R4-C", "G36C"],
-    secondaryWeapons: ["5.7 USG", "M45 MEUSOC"],
-    gadget: "Breach Charge, Claymore",
-    specialAbility: "Breaching Rounds",
-    bio: "Eliza Cohen, codenamed Ash, is an Attacking Operator featured in Rainbow Six Siege. She is equipped with her M120 CREM, which fires breaching rounds that can be used to destroy barricades, walls, and floors from a distance.",
-    imageUrl: "/assets/operators/ash.jpg",
-  },
-  {
-    id: "bandit",
-    name: "Bandit",
-    team: "Defender",
-    armor: 1,
-    speed: 3,
-    difficulty: 2,
-    primaryWeapons: ["MP7", "M870"],
-    secondaryWeapons: ["P12"],
-    gadget: "Barbed Wire, Nitro Cell",
-    specialAbility: "Shock Wire",
-    bio: "Dominic Brunsmeier, codenamed Bandit, is a Defending Operator featured in Rainbow Six Siege. Bandit's unique gadget is his Crude Electrical Device (CED-1), also referred to as a 'Shock Wire', which can be placed on metal objects, including reinforced walls, barbed wire, and deployable shields.",
-    imageUrl: "/assets/operators/bandit.jpg",
-  },
-  {
-    id: "doc",
-    name: "Doc",
-    team: "Defender",
-    armor: 3,
-    speed: 1,
-    difficulty: 1,
-    primaryWeapons: ["SG-CQB", "MP5", "P90"],
-    secondaryWeapons: ["P9", "LFP586"],
-    gadget: "Barbed Wire, Bulletproof Camera",
-    specialAbility: "Stim Pistol",
-    bio: "Gustave Kateb, codenamed Doc, is a Defending Operator in Rainbow Six Siege. He is armed with the MPD-0 Stim Pistol, which can fire darts that heal allies for 40 health points or even revive downed teammates from a distance.",
-    imageUrl: "/assets/operators/doc.jpg",
-  },
-  {
-    id: "sledge",
-    name: "Sledge",
-    team: "Attacker",
-    armor: 2,
-    speed: 2,
-    difficulty: 1,
-    primaryWeapons: ["L85A2", "M590A1"],
-    secondaryWeapons: ["P226 MK 25", "SMG-11"],
-    gadget: "Frag Grenade, Stun Grenade",
-    specialAbility: "Tactical Breaching Hammer",
-    bio: "Seamus Cowden, codenamed Sledge, is an Attacking Operator featured in Rainbow Six Siege. Sledge is equipped with his 'Tactical Breaching Hammer' (nicknamed 'The Caber'), which can destroy barricades, walls, and floors with a single strike.",
-    imageUrl: "/assets/operators/sledge.jpg",
-  },
+const SOURCES: OperatorSource[] = [
+  "core",
+  "year1",
+  "year2",
+  "year3",
+  "year4",
+  "year5",
+  "year6plus",
 ];
 
-const OperatorDatabase: React.FC = () => {
-  const [operators] = useState<Operator[]>(operatorsData);
-  const [selectedOperator, setSelectedOperator] = useState<Operator | null>(
-    null,
+const LocalCardImage = ({
+  src,
+  alt,
+  className,
+  fallback,
+}: {
+  src: string;
+  alt: string;
+  className?: string;
+  fallback?: ReactNode;
+}) => {
+  const [failed, setFailed] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    setFailed(false);
+    setLoaded(false);
+  }, [src]);
+
+  if (failed) {
+    return <>{fallback ?? null}</>;
+  }
+
+  return (
+    <img
+      src={src}
+      alt={alt}
+      className={className}
+      style={loaded ? undefined : { opacity: 0, position: "absolute" }}
+      onLoad={() => setLoaded(true)}
+      onError={() => setFailed(true)}
+    />
   );
-  const [searchTerm, setSearchTerm] = useState<string>("");
-  const [filterTeam, setFilterTeam] = useState<"All" | "Attacker" | "Defender">(
-    "All",
-  );
+};
 
-  // Filter operators based on search and team filter
-  const filteredOperators = operators.filter((op) => {
-    // Filter by search term
-    const matchesSearch = op.name
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase());
+const DicePips = ({ dice }: { dice: CombatDiceTier[] }) => (
+  <span className="dice-pips">
+    {dice.map((tier, i) => (
+      <span
+        key={`${tier}-${i}`}
+        className={`dice-pip dice-pip--${tier}`}
+        title={COMBAT_DICE_META[tier].label}
+      />
+    ))}
+    <span className="visually-hidden">
+      {dice.map((tier) => COMBAT_DICE_META[tier].label).join(" + ")}
+    </span>
+  </span>
+);
 
-    // Filter by team
-    const matchesTeam = filterTeam === "All" || op.team === filterTeam;
-
-    return matchesSearch && matchesTeam;
-  });
-
-  // Handle operator click
-  const handleOperatorClick = (operator: Operator) => {
-    setSelectedOperator(operator);
+const OperatorDetailPane = ({
+  operator,
+  canEditLocally,
+  onSaved,
+  onLoadRange,
+}: {
+  operator: Operator;
+  canEditLocally: boolean;
+  onSaved: (next: Operator) => void;
+  onLoadRange: (op: Operator, band: RangeBand) => void;
+}) => {
+  const editor = useOperatorCardEditor(operator, onSaved);
+  const fields = {
+    draft: editor.draft,
+    setDraft: editor.setDraft,
+    onSave: () => void editor.save(),
+    saving: editor.saving,
+    status: editor.status,
   };
 
-  // Render armor/speed/difficulty bars
-  const renderRatingBars = (value: number, max: number = 3) => {
-    return (
-      <div className="rating-bars">
-        {[...Array(max)].map((_, i) => (
-          <div
-            key={i}
-            className={`rating-bar ${i < value ? "filled" : "empty"}`}
-          />
-        ))}
+  const startEdit = (section: NonNullable<typeof editor.editing>) => {
+    if (editor.editing === section) {
+      editor.cancel();
+      return;
+    }
+    editor.setEditing(section);
+  };
+
+  return (
+    <div className="operator-profile">
+      <div className="operator-header">
+        <div className="section-head">
+          {editor.editing === "header" ? (
+            <h3>Identity</h3>
+          ) : (
+            <h3>{operator.name}</h3>
+          )}
+          {canEditLocally && (
+            <SectionEditButton
+              section="header"
+              editing={editor.editing}
+              onToggle={startEdit}
+            />
+          )}
+        </div>
+        {editor.editing === "header" && canEditLocally ? (
+          <HeaderFields {...fields} />
+        ) : (
+          <div className="operator-header-badges">
+            <span className="source-badge">
+              {OPERATOR_SOURCE_LABELS[operator.source]}
+            </span>
+            <span className={`team-badge ${operator.team.toLowerCase()}`}>
+              {operator.team}
+            </span>
+          </div>
+        )}
       </div>
+
+      {!operator.statsVerified && editor.editing !== "header" && (
+        <div className="operator-meta-row">
+          <span className="unverified-banner" role="status">
+            Unverified — confirm against the card.
+          </span>
+        </div>
+      )}
+
+      <div className="operator-image">
+        <LocalCardImage
+          src={ttsCardUrl(operator.id, "profile")}
+          alt={`${operator.name} operator profile card`}
+          className="operator-profile-card"
+          fallback={
+            <div className="placeholder-portrait">
+              No local card image. Run the TTS extractor after opening
+              this operator in Tabletop Simulator.
+            </div>
+          }
+        />
+      </div>
+
+      <div className="operator-stats">
+        <div className="section-head">
+          <h4>Combat stats</h4>
+          {canEditLocally && (
+            <SectionEditButton
+              section="stats"
+              editing={editor.editing}
+              onToggle={startEdit}
+            />
+          )}
+        </div>
+        {editor.editing === "stats" && canEditLocally ? (
+          <StatsFields {...fields} />
+        ) : (
+          <div className="operator-stats-row">
+            <div className="stat-group">
+              <label>Stamina</label>
+              <div className="stat-value">{operator.stamina ?? "—"}</div>
+            </div>
+            <div className="stat-group">
+              <label>Run</label>
+              <div className="stat-value">{operator.run ?? "—"}</div>
+            </div>
+            <div className="stat-group">
+              <label>Destroy</label>
+              <div className="stat-value">
+                {operator.destroy ? (
+                  <span className={`destroy-pip destroy-pip--${operator.destroy}`}>
+                    {COMBAT_DICE_META[operator.destroy].label}
+                  </span>
+                ) : (
+                  "—"
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div className="operator-loadout">
+        <div className="section-head">
+          <h4>Hit dice by range</h4>
+          {canEditLocally && (
+            <SectionEditButton
+              section="ranges"
+              editing={editor.editing}
+              onToggle={startEdit}
+            />
+          )}
+        </div>
+        {editor.editing === "ranges" && canEditLocally ? (
+          <RangeFields {...fields} />
+        ) : operator.ranges && operator.ranges.length > 0 ? (
+          <table className="range-table">
+            <thead>
+              <tr>
+                <th scope="col">Range</th>
+                <th scope="col">Spaces</th>
+                <th scope="col">Dice</th>
+                <th scope="col">
+                  <span className="visually-hidden">Load into roller</span>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {operator.ranges.map((band) => (
+                <tr key={band.id}>
+                  <th scope="row">{RANGE_BAND_LABELS[band.id]}</th>
+                  <td>{band.spaces}</td>
+                  <td>
+                    <DicePips dice={band.dice} />
+                  </td>
+                  <td>
+                    <button
+                      type="button"
+                      className="load-dice-button"
+                      onClick={() => onLoadRange(operator, band)}
+                    >
+                      Load dice pool
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <p className="muted">
+            Range dice not transcribed — load this operator in TTS so
+            the profile card can be cached, then re-run the extractor.
+          </p>
+        )}
+      </div>
+
+      <div className="operator-loadout">
+        <div className="section-head">
+          <h4>Unique gadget</h4>
+          {canEditLocally && (
+            <SectionEditButton
+              section="gadget"
+              editing={editor.editing}
+              onToggle={startEdit}
+            />
+          )}
+        </div>
+        {editor.editing === "gadget" && canEditLocally ? (
+          <GadgetFields {...fields} />
+        ) : (
+          <div className="ability-group">
+            <label>{operator.gadgetName}</label>
+            <p className="gadget-kind">
+              {GADGET_KIND_LABELS[operator.gadgetKind]}
+            </p>
+            {operator.gadget.length > 0 ? (
+              <ul className="gadget-list">
+                {operator.gadget.map((line) => (
+                  <li key={line}>{line}</li>
+                ))}
+              </ul>
+            ) : (
+              <p className="muted">
+                Paraphrased rules will be filled once the profile card
+                image is available.
+              </p>
+            )}
+          </div>
+        )}
+      </div>
+
+      {(canEditLocally || (operator.notes && operator.notes.length > 0)) && (
+        <div className="operator-bio">
+          <div className="section-head">
+            <h4>Notes</h4>
+            {canEditLocally && (
+              <SectionEditButton
+                section="notes"
+                editing={editor.editing}
+                onToggle={startEdit}
+              />
+            )}
+          </div>
+          {editor.editing === "notes" && canEditLocally ? (
+            <NotesFields {...fields} />
+          ) : operator.notes && operator.notes.length > 0 ? (
+            operator.notes.map((note) => <p key={note}>{note}</p>)
+          ) : (
+            <p className="muted">No notes.</p>
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
+
+const operatorPath = (id: string) => `/operator-database/${id}`;
+
+const OperatorDatabase = () => {
+  const navigate = useNavigate();
+  const { operatorId } = useParams<{ operatorId: string }>();
+  const canEditLocally = useLocalOperatorEditor();
+  const [roster, setRoster] = useState<Operator[]>(OPERATORS);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterTeam, setFilterTeam] = useState<TeamFilter>("All");
+  const [filterSource, setFilterSource] = useState<SourceFilter>("All");
+
+  const selectedOperator: Operator | null =
+    roster.find((op) => op.id === operatorId) ?? null;
+  const fallbackId =
+    roster.find((op) => op.statsVerified)?.id ?? roster[0]?.id ?? null;
+
+  const filteredOperators = useMemo(() => {
+    const q = searchTerm.trim().toLowerCase();
+    return roster.filter((op) => {
+      const matchesSearch =
+        !q ||
+        op.name.toLowerCase().includes(q) ||
+        op.gadgetName.toLowerCase().includes(q);
+      const matchesTeam = filterTeam === "All" || op.team === filterTeam;
+      const matchesSource = filterSource === "All" || op.source === filterSource;
+      return matchesSearch && matchesTeam && matchesSource;
+    });
+  }, [searchTerm, filterTeam, filterSource, roster]);
+
+  useEffect(() => {
+    if (!selectedOperator) return;
+    document
+      .getElementById(`operator-${selectedOperator.id}`)
+      ?.scrollIntoView({ block: "nearest" });
+  }, [selectedOperator?.id]);
+
+  if (!selectedOperator && fallbackId) {
+    return <Navigate to={operatorPath(fallbackId)} replace />;
+  }
+
+  const loadRangeDice = (op: Operator, band: RangeBand) => {
+    sessionStorage.setItem(
+      DICE_POOL_STORAGE_KEY,
+      JSON.stringify({
+        dice: band.dice,
+        label: `${op.name} ${RANGE_BAND_LABELS[band.id]} (${band.spaces})`,
+      }),
     );
+    navigate("/dice-roller");
+  };
+
+  const selectOperator = (id: string) => {
+    if (id === operatorId) return;
+    navigate(operatorPath(id), { replace: true });
+  };
+
+  const selectByIndex = (index: number) => {
+    const next = filteredOperators[index];
+    if (next) selectOperator(next.id);
+  };
+
+  const onRosterKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (filteredOperators.length === 0) return;
+    const current = filteredOperators.findIndex((op) => op.id === operatorId);
+    if (event.key === "ArrowDown" || event.key === "ArrowRight") {
+      event.preventDefault();
+      selectByIndex(
+        current < 0 ? 0 : Math.min(filteredOperators.length - 1, current + 1),
+      );
+    } else if (event.key === "ArrowUp" || event.key === "ArrowLeft") {
+      event.preventDefault();
+      selectByIndex(current < 0 ? 0 : Math.max(0, current - 1));
+    } else if (event.key === "Home") {
+      event.preventDefault();
+      selectByIndex(0);
+    } else if (event.key === "End") {
+      event.preventDefault();
+      selectByIndex(filteredOperators.length - 1);
+    }
   };
 
   return (
@@ -126,54 +413,90 @@ const OperatorDatabase: React.FC = () => {
 
       <div className="operator-filters">
         <div className="search-box">
+          <label className="visually-hidden" htmlFor="operator-search">
+            Search operators
+          </label>
           <input
+            id="operator-search"
             type="text"
-            placeholder="Search operators..."
+            placeholder="Search operators or gadgets..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
 
-        <div className="team-filter">
-          <button
-            className={filterTeam === "All" ? "active" : ""}
-            onClick={() => setFilterTeam("All")}
+        <div className="team-filter" role="group" aria-label="Filter by team">
+          {(["All", "Attacker", "Defender"] as const).map((team) => (
+            <button
+              key={team}
+              type="button"
+              className={filterTeam === team ? "active" : ""}
+              onClick={() => setFilterTeam(team)}
+            >
+              {team === "All" ? "All" : team === "Attacker" ? "Attackers" : "Defenders"}
+            </button>
+          ))}
+        </div>
+
+        <div className="source-filter">
+          <label htmlFor="operator-source">Expansion</label>
+          <select
+            id="operator-source"
+            value={filterSource}
+            onChange={(e) =>
+              setFilterSource(e.target.value as SourceFilter)
+            }
           >
-            All
-          </button>
-          <button
-            className={filterTeam === "Attacker" ? "active" : ""}
-            onClick={() => setFilterTeam("Attacker")}
-          >
-            Attackers
-          </button>
-          <button
-            className={filterTeam === "Defender" ? "active" : ""}
-            onClick={() => setFilterTeam("Defender")}
-          >
-            Defenders
-          </button>
+            <option value="All">All expansions</option>
+            {SOURCES.map((source) => (
+              <option key={source} value={source}>
+                {OPERATOR_SOURCE_LABELS[source]}
+              </option>
+            ))}
+          </select>
         </div>
       </div>
 
       <div className="operator-content">
-        <div className="operators-list">
+        <div
+          className="operators-list"
+          role="listbox"
+          tabIndex={0}
+          aria-label="Operator roster"
+          aria-activedescendant={
+            selectedOperator ? `operator-${selectedOperator.id}` : undefined
+          }
+          onKeyDown={onRosterKeyDown}
+        >
           {filteredOperators.map((operator) => (
-            <div
+            <button
+              type="button"
               key={operator.id}
+              id={`operator-${operator.id}`}
+              role="option"
+              aria-selected={selectedOperator?.id === operator.id}
               className={`operator-card ${selectedOperator?.id === operator.id ? "selected" : ""}`}
-              onClick={() => handleOperatorClick(operator)}
+              onClick={() => selectOperator(operator.id)}
             >
               <div className={`operator-icon ${operator.team.toLowerCase()}`}>
-                <div className="placeholder-image">
-                  {operator.name.charAt(0)}
+                <LocalCardImage
+                  src={ttsCardUrl(operator.id, "portrait")}
+                  alt=""
+                  className="operator-portrait"
+                  fallback={
+                    <div className="placeholder-image">
+                      {operator.name.charAt(0)}
+                    </div>
+                  }
+                />
+              </div>
+              <div className="operator-card-text">
+                <div className="operator-name">{operator.name}</div>
+                <div className={`operator-team ${operator.team.toLowerCase()}`}>
+                  {OPERATOR_SOURCE_LABELS[operator.source]}
                 </div>
               </div>
-              <div className="operator-name">{operator.name}</div>
-              <div className={`operator-team ${operator.team.toLowerCase()}`}>
-                {operator.team}
-              </div>
-            </div>
+            </button>
           ))}
 
           {filteredOperators.length === 0 && (
@@ -185,76 +508,17 @@ const OperatorDatabase: React.FC = () => {
 
         <div className="operator-details">
           {selectedOperator ? (
-            <div className="operator-profile">
-              <div className="operator-header">
-                <h3>{selectedOperator.name}</h3>
-                <span
-                  className={`team-badge ${selectedOperator.team.toLowerCase()}`}
-                >
-                  {selectedOperator.team}
-                </span>
-              </div>
-
-              <div className="operator-stats">
-                <div className="stat-group">
-                  <label>Armor:</label>
-                  {renderRatingBars(selectedOperator.armor)}
-                </div>
-
-                <div className="stat-group">
-                  <label>Speed:</label>
-                  {renderRatingBars(selectedOperator.speed)}
-                </div>
-
-                <div className="stat-group">
-                  <label>Difficulty:</label>
-                  {renderRatingBars(selectedOperator.difficulty)}
-                </div>
-              </div>
-
-              <div className="operator-image">
-                <div className="placeholder-portrait">
-                  {selectedOperator.name}
-                </div>
-              </div>
-
-              <div className="operator-loadout">
-                <h4>Loadout</h4>
-
-                <div className="weapon-group">
-                  <label>Primary Weapons:</label>
-                  <ul>
-                    {selectedOperator.primaryWeapons.map((weapon, index) => (
-                      <li key={index}>{weapon}</li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className="weapon-group">
-                  <label>Secondary Weapons:</label>
-                  <ul>
-                    {selectedOperator.secondaryWeapons.map((weapon, index) => (
-                      <li key={index}>{weapon}</li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className="gadget-group">
-                  <label>Gadgets:</label>
-                  <p>{selectedOperator.gadget}</p>
-                </div>
-
-                <div className="ability-group">
-                  <label>Special Ability:</label>
-                  <p>{selectedOperator.specialAbility}</p>
-                </div>
-              </div>
-
-              <div className="operator-bio">
-                <h4>Biography</h4>
-                <p>{selectedOperator.bio}</p>
-              </div>
-            </div>
+            <OperatorDetailPane
+              key={selectedOperator.id}
+              operator={selectedOperator}
+              canEditLocally={canEditLocally}
+              onSaved={(next) =>
+                setRoster((prev) =>
+                  prev.map((op) => (op.id === next.id ? next : op)),
+                )
+              }
+              onLoadRange={loadRangeDice}
+            />
           ) : (
             <div className="no-selection">
               <p>Select an operator to view their details.</p>

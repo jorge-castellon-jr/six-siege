@@ -262,6 +262,13 @@
   position: relative;
 }
 
+.dice-prefill-label {
+  margin: 0 0 16px;
+  color: #aaa;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+}
+
 .dice-pool::before,
 .roll-results::before {
   content: "";

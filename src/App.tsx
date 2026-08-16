@@ -79,7 +79,10 @@ const AppContent: React.FC = () => {
             <Route index element={<Navigate to="/los" replace />} />
             <Route path="los" element={<LineOfSight maps={maps} />} />
             <Route path="tournament-bans" element={<TournamentBans />} />
-            <Route path="operator-database" element={<OperatorDatabase />} />
+            <Route path="operator-database">
+              <Route index element={<OperatorDatabase />} />
+              <Route path=":operatorId" element={<OperatorDatabase />} />
+            </Route>
             <Route path="dice-roller" element={<DiceRoller />} />
           </Route>
         </Routes>

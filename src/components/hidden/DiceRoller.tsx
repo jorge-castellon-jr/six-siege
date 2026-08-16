@@ -1,12 +1,33 @@
 // src/components/hidden/DiceRoller.tsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./DiceRoller.css";
 import TacticalHeader from "./TacticalHeader";
 import {
   CombatDiceTier,
   COMBAT_DICE_FACES,
   COMBAT_DICE_META,
+  DICE_POOL_STORAGE_KEY,
 } from "../../data/combatDice";
+
+function isCombatDiceTier(value: unknown): value is CombatDiceTier {
+  return value === "yellow" || value === "orange" || value === "red";
+}
+
+function consumeDicePrefill(): { dice: CombatDiceTier[]; label: string | null } {
+  try {
+    const raw = sessionStorage.getItem(DICE_POOL_STORAGE_KEY);
+    if (!raw) return { dice: [], label: null };
+    sessionStorage.removeItem(DICE_POOL_STORAGE_KEY);
+    const parsed = JSON.parse(raw) as { dice?: unknown; label?: unknown };
+    const dice = Array.isArray(parsed.dice)
+      ? parsed.dice.filter(isCombatDiceTier)
+      : [];
+    const label = typeof parsed.label === "string" ? parsed.label : null;
+    return { dice, label };
+  } catch {
+    return { dice: [], label: null };
+  }
+}
 
 const TIERS: CombatDiceTier[] = ["yellow", "orange", "red"];
 
@@ -62,6 +83,22 @@ const DiceRoller: React.FC = () => {
   const [rolling, setRolling] = useState<boolean>(false);
   const [rollHistory, setRollHistory] = useState<RollHistory[]>([]);
   const [historyId, setHistoryId] = useState<number>(1);
+  const [prefillLabel, setPrefillLabel] = useState<string | null>(null);
+
+  useEffect(() => {
+    const { dice, label } = consumeDicePrefill();
+    if (dice.length === 0) return;
+    setDicePool(
+      dice.map((tier, i) => ({
+        id: i + 1,
+        tier,
+        damage: 0,
+        rolled: false,
+      })),
+    );
+    setNextId(dice.length + 1);
+    setPrefillLabel(label);
+  }, []);
 
   const addDie = (tier: CombatDiceTier) => {
     setDicePool((prev) => [
@@ -79,6 +116,7 @@ const DiceRoller: React.FC = () => {
     setDicePool([]);
     setRollResults([]);
     setShowResults(false);
+    setPrefillLabel(null);
   };
 
   const rollDice = () => {
@@ -188,6 +226,9 @@ const DiceRoller: React.FC = () => {
             Dice Pool{" "}
             {dicePool.length > 0 && <span>({dicePool.length})</span>}
           </h3>
+          {prefillLabel && (
+            <p className="dice-prefill-label">Loaded from {prefillLabel}</p>
+          )}
 
           {dicePool.length === 0 ? (
             <div className="empty-pool">

@@ -1,0 +1,1295 @@
+{
+  "source": "2920905487",
+  "extractedAt": "2026-08-16T17:41:40.650Z",
+  "operatorCount": 56,
+  "operators": [
+    {
+      "id": "ace",
+      "name": "Ace",
+      "rawNickname": "Ace",
+      "slices": [
+        {
+          "role": "profile",
+          "file": "ace/profile.png",
+          "cardId": 23700,
+          "grid": "3x2",
+          "cell": 0,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2074514953769924161/A3D9261097CF4323A33DB586A9E5654218C1011B/"
+        },
+        {
+          "role": "gadget",
+          "file": "ace/gadget.png",
+          "cardId": 24300,
+          "grid": "3x2",
+          "cell": 0,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2074514953769938101/EADF371E8A2F57E3C048E66A5EC584F2DE4DD6A4/"
+        }
+      ]
+    },
+    {
+      "id": "alibi",
+      "name": "Alibi",
+      "rawNickname": "Alibi",
+      "slices": [
+        {
+          "role": "gadget",
+          "file": "alibi/gadget.png",
+          "cardId": 23600,
+          "grid": "4x2",
+          "cell": 0,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2054242960853289999/6B4F30825982D00B254E747773B4668AEBDE42E3/"
+        },
+        {
+          "role": "profile",
+          "file": "alibi/profile.png",
+          "cardId": 22600,
+          "grid": "4x2",
+          "cell": 0,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2073385337002630957/31407A3879F93194AB0256D442C3A3CA66610161/"
+        }
+      ]
+    },
+    {
+      "id": "amaru",
+      "name": "Amaru",
+      "rawNickname": "Amaru",
+      "slices": [
+        {
+          "role": "gadget",
+          "file": "amaru/gadget.png",
+          "cardId": 24502,
+          "grid": "4x2",
+          "cell": 2,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2074514862534615451/E158862EAC19DF7C0AEE6132706E2D4B5328DA0E/"
+        },
+        {
+          "role": "profile",
+          "file": "amaru/profile.png",
+          "cardId": 23800,
+          "grid": "4x2",
+          "cell": 0,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2074514862534580871/D23BE157EE9AB4C16AC608F5E933080B032E64AD/"
+        }
+      ]
+    },
+    {
+      "id": "aruni",
+      "name": "Aruni",
+      "rawNickname": "Aruni",
+      "slices": [
+        {
+          "role": "gadget",
+          "file": "aruni/gadget.png",
+          "cardId": 24301,
+          "grid": "3x2",
+          "cell": 1,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2074514953769938101/EADF371E8A2F57E3C048E66A5EC584F2DE4DD6A4/"
+        },
+        {
+          "role": "profile",
+          "file": "aruni/profile.png",
+          "cardId": 23701,
+          "grid": "3x2",
+          "cell": 1,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2074514953769924161/A3D9261097CF4323A33DB586A9E5654218C1011B/"
+        }
+      ]
+    },
+    {
+      "id": "ash",
+      "name": "Ash",
+      "rawNickname": "Ash",
+      "slices": [
+        {
+          "role": "profile",
+          "file": "ash/profile.png",
+          "cardId": 22300,
+          "grid": "6x5",
+          "cell": 0,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048609656671503341/0B059A5A438C7F3EF06B59545F2EF7D5BD661901/"
+        },
+        {
+          "role": "gadget",
+          "file": "ash/gadget.png",
+          "cardId": 18213,
+          "grid": "6x4",
+          "cell": 13,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048608475754061160/E811A6A4D02EF121B5833B0777A644922B96E1E0/"
+        }
+      ]
+    },
+    {
+      "id": "bandit",
+      "name": "Bandit",
+      "rawNickname": "Bandit",
+      "slices": [
+        {
+          "role": "gadget",
+          "file": "bandit/gadget.png",
+          "cardId": 18203,
+          "grid": "6x4",
+          "cell": 3,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048608475754061160/E811A6A4D02EF121B5833B0777A644922B96E1E0/"
+        },
+        {
+          "role": "profile",
+          "file": "bandit/profile.png",
+          "cardId": 22301,
+          "grid": "6x5",
+          "cell": 1,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048609656671503341/0B059A5A438C7F3EF06B59545F2EF7D5BD661901/"
+        }
+      ]
+    },
+    {
+      "id": "blackbeard",
+      "name": "Blackbeard",
+      "rawNickname": "Blackbeard",
+      "slices": [
+        {
+          "role": "profile",
+          "file": "blackbeard/profile.png",
+          "cardId": 22700,
+          "grid": "4x2",
+          "cell": 0,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048610294182394171/806ADE126FC22D329503C3AEDCFB1CEE857AFCC5/"
+        },
+        {
+          "role": "gadget",
+          "file": "blackbeard/gadget.png",
+          "cardId": 23200,
+          "grid": "4x2",
+          "cell": 0,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048609021577123686/7DE6AD32216B2B897D7CC4E78CC2D53E532C45D4/"
+        }
+      ]
+    },
+    {
+      "id": "blitz",
+      "name": "Blitz",
+      "rawNickname": "Blitz",
+      "slices": [
+        {
+          "role": "profile",
+          "file": "blitz/profile.png",
+          "cardId": 22302,
+          "grid": "6x5",
+          "cell": 2,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048609656671503341/0B059A5A438C7F3EF06B59545F2EF7D5BD661901/"
+        },
+        {
+          "role": "gadget",
+          "file": "blitz/gadget.png",
+          "cardId": 18215,
+          "grid": "6x4",
+          "cell": 15,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048608475754061160/E811A6A4D02EF121B5833B0777A644922B96E1E0/"
+        }
+      ]
+    },
+    {
+      "id": "buck",
+      "name": "Buck",
+      "rawNickname": "Buck",
+      "slices": [
+        {
+          "role": "profile",
+          "file": "buck/profile.png",
+          "cardId": 22701,
+          "grid": "4x2",
+          "cell": 1,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048610294182394171/806ADE126FC22D329503C3AEDCFB1CEE857AFCC5/"
+        },
+        {
+          "role": "gadget",
+          "file": "buck/gadget.png",
+          "cardId": 23001,
+          "grid": "4x2",
+          "cell": 1,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048609021577123686/7DE6AD32216B2B897D7CC4E78CC2D53E532C45D4/"
+        }
+      ]
+    },
+    {
+      "id": "capitao",
+      "name": "Capitão",
+      "rawNickname": "Capitao",
+      "slices": [
+        {
+          "role": "profile",
+          "file": "capitao/profile.png",
+          "cardId": 22702,
+          "grid": "4x2",
+          "cell": 2,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048610294182394171/806ADE126FC22D329503C3AEDCFB1CEE857AFCC5/"
+        },
+        {
+          "role": "gadget",
+          "file": "capitao/gadget.png",
+          "cardId": 22902,
+          "grid": "4x2",
+          "cell": 2,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048609021577123686/7DE6AD32216B2B897D7CC4E78CC2D53E532C45D4/"
+        }
+      ]
+    },
+    {
+      "id": "castle",
+      "name": "Castle",
+      "rawNickname": "Castle",
+      "slices": [
+        {
+          "role": "profile",
+          "file": "castle/profile.png",
+          "cardId": 22303,
+          "grid": "6x5",
+          "cell": 3,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048609656671503341/0B059A5A438C7F3EF06B59545F2EF7D5BD661901/"
+        },
+        {
+          "role": "gadget",
+          "file": "castle/gadget.png",
+          "cardId": 18200,
+          "grid": "6x4",
+          "cell": 0,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048608475754061160/E811A6A4D02EF121B5833B0777A644922B96E1E0/"
+        }
+      ]
+    },
+    {
+      "id": "caveira",
+      "name": "Caveira",
+      "rawNickname": "Caveira",
+      "slices": [
+        {
+          "role": "gadget",
+          "file": "caveira/gadget.png",
+          "cardId": 23203,
+          "grid": "4x2",
+          "cell": 3,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048609021577123686/7DE6AD32216B2B897D7CC4E78CC2D53E532C45D4/"
+        },
+        {
+          "role": "profile",
+          "file": "caveira/profile.png",
+          "cardId": 22703,
+          "grid": "4x2",
+          "cell": 3,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048610294182394171/806ADE126FC22D329503C3AEDCFB1CEE857AFCC5/"
+        }
+      ]
+    },
+    {
+      "id": "clash",
+      "name": "Clash",
+      "rawNickname": "Clash",
+      "slices": [
+        {
+          "role": "gadget",
+          "file": "clash/gadget.png",
+          "cardId": 23601,
+          "grid": "4x2",
+          "cell": 1,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2054242960853289999/6B4F30825982D00B254E747773B4668AEBDE42E3/"
+        },
+        {
+          "role": "profile",
+          "file": "clash/profile.png",
+          "cardId": 22601,
+          "grid": "4x2",
+          "cell": 1,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2073385337002630957/31407A3879F93194AB0256D442C3A3CA66610161/"
+        }
+      ]
+    },
+    {
+      "id": "doc",
+      "name": "Doc",
+      "rawNickname": "Doc",
+      "slices": [
+        {
+          "role": "profile",
+          "file": "doc/profile.png",
+          "cardId": 22304,
+          "grid": "6x5",
+          "cell": 4,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048609656671503341/0B059A5A438C7F3EF06B59545F2EF7D5BD661901/"
+        },
+        {
+          "role": "gadget",
+          "file": "doc/gadget.png",
+          "cardId": 18207,
+          "grid": "6x4",
+          "cell": 7,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048608475754061160/E811A6A4D02EF121B5833B0777A644922B96E1E0/"
+        }
+      ]
+    },
+    {
+      "id": "dokkaebi",
+      "name": "Dokkaebi",
+      "rawNickname": "Dokkaebi",
+      "slices": [
+        {
+          "role": "profile",
+          "file": "dokkaebi/profile.png",
+          "cardId": 22500,
+          "grid": "4x2",
+          "cell": 0,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2073385337002629492/38C1FC45BAACFF79BB6D0529792C7DCA036F9D68/"
+        },
+        {
+          "role": "gadget",
+          "file": "dokkaebi/gadget.png",
+          "cardId": 23300,
+          "grid": "4x2",
+          "cell": 0,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048609021581475580/77A6180DC555B5F348EE6422BA4E89803DEC60F0/"
+        }
+      ]
+    },
+    {
+      "id": "echo",
+      "name": "Echo",
+      "rawNickname": "Echo",
+      "slices": [
+        {
+          "role": "profile",
+          "file": "echo/profile.png",
+          "cardId": 22704,
+          "grid": "4x2",
+          "cell": 4,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048610294182394171/806ADE126FC22D329503C3AEDCFB1CEE857AFCC5/"
+        },
+        {
+          "role": "gadget",
+          "file": "echo/gadget.png",
+          "cardId": 23504,
+          "grid": "4x2",
+          "cell": 4,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048609021577123686/7DE6AD32216B2B897D7CC4E78CC2D53E532C45D4/"
+        }
+      ]
+    },
+    {
+      "id": "ela",
+      "name": "Ela",
+      "rawNickname": "Ela",
+      "slices": [
+        {
+          "role": "gadget",
+          "file": "ela/gadget.png",
+          "cardId": 24201,
+          "grid": "4x2",
+          "cell": 1,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048609021581475580/77A6180DC555B5F348EE6422BA4E89803DEC60F0/"
+        },
+        {
+          "role": "profile",
+          "file": "ela/profile.png",
+          "cardId": 22501,
+          "grid": "4x2",
+          "cell": 1,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2073385337002629492/38C1FC45BAACFF79BB6D0529792C7DCA036F9D68/"
+        }
+      ]
+    },
+    {
+      "id": "finka",
+      "name": "Finka",
+      "rawNickname": "Finka",
+      "slices": [
+        {
+          "role": "gadget",
+          "file": "finka/gadget.png",
+          "cardId": 23602,
+          "grid": "4x2",
+          "cell": 2,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2054242960853289999/6B4F30825982D00B254E747773B4668AEBDE42E3/"
+        },
+        {
+          "role": "profile",
+          "file": "finka/profile.png",
+          "cardId": 22602,
+          "grid": "4x2",
+          "cell": 2,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2073385337002630957/31407A3879F93194AB0256D442C3A3CA66610161/"
+        }
+      ]
+    },
+    {
+      "id": "flores",
+      "name": "Flores",
+      "rawNickname": "Flores",
+      "slices": [
+        {
+          "role": "profile",
+          "file": "flores/profile.png",
+          "cardId": 22305,
+          "grid": "6x5",
+          "cell": 5,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048609656671503341/0B059A5A438C7F3EF06B59545F2EF7D5BD661901/"
+        },
+        {
+          "role": "gadget",
+          "file": "flores/gadget.png",
+          "cardId": 18221,
+          "grid": "6x4",
+          "cell": 21,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048608475754061160/E811A6A4D02EF121B5833B0777A644922B96E1E0/"
+        }
+      ]
+    },
+    {
+      "id": "frost",
+      "name": "Frost",
+      "rawNickname": "Frost",
+      "slices": [
+        {
+          "role": "gadget",
+          "file": "frost/gadget.png",
+          "cardId": 23605,
+          "grid": "4x2",
+          "cell": 5,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048609021577123686/7DE6AD32216B2B897D7CC4E78CC2D53E532C45D4/"
+        },
+        {
+          "role": "profile",
+          "file": "frost/profile.png",
+          "cardId": 22705,
+          "grid": "4x2",
+          "cell": 5,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048610294182394171/806ADE126FC22D329503C3AEDCFB1CEE857AFCC5/"
+        }
+      ]
+    },
+    {
+      "id": "fuze",
+      "name": "Fuze",
+      "rawNickname": "Fuze",
+      "slices": [
+        {
+          "role": "profile",
+          "file": "fuze/profile.png",
+          "cardId": 22306,
+          "grid": "6x5",
+          "cell": 6,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048609656671503341/0B059A5A438C7F3EF06B59545F2EF7D5BD661901/"
+        },
+        {
+          "role": "gadget",
+          "file": "fuze/gadget.png",
+          "cardId": 18212,
+          "grid": "6x4",
+          "cell": 12,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048608475754061160/E811A6A4D02EF121B5833B0777A644922B96E1E0/"
+        }
+      ]
+    },
+    {
+      "id": "glaz",
+      "name": "Glaz",
+      "rawNickname": "Glaz",
+      "slices": [
+        {
+          "role": "gadget",
+          "file": "glaz/gadget.png",
+          "cardId": 18210,
+          "grid": "6x4",
+          "cell": 10,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048608475754061160/E811A6A4D02EF121B5833B0777A644922B96E1E0/"
+        },
+        {
+          "role": "profile",
+          "file": "glaz/profile.png",
+          "cardId": 22307,
+          "grid": "6x5",
+          "cell": 7,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048609656671503341/0B059A5A438C7F3EF06B59545F2EF7D5BD661901/"
+        }
+      ]
+    },
+    {
+      "id": "gridlock",
+      "name": "Gridlock",
+      "rawNickname": "Gridlock",
+      "slices": [
+        {
+          "role": "profile",
+          "file": "gridlock/profile.png",
+          "cardId": 23802,
+          "grid": "4x2",
+          "cell": 2,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2074514862534580871/D23BE157EE9AB4C16AC608F5E933080B032E64AD/"
+        },
+        {
+          "role": "gadget",
+          "file": "gridlock/gadget.png",
+          "cardId": 24500,
+          "grid": "4x2",
+          "cell": 0,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2074514862534615451/E158862EAC19DF7C0AEE6132706E2D4B5328DA0E/"
+        }
+      ]
+    },
+    {
+      "id": "hibana",
+      "name": "Hibana",
+      "rawNickname": "Hibana",
+      "slices": [
+        {
+          "role": "profile",
+          "file": "hibana/profile.png",
+          "cardId": 22706,
+          "grid": "4x2",
+          "cell": 6,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048610294182394171/806ADE126FC22D329503C3AEDCFB1CEE857AFCC5/"
+        },
+        {
+          "role": "gadget",
+          "file": "hibana/gadget.png",
+          "cardId": 23506,
+          "grid": "4x2",
+          "cell": 6,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048609021577123686/7DE6AD32216B2B897D7CC4E78CC2D53E532C45D4/"
+        }
+      ]
+    },
+    {
+      "id": "iana",
+      "name": "Iana",
+      "rawNickname": "Iana",
+      "slices": [
+        {
+          "role": "profile",
+          "file": "iana/profile.png",
+          "cardId": 23702,
+          "grid": "3x2",
+          "cell": 2,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2074514953769924161/A3D9261097CF4323A33DB586A9E5654218C1011B/"
+        },
+        {
+          "role": "gadget",
+          "file": "iana/gadget.png",
+          "cardId": 24302,
+          "grid": "3x2",
+          "cell": 2,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2074514953769938101/EADF371E8A2F57E3C048E66A5EC584F2DE4DD6A4/"
+        }
+      ]
+    },
+    {
+      "id": "iq",
+      "name": "IQ",
+      "rawNickname": "IQ",
+      "slices": [
+        {
+          "role": "gadget",
+          "file": "iq/gadget.png",
+          "cardId": 18214,
+          "grid": "6x4",
+          "cell": 14,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048608475754061160/E811A6A4D02EF121B5833B0777A644922B96E1E0/"
+        },
+        {
+          "role": "profile",
+          "file": "iq/profile.png",
+          "cardId": 22308,
+          "grid": "6x5",
+          "cell": 8,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048609656671503341/0B059A5A438C7F3EF06B59545F2EF7D5BD661901/"
+        }
+      ]
+    },
+    {
+      "id": "jackal",
+      "name": "Jackal",
+      "rawNickname": "Jackal",
+      "slices": [
+        {
+          "role": "profile",
+          "file": "jackal/profile.png",
+          "cardId": 22502,
+          "grid": "4x2",
+          "cell": 2,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2073385337002629492/38C1FC45BAACFF79BB6D0529792C7DCA036F9D68/"
+        },
+        {
+          "role": "gadget",
+          "file": "jackal/gadget.png",
+          "cardId": 22702,
+          "grid": "4x2",
+          "cell": 2,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048609021581475580/77A6180DC555B5F348EE6422BA4E89803DEC60F0/"
+        }
+      ]
+    },
+    {
+      "id": "jager",
+      "name": "Jäger",
+      "rawNickname": "Jager",
+      "slices": [
+        {
+          "role": "gadget",
+          "file": "jager/gadget.png",
+          "cardId": 18202,
+          "grid": "6x4",
+          "cell": 2,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048608475754061160/E811A6A4D02EF121B5833B0777A644922B96E1E0/"
+        },
+        {
+          "role": "profile",
+          "file": "jager/profile.png",
+          "cardId": 22309,
+          "grid": "6x5",
+          "cell": 9,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048609656671503341/0B059A5A438C7F3EF06B59545F2EF7D5BD661901/"
+        }
+      ]
+    },
+    {
+      "id": "kaid",
+      "name": "Kaid",
+      "rawNickname": "Kaid",
+      "slices": [
+        {
+          "role": "gadget",
+          "file": "kaid/gadget.png",
+          "cardId": 24501,
+          "grid": "4x2",
+          "cell": 1,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2074514862534615451/E158862EAC19DF7C0AEE6132706E2D4B5328DA0E/"
+        },
+        {
+          "role": "profile",
+          "file": "kaid/profile.png",
+          "cardId": 23801,
+          "grid": "4x2",
+          "cell": 1,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2074514862534580871/D23BE157EE9AB4C16AC608F5E933080B032E64AD/"
+        }
+      ]
+    },
+    {
+      "id": "kali",
+      "name": "Kali",
+      "rawNickname": "Kali",
+      "slices": [
+        {
+          "role": "profile",
+          "file": "kali/profile.png",
+          "cardId": 23803,
+          "grid": "4x2",
+          "cell": 3,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2074514862534580871/D23BE157EE9AB4C16AC608F5E933080B032E64AD/"
+        },
+        {
+          "role": "gadget",
+          "file": "kali/gadget.png",
+          "cardId": 24503,
+          "grid": "4x2",
+          "cell": 3,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2074514862534615451/E158862EAC19DF7C0AEE6132706E2D4B5328DA0E/"
+        }
+      ]
+    },
+    {
+      "id": "kapkan",
+      "name": "Kapkan",
+      "rawNickname": "Kaplan",
+      "slices": [
+        {
+          "role": "gadget",
+          "file": "kapkan/gadget.png",
+          "cardId": 18209,
+          "grid": "6x4",
+          "cell": 9,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048608475754061160/E811A6A4D02EF121B5833B0777A644922B96E1E0/"
+        },
+        {
+          "role": "profile",
+          "file": "kapkan/profile.png",
+          "cardId": 22310,
+          "grid": "6x5",
+          "cell": 10,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048609656671503341/0B059A5A438C7F3EF06B59545F2EF7D5BD661901/"
+        }
+      ]
+    },
+    {
+      "id": "lesion",
+      "name": "Lesion",
+      "rawNickname": "Lesion",
+      "slices": [
+        {
+          "role": "gadget",
+          "file": "lesion/gadget.png",
+          "cardId": 24103,
+          "grid": "4x2",
+          "cell": 3,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048609021581475580/77A6180DC555B5F348EE6422BA4E89803DEC60F0/"
+        },
+        {
+          "role": "profile",
+          "file": "lesion/profile.png",
+          "cardId": 22503,
+          "grid": "4x2",
+          "cell": 3,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2073385337002629492/38C1FC45BAACFF79BB6D0529792C7DCA036F9D68/"
+        }
+      ]
+    },
+    {
+      "id": "lion",
+      "name": "Lion",
+      "rawNickname": "Lion",
+      "slices": [
+        {
+          "role": "profile",
+          "file": "lion/profile.png",
+          "cardId": 22604,
+          "grid": "4x2",
+          "cell": 4,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2073385337002630957/31407A3879F93194AB0256D442C3A3CA66610161/"
+        },
+        {
+          "role": "gadget",
+          "file": "lion/gadget.png",
+          "cardId": 23604,
+          "grid": "4x2",
+          "cell": 4,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2054242960853289999/6B4F30825982D00B254E747773B4668AEBDE42E3/"
+        }
+      ]
+    },
+    {
+      "id": "maestro",
+      "name": "Maestro",
+      "rawNickname": "Maestro",
+      "slices": [
+        {
+          "role": "gadget",
+          "file": "maestro/gadget.png",
+          "cardId": 23605,
+          "grid": "4x2",
+          "cell": 5,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2054242960853289999/6B4F30825982D00B254E747773B4668AEBDE42E3/"
+        },
+        {
+          "role": "profile",
+          "file": "maestro/profile.png",
+          "cardId": 22605,
+          "grid": "4x2",
+          "cell": 5,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2073385337002630957/31407A3879F93194AB0256D442C3A3CA66610161/"
+        }
+      ]
+    },
+    {
+      "id": "maverick",
+      "name": "Maverick",
+      "rawNickname": "Maverick",
+      "slices": [
+        {
+          "role": "profile",
+          "file": "maverick/profile.png",
+          "cardId": 22606,
+          "grid": "4x2",
+          "cell": 6,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2073385337002630957/31407A3879F93194AB0256D442C3A3CA66610161/"
+        },
+        {
+          "role": "gadget",
+          "file": "maverick/gadget.png",
+          "cardId": 23606,
+          "grid": "4x2",
+          "cell": 6,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2054242960853289999/6B4F30825982D00B254E747773B4668AEBDE42E3/"
+        }
+      ]
+    },
+    {
+      "id": "melusi",
+      "name": "Melusi",
+      "rawNickname": "Melusi",
+      "slices": [
+        {
+          "role": "profile",
+          "file": "melusi/profile.png",
+          "cardId": 23703,
+          "grid": "3x2",
+          "cell": 3,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2074514953769924161/A3D9261097CF4323A33DB586A9E5654218C1011B/"
+        },
+        {
+          "role": "gadget",
+          "file": "melusi/gadget.png",
+          "cardId": 24303,
+          "grid": "3x2",
+          "cell": 3,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2074514953769938101/EADF371E8A2F57E3C048E66A5EC584F2DE4DD6A4/"
+        }
+      ]
+    },
+    {
+      "id": "mira",
+      "name": "Mira",
+      "rawNickname": "Mira",
+      "slices": [
+        {
+          "role": "gadget",
+          "file": "mira/gadget.png",
+          "cardId": 23904,
+          "grid": "4x2",
+          "cell": 4,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048609021581475580/77A6180DC555B5F348EE6422BA4E89803DEC60F0/"
+        },
+        {
+          "role": "profile",
+          "file": "mira/profile.png",
+          "cardId": 22504,
+          "grid": "4x2",
+          "cell": 4,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2073385337002629492/38C1FC45BAACFF79BB6D0529792C7DCA036F9D68/"
+        }
+      ]
+    },
+    {
+      "id": "montagne",
+      "name": "Montagne",
+      "rawNickname": "Montagne",
+      "slices": [
+        {
+          "role": "profile",
+          "file": "montagne/profile.png",
+          "cardId": 22311,
+          "grid": "6x5",
+          "cell": 11,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048609656671503341/0B059A5A438C7F3EF06B59545F2EF7D5BD661901/"
+        },
+        {
+          "role": "gadget",
+          "file": "montagne/gadget.png",
+          "cardId": 18211,
+          "grid": "6x4",
+          "cell": 11,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048608475754061160/E811A6A4D02EF121B5833B0777A644922B96E1E0/"
+        }
+      ]
+    },
+    {
+      "id": "mute",
+      "name": "Mute",
+      "rawNickname": "Mute",
+      "slices": [
+        {
+          "role": "profile",
+          "file": "mute/profile.png",
+          "cardId": 22312,
+          "grid": "6x5",
+          "cell": 12,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048609656671503341/0B059A5A438C7F3EF06B59545F2EF7D5BD661901/"
+        },
+        {
+          "role": "gadget",
+          "file": "mute/gadget.png",
+          "cardId": 18201,
+          "grid": "6x4",
+          "cell": 1,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048608475754061160/E811A6A4D02EF121B5833B0777A644922B96E1E0/"
+        }
+      ]
+    },
+    {
+      "id": "n-kk",
+      "name": "Nøkk",
+      "rawNickname": "Nokk",
+      "slices": [
+        {
+          "role": "profile",
+          "file": "n-kk/profile.png",
+          "cardId": 23805,
+          "grid": "4x2",
+          "cell": 5,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2074514862534580871/D23BE157EE9AB4C16AC608F5E933080B032E64AD/"
+        },
+        {
+          "role": "gadget",
+          "file": "n-kk/gadget.png",
+          "cardId": 24505,
+          "grid": "4x2",
+          "cell": 5,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2074514862534615451/E158862EAC19DF7C0AEE6132706E2D4B5328DA0E/"
+        }
+      ]
+    },
+    {
+      "id": "nomad",
+      "name": "Nomad",
+      "rawNickname": "Nomad",
+      "slices": [
+        {
+          "role": "gadget",
+          "file": "nomad/gadget.png",
+          "cardId": 23607,
+          "grid": "4x2",
+          "cell": 7,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2054242960853289999/6B4F30825982D00B254E747773B4668AEBDE42E3/"
+        },
+        {
+          "role": "profile",
+          "file": "nomad/profile.png",
+          "cardId": 22607,
+          "grid": "4x2",
+          "cell": 7,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2073385337002630957/31407A3879F93194AB0256D442C3A3CA66610161/"
+        }
+      ]
+    },
+    {
+      "id": "oryx",
+      "name": "Oryx",
+      "rawNickname": "Oryx",
+      "slices": [
+        {
+          "role": "profile",
+          "file": "oryx/profile.png",
+          "cardId": 23704,
+          "grid": "3x2",
+          "cell": 4,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2074514953769924161/A3D9261097CF4323A33DB586A9E5654218C1011B/"
+        },
+        {
+          "role": "gadget",
+          "file": "oryx/gadget.png",
+          "cardId": 24304,
+          "grid": "3x2",
+          "cell": 4,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2074514953769938101/EADF371E8A2F57E3C048E66A5EC584F2DE4DD6A4/"
+        }
+      ]
+    },
+    {
+      "id": "pulse",
+      "name": "Pulse",
+      "rawNickname": "Pulse",
+      "slices": [
+        {
+          "role": "gadget",
+          "file": "pulse/gadget.png",
+          "cardId": 18205,
+          "grid": "6x4",
+          "cell": 5,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048608475754061160/E811A6A4D02EF121B5833B0777A644922B96E1E0/"
+        },
+        {
+          "role": "profile",
+          "file": "pulse/profile.png",
+          "cardId": 22313,
+          "grid": "6x5",
+          "cell": 13,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048609656671503341/0B059A5A438C7F3EF06B59545F2EF7D5BD661901/"
+        }
+      ]
+    },
+    {
+      "id": "rook",
+      "name": "Rook",
+      "rawNickname": "Rook",
+      "slices": [
+        {
+          "role": "gadget",
+          "file": "rook/gadget.png",
+          "cardId": 18208,
+          "grid": "6x4",
+          "cell": 8,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048608475754061160/E811A6A4D02EF121B5833B0777A644922B96E1E0/"
+        },
+        {
+          "role": "profile",
+          "file": "rook/profile.png",
+          "cardId": 22318,
+          "grid": "6x5",
+          "cell": 18,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048609656671503341/0B059A5A438C7F3EF06B59545F2EF7D5BD661901/"
+        }
+      ]
+    },
+    {
+      "id": "sledge",
+      "name": "Sledge",
+      "rawNickname": "Sledge",
+      "slices": [
+        {
+          "role": "profile",
+          "file": "sledge/profile.png",
+          "cardId": 22319,
+          "grid": "6x5",
+          "cell": 19,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048609656671503341/0B059A5A438C7F3EF06B59545F2EF7D5BD661901/"
+        },
+        {
+          "role": "gadget",
+          "file": "sledge/gadget.png",
+          "cardId": 18216,
+          "grid": "6x4",
+          "cell": 16,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048608475754061160/E811A6A4D02EF121B5833B0777A644922B96E1E0/"
+        }
+      ]
+    },
+    {
+      "id": "smoke",
+      "name": "Smoke",
+      "rawNickname": "Smoke",
+      "slices": [
+        {
+          "role": "profile",
+          "file": "smoke/profile.png",
+          "cardId": 22320,
+          "grid": "6x5",
+          "cell": 20,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048609656671503341/0B059A5A438C7F3EF06B59545F2EF7D5BD661901/"
+        },
+        {
+          "role": "gadget",
+          "file": "smoke/gadget.png",
+          "cardId": 18204,
+          "grid": "6x4",
+          "cell": 4,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048608475754061160/E811A6A4D02EF121B5833B0777A644922B96E1E0/"
+        }
+      ]
+    },
+    {
+      "id": "tachanka",
+      "name": "Tachanka",
+      "rawNickname": "Tachanca",
+      "slices": [
+        {
+          "role": "gadget",
+          "file": "tachanka/gadget.png",
+          "cardId": 18206,
+          "grid": "6x4",
+          "cell": 6,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048608475754061160/E811A6A4D02EF121B5833B0777A644922B96E1E0/"
+        },
+        {
+          "role": "profile",
+          "file": "tachanka/profile.png",
+          "cardId": 22321,
+          "grid": "6x5",
+          "cell": 21,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048609656671503341/0B059A5A438C7F3EF06B59545F2EF7D5BD661901/"
+        }
+      ]
+    },
+    {
+      "id": "thatcher",
+      "name": "Thatcher",
+      "rawNickname": "Thatcher",
+      "slices": [
+        {
+          "role": "profile",
+          "file": "thatcher/profile.png",
+          "cardId": 22322,
+          "grid": "6x5",
+          "cell": 22,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048609656671503341/0B059A5A438C7F3EF06B59545F2EF7D5BD661901/"
+        },
+        {
+          "role": "gadget",
+          "file": "thatcher/gadget.png",
+          "cardId": 18217,
+          "grid": "6x4",
+          "cell": 17,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048608475754061160/E811A6A4D02EF121B5833B0777A644922B96E1E0/"
+        }
+      ]
+    },
+    {
+      "id": "thermite",
+      "name": "Thermite",
+      "rawNickname": "Thermite",
+      "slices": [
+        {
+          "role": "gadget",
+          "file": "thermite/gadget.png",
+          "cardId": 18218,
+          "grid": "6x4",
+          "cell": 18,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048608475754061160/E811A6A4D02EF121B5833B0777A644922B96E1E0/"
+        },
+        {
+          "role": "profile",
+          "file": "thermite/profile.png",
+          "cardId": 22323,
+          "grid": "6x5",
+          "cell": 23,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048609656671503341/0B059A5A438C7F3EF06B59545F2EF7D5BD661901/"
+        }
+      ]
+    },
+    {
+      "id": "thunderbird",
+      "name": "Thunderbird",
+      "rawNickname": "Thunderbird",
+      "slices": [
+        {
+          "role": "gadget",
+          "file": "thunderbird/gadget.png",
+          "cardId": 18220,
+          "grid": "6x4",
+          "cell": 20,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048608475754061160/E811A6A4D02EF121B5833B0777A644922B96E1E0/"
+        },
+        {
+          "role": "profile",
+          "file": "thunderbird/profile.png",
+          "cardId": 22324,
+          "grid": "6x5",
+          "cell": 24,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048609656671503341/0B059A5A438C7F3EF06B59545F2EF7D5BD661901/"
+        }
+      ]
+    },
+    {
+      "id": "twitch",
+      "name": "Twitch",
+      "rawNickname": "Twitch",
+      "slices": [
+        {
+          "role": "gadget",
+          "file": "twitch/gadget.png",
+          "cardId": 18219,
+          "grid": "6x4",
+          "cell": 19,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048608475754061160/E811A6A4D02EF121B5833B0777A644922B96E1E0/"
+        },
+        {
+          "role": "profile",
+          "file": "twitch/profile.png",
+          "cardId": 22325,
+          "grid": "6x5",
+          "cell": 25,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048609656671503341/0B059A5A438C7F3EF06B59545F2EF7D5BD661901/"
+        }
+      ]
+    },
+    {
+      "id": "valkyrie",
+      "name": "Valkyrie",
+      "rawNickname": "Valkyrie",
+      "slices": [
+        {
+          "role": "gadget",
+          "file": "valkyrie/gadget.png",
+          "cardId": 24307,
+          "grid": "4x2",
+          "cell": 7,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048609021577123686/7DE6AD32216B2B897D7CC4E78CC2D53E532C45D4/"
+        },
+        {
+          "role": "profile",
+          "file": "valkyrie/profile.png",
+          "cardId": 22707,
+          "grid": "4x2",
+          "cell": 7,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048610294182394171/806ADE126FC22D329503C3AEDCFB1CEE857AFCC5/"
+        }
+      ]
+    },
+    {
+      "id": "vigil",
+      "name": "Vigil",
+      "rawNickname": "Vigil",
+      "slices": [
+        {
+          "role": "gadget",
+          "file": "vigil/gadget.png",
+          "cardId": 24405,
+          "grid": "4x2",
+          "cell": 5,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048609021581475580/77A6180DC555B5F348EE6422BA4E89803DEC60F0/"
+        },
+        {
+          "role": "profile",
+          "file": "vigil/profile.png",
+          "cardId": 22505,
+          "grid": "4x2",
+          "cell": 5,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2073385337002629492/38C1FC45BAACFF79BB6D0529792C7DCA036F9D68/"
+        }
+      ]
+    },
+    {
+      "id": "ying",
+      "name": "Ying",
+      "rawNickname": "Ying",
+      "slices": [
+        {
+          "role": "gadget",
+          "file": "ying/gadget.png",
+          "cardId": 22906,
+          "grid": "4x2",
+          "cell": 6,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048609021581475580/77A6180DC555B5F348EE6422BA4E89803DEC60F0/"
+        },
+        {
+          "role": "profile",
+          "file": "ying/profile.png",
+          "cardId": 22506,
+          "grid": "4x2",
+          "cell": 6,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2073385337002629492/38C1FC45BAACFF79BB6D0529792C7DCA036F9D68/"
+        }
+      ]
+    },
+    {
+      "id": "zero",
+      "name": "Zero",
+      "rawNickname": "Zero",
+      "slices": [
+        {
+          "role": "profile",
+          "file": "zero/profile.png",
+          "cardId": 23705,
+          "grid": "3x2",
+          "cell": 5,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2074514953769924161/A3D9261097CF4323A33DB586A9E5654218C1011B/"
+        },
+        {
+          "role": "gadget",
+          "file": "zero/gadget.png",
+          "cardId": 24305,
+          "grid": "3x2",
+          "cell": 5,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2074514953769938101/EADF371E8A2F57E3C048E66A5EC584F2DE4DD6A4/"
+        }
+      ]
+    },
+    {
+      "id": "zofia",
+      "name": "Zofia",
+      "rawNickname": "Zofia",
+      "slices": [
+        {
+          "role": "gadget",
+          "file": "zofia/gadget.png",
+          "cardId": 23207,
+          "grid": "4x2",
+          "cell": 7,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2048609021581475580/77A6180DC555B5F348EE6422BA4E89803DEC60F0/"
+        },
+        {
+          "role": "profile",
+          "file": "zofia/profile.png",
+          "cardId": 22507,
+          "grid": "4x2",
+          "cell": 7,
+          "faceUrl": "http://cloud-3.steamusercontent.com/ugc/2073385337002629492/38C1FC45BAACFF79BB6D0529792C7DCA036F9D68/"
+        }
+      ]
+    }
+  ]
+}

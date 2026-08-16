@@ -1,0 +1,74 @@
+[
+  {
+    "id": "drone",
+    "name": "Drone",
+    "team": "Attacker",
+    "summary": "Scan a room to reveal hidden defenders. Completing a scan can trigger operator-specific drone effects."
+  },
+  {
+    "id": "breach-charge",
+    "name": "Breach Charge",
+    "team": "Attacker",
+    "summary": "Throwable/deployable charge used to destroy light walls, barricades, and similar partitions."
+  },
+  {
+    "id": "claymore",
+    "name": "Claymore",
+    "team": "Attacker",
+    "summary": "Proximity mine that triggers when an opposing operator enters its covered space."
+  },
+  {
+    "id": "frag-grenade",
+    "name": "Frag Grenade",
+    "team": "Attacker",
+    "summary": "Throwable grenade that damages operators and gadgets in the targeted room."
+  },
+  {
+    "id": "stun-grenade",
+    "name": "Stun Grenade",
+    "team": "Attacker",
+    "summary": "Throwable flash that applies a stunned marker to operators in the targeted room."
+  },
+  {
+    "id": "smoke-grenade",
+    "name": "Smoke Grenade",
+    "team": "Attacker",
+    "summary": "Places a smoke overlay that blocks line of sight in its spaces."
+  },
+  {
+    "id": "hard-breach",
+    "name": "Hard Breach Charge",
+    "team": "Attacker",
+    "summary": "Charge that can destroy fortified/reinforced walls the standard breach cannot."
+  },
+  {
+    "id": "barbed-wire",
+    "name": "Barbed Wire",
+    "team": "Defender",
+    "summary": "Setup obstacle that costs extra movement to enter or leave its spaces."
+  },
+  {
+    "id": "nitro-cell",
+    "name": "Nitro Cell",
+    "team": "Defender",
+    "summary": "Throwable explosive that damages operators and destroys gadgets in the targeted room."
+  },
+  {
+    "id": "deployable-shield",
+    "name": "Deployable Shield",
+    "team": "Defender",
+    "summary": "Portable cover that grants protection and can block lines of sight or movement."
+  },
+  {
+    "id": "bulletproof-camera",
+    "name": "Bulletproof Camera",
+    "team": "Defender",
+    "summary": "Setup camera that grants information; it remains visible and can be destroyed."
+  },
+  {
+    "id": "impact-grenade",
+    "name": "Impact Grenade",
+    "team": "Defender",
+    "summary": "Throwable that can destroy light walls, barricades, and nearby gadgets."
+  }
+]

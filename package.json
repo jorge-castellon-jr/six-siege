@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "build:los-goldens": "tsx scripts/build-los-goldens.ts"
+    "build:los-goldens": "tsx scripts/build-los-goldens.ts",
+    "extract:tts-operators": "tsx scripts/extract-tts-operators.ts"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.0.14",
@@ -29,6 +30,7 @@
     "eslint-plugin-react-hooks": "^5.1.0",
     "eslint-plugin-react-refresh": "^0.4.19",
     "globals": "^15.15.0",
+    "sharp": "^0.35.3",
     "tsx": "^4.19.3",
     "typescript": "~5.7.2",
     "typescript-eslint": "^8.24.1",
