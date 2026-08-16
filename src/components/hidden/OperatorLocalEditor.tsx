@@ -31,7 +31,7 @@ const DEFAULT_SPACES: Record<RangeBandId, string> = {
   long: "7+",
 };
 
-export type EditorSection = "header" | "stats" | "ranges" | "gadget" | "notes";
+export type EditorSection = "header" | "stats" | "ranges" | "gadget";
 
 type Draft = {
   name: string;
@@ -454,26 +454,6 @@ export const GadgetFields = ({
         rows={5}
         value={draft.gadgetText}
         onChange={(e) => setDraft({ ...draft, gadgetText: e.target.value })}
-      />
-    </label>
-    <SectionSaveRow onSave={onSave} saving={saving} status={status} />
-  </div>
-);
-
-export const NotesFields = ({
-  draft,
-  setDraft,
-  onSave,
-  saving,
-  status,
-}: FieldsProps) => (
-  <div className="section-edit-fields">
-    <label className="json-editor-block">
-      Notes (one per line)
-      <textarea
-        rows={3}
-        value={draft.notesText}
-        onChange={(e) => setDraft({ ...draft, notesText: e.target.value })}
       />
     </label>
     <SectionSaveRow onSave={onSave} saving={saving} status={status} />

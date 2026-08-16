@@ -654,29 +654,41 @@
     "source": "year1",
     "gadgetName": "Skeleton Key",
     "gadgetKind": "action",
-    "gadget": [],
+    "gadget": [
+      "Action, line of sight or vertical: place a Holed Ceiling token in the targeted free space.",
+      "Holed Ceiling tokens count as entryway spaces. Overwatch tokens may be placed on them, but operators cannot use them to move to or from an upper floor area. They are not gadgets and are indestructible.",
+      "3 charges."
+    ],
+    "stamina": 5,
+    "run": 2,
+    "destroy": "orange",
     "ranges": [
       { "id": "short", "spaces": "1–3", "dice": ["yellow", "orange", "red", "red"] },
       { "id": "medium", "spaces": "4–6", "dice": ["yellow", "red", "red"] },
       { "id": "long", "spaces": "7+", "dice": ["red", "red"] }
     ],
-    "notes": [
-      "Profile card was not in the local TTS image cache."
-    ],
-    "statsVerified": false
+    "statsVerified": true
   },
   {
     "id": "blackbeard",
     "name": "Blackbeard",
     "team": "Attacker",
     "source": "year1",
-    "gadgetName": "Rifle-Shield",
-    "gadgetKind": "passive",
-    "gadget": [],
-    "notes": [
-      "Profile card was not in the local TTS image cache."
+    "gadgetName": "Rifle Shield",
+    "gadgetKind": "reaction",
+    "gadget": [
+      "Reaction: Blackbeard ignores 2 hits from shots targeting him.",
+      "2 charges."
     ],
-    "statsVerified": false
+    "stamina": 5,
+    "run": 2,
+    "destroy": "yellow",
+    "ranges": [
+      { "id": "short", "spaces": "1–3", "dice": ["orange", "red"] },
+      { "id": "medium", "spaces": "4–6", "dice": ["orange", "red", "red"] },
+      { "id": "long", "spaces": "7+", "dice": ["yellow", "orange", "red", "red"] }
+    ],
+    "statsVerified": true
   },
   {
     "id": "capitao",
@@ -685,11 +697,20 @@
     "source": "year1",
     "gadgetName": "Tactical Crossbow",
     "gadgetKind": "action",
-    "gadget": [],
-    "notes": [
-      "Profile card was not in the local TTS image cache."
+    "gadget": [
+      "Action, throwable: place a Fire overlay.",
+      "Operators in a Fire space immediately sustain an orange hit die. Entering or ending an action in Fire also inflicts an orange hit die.",
+      "3 charges."
     ],
-    "statsVerified": false
+    "stamina": 4,
+    "run": 5,
+    "destroy": "yellow",
+    "ranges": [
+      { "id": "short", "spaces": "1–3", "dice": ["orange", "red"] },
+      { "id": "medium", "spaces": "4–6", "dice": ["yellow", "orange", "red", "red"] },
+      { "id": "long", "spaces": "7+", "dice": ["yellow", "orange", "red"] }
+    ],
+    "statsVerified": true
   },
   {
     "id": "hibana",
@@ -698,11 +719,19 @@
     "source": "year1",
     "gadgetName": "X-KAIROS",
     "gadgetKind": "action",
-    "gadget": [],
-    "notes": [
-      "Profile card was not in the local TTS image cache."
+    "gadget": [
+      "Action, throwable: perform a Destroy action in the targeted space.",
+      "2 charges."
     ],
-    "statsVerified": false
+    "stamina": 4,
+    "run": 5,
+    "destroy": "yellow",
+    "ranges": [
+      { "id": "short", "spaces": "1–3", "dice": ["yellow", "yellow", "orange"] },
+      { "id": "medium", "spaces": "4–6", "dice": ["orange", "orange", "red", "red"] },
+      { "id": "long", "spaces": "7+", "dice": ["yellow", "orange", "red"] }
+    ],
+    "statsVerified": true
   },
   {
     "id": "frost",
@@ -710,12 +739,20 @@
     "team": "Defender",
     "source": "year1",
     "gadgetName": "Welcome Mats",
-    "gadgetKind": "setup",
-    "gadget": [],
-    "notes": [
-      "Profile card was not in the local TTS image cache."
+    "gadgetKind": "reaction",
+    "gadget": [
+      "Reaction: after entering a space adjacent to an obstacle, an opposing operator sustains 2 hits. They may spend an extra action to ignore the effect.",
+      "2 charges."
     ],
-    "statsVerified": false
+    "stamina": 5,
+    "run": 2,
+    "destroy": "yellow",
+    "ranges": [
+      { "id": "short", "spaces": "1–3", "dice": ["yellow", "orange", "red"] },
+      { "id": "medium", "spaces": "4–6", "dice": ["yellow", "yellow", "red", "red"] },
+      { "id": "long", "spaces": "7+", "dice": ["yellow", "yellow", "red"] }
+    ],
+    "statsVerified": true
   },
   {
     "id": "valkyrie",
@@ -724,11 +761,20 @@
     "source": "year1",
     "gadgetName": "Black Eye",
     "gadgetKind": "setup",
-    "gadget": [],
-    "notes": [
-      "Profile card was not in the local TTS image cache."
+    "gadget": [
+      "Setup: place at most one Black Eye camera on a section of heavy wall.",
+      "Action, throwable: place a Black Eye camera on a section of heavy wall in the targeted space.",
+      "All opposing operators in that room receive a Located marker. Black Eye cameras behave like standard cameras."
     ],
-    "statsVerified": false
+    "stamina": 5,
+    "run": 2,
+    "destroy": "yellow",
+    "ranges": [
+      { "id": "short", "spaces": "1–3", "dice": ["yellow", "yellow", "red", "red"] },
+      { "id": "medium", "spaces": "4–6", "dice": ["yellow", "yellow", "yellow", "red"] },
+      { "id": "long", "spaces": "7+", "dice": ["yellow", "yellow", "red"] }
+    ],
+    "statsVerified": true
   },
   {
     "id": "caveira",
@@ -737,11 +783,19 @@
     "source": "year1",
     "gadgetName": "Silent Step",
     "gadgetKind": "action",
-    "gadget": [],
-    "notes": [
-      "Profile card was not in the local TTS image cache."
+    "gadget": [
+      "Whenever Caveira eliminates an opposing operator, all remaining opposing operators receive a Located marker.",
+      "Action: from your upper floor area, perform a Shoot action (short range, light protection) targeting a Located operator in the opposing upper floor area."
     ],
-    "statsVerified": false
+    "stamina": 4,
+    "run": 5,
+    "destroy": "yellow",
+    "ranges": [
+      { "id": "short", "spaces": "1–3", "dice": ["orange", "orange", "red", "red"] },
+      { "id": "medium", "spaces": "4–6", "dice": ["yellow", "yellow", "yellow", "red"] },
+      { "id": "long", "spaces": "7+", "dice": ["yellow", "yellow", "yellow"] }
+    ],
+    "statsVerified": true
   },
   {
     "id": "echo",
@@ -750,11 +804,18 @@
     "source": "year1",
     "gadgetName": "Yokai",
     "gadgetKind": "action",
-    "gadget": [],
-    "notes": [
-      "Profile card was not in the local TTS image cache."
+    "gadget": [
+      "Action, drone: after completing a scan, all opposing Located operators in the scanned room receive a Stunned marker.",
+      "2 charges."
     ],
-    "statsVerified": false
+    "stamina": 6,
+    "destroy": "yellow",
+    "ranges": [
+      { "id": "short", "spaces": "1–3", "dice": ["red", "red"] },
+      { "id": "medium", "spaces": "4–6", "dice": ["yellow", "red", "red"] },
+      { "id": "long", "spaces": "7+", "dice": ["yellow", "orange", "red"] }
+    ],
+    "statsVerified": true
   },
   {
     "id": "jackal",
@@ -763,11 +824,20 @@
     "source": "year2",
     "gadgetName": "Eyenox Model III",
     "gadgetKind": "action",
-    "gadget": [],
-    "notes": [
-      "Profile card was not in the local TTS image cache."
+    "gadget": [
+      "Opposing operators moving to or from their upper floor area receive a Located marker.",
+      "Action: from a stair room or your upper floor area, perform a Shoot action (short range, light protection) targeting a Located operator in the opposing upper floor area.",
+      "3 charges."
     ],
-    "statsVerified": false
+    "stamina": 5,
+    "run": 2,
+    "destroy": "orange",
+    "ranges": [
+      { "id": "short", "spaces": "1–3", "dice": ["yellow", "yellow", "orange", "red"] },
+      { "id": "medium", "spaces": "4–6", "dice": ["yellow", "red", "red"] },
+      { "id": "long", "spaces": "7+", "dice": ["yellow", "yellow", "orange", "red"] }
+    ],
+    "statsVerified": true
   },
   {
     "id": "ying",
@@ -776,11 +846,19 @@
     "source": "year2",
     "gadgetName": "Candela",
     "gadgetKind": "action",
-    "gadget": [],
-    "notes": [
-      "Profile card was not in the local TTS image cache."
+    "gadget": [
+      "Action, deployable ignoring at most one light wall or barricade, or vertical: all operators in the targeted room receive a Stunned marker, except Ying.",
+      "2 charges."
     ],
-    "statsVerified": false
+    "stamina": 5,
+    "run": 2,
+    "destroy": "yellow",
+    "ranges": [
+      { "id": "short", "spaces": "1–3", "dice": ["yellow", "red", "red"] },
+      { "id": "medium", "spaces": "4–6", "dice": ["yellow", "orange", "red", "red"] },
+      { "id": "long", "spaces": "7+", "dice": ["red", "red"] }
+    ],
+    "statsVerified": true
   },
   {
     "id": "zofia",
@@ -789,11 +867,19 @@
     "source": "year2",
     "gadgetName": "KS79 Lifeline",
     "gadgetKind": "action",
-    "gadget": [],
-    "notes": [
-      "Profile card was not in the local TTS image cache."
+    "gadget": [
+      "Action, line of sight, ignoring at most one barricade: the targeted operator receives a Stunned marker and sustains an orange hit die.",
+      "2 charges."
     ],
-    "statsVerified": false
+    "stamina": 5,
+    "run": 2,
+    "destroy": "orange",
+    "ranges": [
+      { "id": "short", "spaces": "1–3", "dice": ["yellow", "red", "red"] },
+      { "id": "medium", "spaces": "4–6", "dice": ["orange", "orange", "red", "red"] },
+      { "id": "long", "spaces": "7+", "dice": ["yellow", "yellow", "red"] }
+    ],
+    "statsVerified": true
   },
   {
     "id": "dokkaebi",
@@ -802,11 +888,20 @@
     "source": "year2",
     "gadgetName": "Logic Bomb",
     "gadgetKind": "action",
-    "gadget": [],
-    "notes": [
-      "Profile card was not in the local TTS image cache."
+    "gadget": [
+      "Action, wave: the targeted operator receives a Located marker.",
+      "Action, vertical: remove Located markers from all operators in your squad in the room containing the targeted space.",
+      "2 charges."
     ],
-    "statsVerified": false
+    "stamina": 5,
+    "run": 2,
+    "destroy": "yellow",
+    "ranges": [
+      { "id": "short", "spaces": "1–3", "dice": ["yellow", "red"] },
+      { "id": "medium", "spaces": "4–6", "dice": ["yellow", "yellow", "orange", "red"] },
+      { "id": "long", "spaces": "7+", "dice": ["yellow", "yellow", "red", "red"] }
+    ],
+    "statsVerified": true
   },
   {
     "id": "mira",
@@ -815,11 +910,18 @@
     "source": "year2",
     "gadgetName": "Black Mirror",
     "gadgetKind": "setup",
-    "gadget": [],
-    "notes": [
-      "Profile card was not in the local TTS image cache."
+    "gadget": [
+      "Setup: cover up to one section of light or fortified wall with a matching Holed Wall token.",
+      "Action: if Mira is in a space with a light or fortified wall, cover it with a matching Holed Wall token, then perform a Shoot action through the holed wall."
     ],
-    "statsVerified": false
+    "stamina": 6,
+    "destroy": "orange",
+    "ranges": [
+      { "id": "short", "spaces": "1–3", "dice": ["yellow", "orange", "red"] },
+      { "id": "medium", "spaces": "4–6", "dice": ["orange", "red", "red"] },
+      { "id": "long", "spaces": "7+", "dice": ["orange", "red"] }
+    ],
+    "statsVerified": true
   },
   {
     "id": "lesion",
@@ -827,12 +929,20 @@
     "team": "Defender",
     "source": "year2",
     "gadgetName": "Gu Mines",
-    "gadgetKind": "setup",
-    "gadget": [],
-    "notes": [
-      "Profile card was not in the local TTS image cache."
+    "gadgetKind": "reaction",
+    "gadget": [
+      "Reaction: an opposing operator entering a gray entryway space receives a Located marker and sustains a hit. They may spend an extra action to ignore this effect.",
+      "3 charges."
     ],
-    "statsVerified": false
+    "stamina": 5,
+    "run": 2,
+    "destroy": "yellow",
+    "ranges": [
+      { "id": "short", "spaces": "1–3", "dice": ["yellow", "yellow", "orange", "red"] },
+      { "id": "medium", "spaces": "4–6", "dice": ["orange", "orange", "red"] },
+      { "id": "long", "spaces": "7+", "dice": ["orange", "red"] }
+    ],
+    "statsVerified": true
   },
   {
     "id": "ela",
@@ -840,12 +950,20 @@
     "team": "Defender",
     "source": "year2",
     "gadgetName": "Grzmot Mines",
-    "gadgetKind": "setup",
-    "gadget": [],
-    "notes": [
-      "Profile card was not in the local TTS image cache."
+    "gadgetKind": "reaction",
+    "gadget": [
+      "Reaction: an opposing operator crossing a room perimeter or entering an entryway space from their upper floor area receives a Stunned marker. They may spend an extra action to ignore this effect.",
+      "3 charges."
     ],
-    "statsVerified": false
+    "stamina": 4,
+    "run": 5,
+    "destroy": "yellow",
+    "ranges": [
+      { "id": "short", "spaces": "1–3", "dice": ["yellow", "yellow", "red", "red"] },
+      { "id": "medium", "spaces": "4–6", "dice": ["orange", "red", "red"] },
+      { "id": "long", "spaces": "7+", "dice": ["yellow", "yellow", "red"] }
+    ],
+    "statsVerified": true
   },
   {
     "id": "vigil",
@@ -854,11 +972,19 @@
     "source": "year2",
     "gadgetName": "ERC-7",
     "gadgetKind": "passive",
-    "gadget": [],
-    "notes": [
-      "Profile card was not in the local TTS image cache."
+    "gadget": [
+      "Vigil never receives a Located marker.",
+      "If Vigil is targeted by a shot, the shooter must remove any one die before rolling their hit dice."
     ],
-    "statsVerified": false
+    "stamina": 4,
+    "run": 5,
+    "destroy": "yellow",
+    "ranges": [
+      { "id": "short", "spaces": "1–3", "dice": ["yellow", "yellow", "orange", "red"] },
+      { "id": "medium", "spaces": "4–6", "dice": ["yellow", "yellow", "orange", "orange"] },
+      { "id": "long", "spaces": "7+", "dice": ["yellow", "orange", "orange"] }
+    ],
+    "statsVerified": true
   },
   {
     "id": "lion",
@@ -867,11 +993,19 @@
     "source": "year3",
     "gadgetName": "EE-ONE-D",
     "gadgetKind": "action",
-    "gadget": [],
-    "notes": [
-      "Profile card was not in the local TTS image cache."
+    "gadget": [
+      "Action, drone: an EE-ONE-D can spend up to 10 movement points. After the scan, place an EE-ONE-D token in the space where it ended its movement.",
+      "Opposing operators that enter a space in a room containing an EE-ONE-D token, or end an action in one, receive a Located marker."
     ],
-    "statsVerified": false
+    "stamina": 5,
+    "run": 2,
+    "destroy": "yellow",
+    "ranges": [
+      { "id": "short", "spaces": "1–3", "dice": ["yellow", "orange", "orange"] },
+      { "id": "medium", "spaces": "4–6", "dice": ["yellow", "yellow", "orange", "red"] },
+      { "id": "long", "spaces": "7+", "dice": ["yellow", "orange", "red"] }
+    ],
+    "statsVerified": true
   },
   {
     "id": "finka",
@@ -880,11 +1014,19 @@
     "source": "year3",
     "gadgetName": "Adrenal Surge",
     "gadgetKind": "action",
-    "gadget": [],
-    "notes": [
-      "Profile card was not in the local TTS image cache."
+    "gadget": [
+      "Action, vertical: remove up to 3 hits from the targeted operator.",
+      "Reaction, wave: when another operator is eliminated, Finka may immediately revive them before their miniature is put back in the box. Remove hits until they are no longer eliminated. The revived operator receives a Stunned marker."
     ],
-    "statsVerified": false
+    "stamina": 5,
+    "run": 2,
+    "destroy": "yellow",
+    "ranges": [
+      { "id": "short", "spaces": "1–3", "dice": ["orange", "red"] },
+      { "id": "medium", "spaces": "4–6", "dice": ["orange", "orange", "red", "red"] },
+      { "id": "long", "spaces": "7+", "dice": ["orange", "orange", "red"] }
+    ],
+    "statsVerified": true
   },
   {
     "id": "maverick",
@@ -893,11 +1035,19 @@
     "source": "year3",
     "gadgetName": "Breaching Torch",
     "gadgetKind": "action",
-    "gadget": [],
-    "notes": [
-      "Profile card was not in the local TTS image cache."
+    "gadget": [
+      "Action: if Maverick is in a space with a light or fortified wall, cover it with a matching Holed Wall token, then perform a Shoot action through the holed wall.",
+      "2 charges."
     ],
-    "statsVerified": false
+    "stamina": 4,
+    "run": 5,
+    "destroy": "orange",
+    "ranges": [
+      { "id": "short", "spaces": "1–3", "dice": ["yellow", "red", "red"] },
+      { "id": "medium", "spaces": "4–6", "dice": ["orange", "red", "red"] },
+      { "id": "long", "spaces": "7+", "dice": ["yellow", "red", "red"] }
+    ],
+    "statsVerified": true
   },
   {
     "id": "nomad",
@@ -906,11 +1056,19 @@
     "source": "year3",
     "gadgetName": "Airjab Launcher",
     "gadgetKind": "action",
-    "gadget": [],
-    "notes": [
-      "Profile card was not in the local TTS image cache."
+    "gadget": [
+      "Action, throwable: move an opposing operator from the targeted space to any adjacent free space, keeping orientation and status markers. If they are leaning, return their Leaning standee to the opposing reserve before moving them.",
+      "3 charges."
     ],
-    "statsVerified": false
+    "stamina": 5,
+    "run": 2,
+    "destroy": "orange",
+    "ranges": [
+      { "id": "short", "spaces": "1–3", "dice": ["yellow", "red", "red"] },
+      { "id": "medium", "spaces": "4–6", "dice": ["yellow", "orange", "red", "red"] },
+      { "id": "long", "spaces": "7+", "dice": ["red", "red"] }
+    ],
+    "statsVerified": true
   },
   {
     "id": "maestro",
@@ -919,11 +1077,18 @@
     "source": "year3",
     "gadgetName": "Evil Eye",
     "gadgetKind": "setup",
-    "gadget": [],
-    "notes": [
-      "Profile card was not in the local TTS image cache."
+    "gadget": [
+      "Setup: place up to 2 Evil Eye cameras on 2 sections of heavy wall.",
+      "Whenever an opposing operator enters a space in a room containing an Evil Eye camera, or ends an action in one, they receive a Located marker and sustain a yellow hit die."
     ],
-    "statsVerified": false
+    "stamina": 6,
+    "destroy": "yellow",
+    "ranges": [
+      { "id": "short", "spaces": "1–3", "dice": ["yellow", "red", "red"] },
+      { "id": "medium", "spaces": "4–6", "dice": ["orange", "red", "red"] },
+      { "id": "long", "spaces": "7+", "dice": ["orange", "red"] }
+    ],
+    "statsVerified": true
   },
   {
     "id": "alibi",
@@ -932,11 +1097,20 @@
     "source": "year3",
     "gadgetName": "Prisma",
     "gadgetKind": "setup",
-    "gadget": [],
-    "notes": [
-      "Profile card was not in the local TTS image cache."
+    "gadget": [
+      "Setup: place Alibi's 2 extra decoy Hidden Operator tokens.",
+      "If a decoy is revealed, put only that token back in the box. If Alibi's own Hidden Operator token is revealed, put all of her Hidden Operator tokens back in the box.",
+      "Action: reveal one decoy and, before putting it back in the box, move it as if it had 4 movement points. Operators in spaces it enters receive a Located marker."
     ],
-    "statsVerified": false
+    "stamina": 4,
+    "run": 5,
+    "destroy": "orange",
+    "ranges": [
+      { "id": "short", "spaces": "1–3", "dice": ["orange", "orange", "red", "red"] },
+      { "id": "medium", "spaces": "4–6", "dice": ["yellow", "red", "red"] },
+      { "id": "long", "spaces": "7+", "dice": ["yellow", "orange", "orange"] }
+    ],
+    "statsVerified": true
   },
   {
     "id": "clash",
@@ -945,24 +1119,44 @@
     "source": "year3",
     "gadgetName": "CCE Shield",
     "gadgetKind": "action",
-    "gadget": [],
-    "notes": [
-      "Profile card was not in the local TTS image cache."
+    "gadget": [
+      "If Clash has multiple sources of protection, cancel up to 4 hits from shots targeting her instead of the usual 3.",
+      "Action, deployable: choose one operator in the room containing the targeted space. That operator receives a Stunned marker and sustains a yellow hit die.",
+      "2 charges."
     ],
-    "statsVerified": false
+    "stamina": 6,
+    "destroy": "yellow",
+    "ranges": [
+      { "id": "short", "spaces": "1–3", "dice": ["yellow", "yellow", "orange", "orange"] },
+      { "id": "medium", "spaces": "4–6", "dice": ["yellow", "yellow", "orange"] },
+      { "id": "long", "spaces": "7+", "dice": ["yellow", "orange"] }
+    ],
+    "notes": [
+      "No Run value on the card."
+    ],
+    "statsVerified": true
   },
   {
     "id": "kaid",
     "name": "Kaid",
     "team": "Defender",
     "source": "year3",
-    "gadgetName": "Rtila Electroclaws",
+    "gadgetName": "Volcán Shields",
     "gadgetKind": "setup",
-    "gadget": [],
-    "notes": [
-      "Profile card was not in the local TTS image cache."
+    "gadget": [
+      "Setup: place up to 2 Deployable Shields in 2 free spaces.",
+      "Reaction: whenever an opposing operator enters a space adjacent to a deployable shield, or such a shield is destroyed, put it back in the box and place a Fire overlay covering its space.",
+      "Operators in a Fire space immediately sustain an orange hit die. Entering or ending an action in Fire also inflicts an orange hit die."
     ],
-    "statsVerified": false
+    "stamina": 5,
+    "run": 2,
+    "destroy": "orange",
+    "ranges": [
+      { "id": "short", "spaces": "1–3", "dice": ["yellow", "orange", "red"] },
+      { "id": "medium", "spaces": "4–6", "dice": ["yellow", "orange", "orange", "red"] },
+      { "id": "long", "spaces": "7+", "dice": ["orange", "red"] }
+    ],
+    "statsVerified": true
   },
   {
     "id": "gridlock",
@@ -971,11 +1165,22 @@
     "source": "year4",
     "gadgetName": "Trax Stingers",
     "gadgetKind": "action",
-    "gadget": [],
-    "notes": [
-      "Profile card was not in the local TTS image cache."
+    "gadget": [
+      "Action, throwable: place a Trax Stinger in the targeted space.",
+      "Opposing operators entering a space containing or adjacent to a Trax Stinger sustain a hit and must end their activation immediately, except decoy tokens.",
+      "2 charges."
     ],
-    "statsVerified": false
+    "stamina": 6,
+    "destroy": "orange",
+    "ranges": [
+      { "id": "short", "spaces": "1–3", "dice": ["yellow", "red", "red"] },
+      { "id": "medium", "spaces": "4–6", "dice": ["orange", "orange", "red", "red"] },
+      { "id": "long", "spaces": "7+", "dice": ["yellow", "yellow", "red"] }
+    ],
+    "notes": [
+      "No Run value on the card."
+    ],
+    "statsVerified": true
   },
   {
     "id": "nokk",
@@ -983,12 +1188,19 @@
     "team": "Attacker",
     "source": "year4",
     "gadgetName": "HEL Presence Reduction",
-    "gadgetKind": "action",
-    "gadget": [],
-    "notes": [
-      "Profile card was not in the local TTS image cache."
+    "gadgetKind": "passive",
+    "gadget": [
+      "Nøkk never receives a Located marker."
     ],
-    "statsVerified": false
+    "stamina": 5,
+    "run": 2,
+    "destroy": "yellow",
+    "ranges": [
+      { "id": "short", "spaces": "1–3", "dice": ["orange", "orange", "red"] },
+      { "id": "medium", "spaces": "4–6", "dice": ["orange", "orange", "red"] },
+      { "id": "long", "spaces": "7+", "dice": ["yellow", "yellow", "red"] }
+    ],
+    "statsVerified": true
   },
   {
     "id": "amaru",
@@ -997,11 +1209,19 @@
     "source": "year4",
     "gadgetName": "Garra Hook",
     "gadgetKind": "action",
-    "gadget": [],
-    "notes": [
-      "Profile card was not in the local TTS image cache."
+    "gadget": [
+      "Action: when Amaru moves into an entryway space, she may spend 1 movement point to relocate to any other free entryway space on the main floor, unless she is escorting the hostage.",
+      "The hook refreshes during upkeep."
     ],
-    "statsVerified": false
+    "stamina": 5,
+    "run": 2,
+    "destroy": "yellow",
+    "ranges": [
+      { "id": "short", "spaces": "1–3", "dice": ["yellow", "orange", "red", "red"] },
+      { "id": "medium", "spaces": "4–6", "dice": ["yellow", "red", "red"] },
+      { "id": "long", "spaces": "7+", "dice": ["red", "red"] }
+    ],
+    "statsVerified": true
   },
   {
     "id": "kali",
@@ -1010,10 +1230,18 @@
     "source": "year4",
     "gadgetName": "LV Explosive Lance",
     "gadgetKind": "action",
-    "gadget": [],
-    "notes": [
-      "Profile card was not in the local TTS image cache."
+    "gadget": [
+      "Action, throwable, ignoring at most one light or fortified wall or one barricade: perform a Destroy action on all Always Visible gadgets and all barricades in the room containing the targeted space.",
+      "2 charges."
     ],
-    "statsVerified": false
+    "stamina": 5,
+    "run": 2,
+    "destroy": "orange",
+    "ranges": [
+      { "id": "short", "spaces": "1–3", "dice": ["yellow", "yellow"] },
+      { "id": "medium", "spaces": "4–6", "dice": ["yellow", "yellow", "red", "red"] },
+      { "id": "long", "spaces": "7+", "dice": ["yellow", "orange", "red", "red"] }
+    ],
+    "statsVerified": true
   }
 ]

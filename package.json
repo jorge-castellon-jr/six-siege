@@ -11,7 +11,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "build:los-goldens": "tsx scripts/build-los-goldens.ts",
-    "extract:tts-operators": "tsx scripts/extract-tts-operators.ts"
+    "extract:tts-operators": "tsx scripts/extract-tts-operators.ts",
+    "parse:tts-profiles": "tsx scripts/parse-tts-profiles.ts"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.0.14",

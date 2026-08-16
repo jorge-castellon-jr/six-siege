@@ -434,7 +434,6 @@ button.operator-card.selected::before {
 }
 
 .operator-loadout .section-head,
-.operator-bio .section-head,
 .operator-stats .section-head {
   margin-bottom: 15px;
   border-bottom: 1px solid var(--r6s-border);
@@ -442,8 +441,7 @@ button.operator-card.selected::before {
 }
 
 .operator-stats h4,
-.operator-loadout .section-head h4,
-.operator-bio .section-head h4 {
+.operator-loadout .section-head h4 {
   margin: 0;
   border: 0;
   padding: 0;
@@ -639,8 +637,7 @@ button.operator-card.selected::before {
 }
 
 .operator-stats h4,
-.operator-loadout h4,
-.operator-bio h4 {
+.operator-loadout h4 {
   margin-top: 0;
   margin-bottom: 15px;
   color: var(--r6s-text);
@@ -929,33 +926,6 @@ button.operator-card.selected::before {
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
-}
-
-.operator-bio {
-  background-color: var(--r6s-gray);
-  padding: 20px;
-  border-radius: 4px;
-  position: relative;
-}
-
-.operator-bio::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 3px;
-  height: 100%;
-  background-color: var(--r6s-highlight);
-}
-
-.operator-bio p {
-  margin: 0;
-  color: #aaa;
-  line-height: 1.8;
-}
-
-.operator-bio p + p {
-  margin-top: 10px;
 }
 
 .operator-json-editor {

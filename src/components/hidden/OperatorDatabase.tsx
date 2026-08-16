@@ -21,7 +21,6 @@ import {
 import {
   GadgetFields,
   HeaderFields,
-  NotesFields,
   RangeFields,
   SectionEditButton,
   StatsFields,
@@ -300,28 +299,6 @@ const OperatorDetailPane = ({
           </div>
         )}
       </div>
-
-      {(canEditLocally || (operator.notes && operator.notes.length > 0)) && (
-        <div className="operator-bio">
-          <div className="section-head">
-            <h4>Notes</h4>
-            {canEditLocally && (
-              <SectionEditButton
-                section="notes"
-                editing={editor.editing}
-                onToggle={startEdit}
-              />
-            )}
-          </div>
-          {editor.editing === "notes" && canEditLocally ? (
-            <NotesFields {...fields} />
-          ) : operator.notes && operator.notes.length > 0 ? (
-            operator.notes.map((note) => <p key={note}>{note}</p>)
-          ) : (
-            <p className="muted">No notes.</p>
-          )}
-        </div>
-      )}
     </div>
   );
 };

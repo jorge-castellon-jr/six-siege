@@ -1,0 +1,632 @@
+[
+  {
+    "id": "buck",
+    "ranges": [
+      [
+        "yellow",
+        "orange",
+        "red",
+        "red"
+      ],
+      [
+        "yellow",
+        "red",
+        "red"
+      ],
+      [
+        "red",
+        "red"
+      ]
+    ],
+    "destroy": "orange",
+    "ok": true
+  },
+  {
+    "id": "blackbeard",
+    "ranges": [
+      [
+        "orange",
+        "red"
+      ],
+      [
+        "orange",
+        "red",
+        "red"
+      ],
+      [
+        "yellow",
+        "orange",
+        "red",
+        "red"
+      ]
+    ],
+    "destroy": "yellow",
+    "ok": true
+  },
+  {
+    "id": "capitao",
+    "ranges": [
+      [
+        "orange",
+        "red"
+      ],
+      [
+        "yellow",
+        "orange",
+        "red",
+        "red"
+      ],
+      [
+        "yellow",
+        "orange",
+        "red"
+      ]
+    ],
+    "destroy": "yellow",
+    "ok": true
+  },
+  {
+    "id": "hibana",
+    "ranges": [
+      [
+        "yellow",
+        "yellow",
+        "orange"
+      ],
+      [
+        "orange",
+        "orange",
+        "red",
+        "red"
+      ],
+      [
+        "yellow",
+        "orange",
+        "red"
+      ]
+    ],
+    "destroy": "yellow",
+    "ok": true
+  },
+  {
+    "id": "frost",
+    "ranges": [
+      [
+        "yellow",
+        "orange",
+        "red"
+      ],
+      [
+        "yellow",
+        "yellow",
+        "red",
+        "red"
+      ],
+      [
+        "yellow",
+        "yellow",
+        "red"
+      ]
+    ],
+    "destroy": "yellow",
+    "ok": true
+  },
+  {
+    "id": "valkyrie",
+    "ranges": [
+      [
+        "yellow",
+        "yellow",
+        "red",
+        "red"
+      ],
+      [
+        "yellow",
+        "yellow",
+        "yellow",
+        "red"
+      ],
+      [
+        "yellow",
+        "yellow",
+        "red"
+      ]
+    ],
+    "destroy": "yellow",
+    "ok": true
+  },
+  {
+    "id": "caveira",
+    "ranges": [
+      [
+        "orange",
+        "orange",
+        "red",
+        "red"
+      ],
+      [
+        "yellow",
+        "yellow",
+        "yellow",
+        "red"
+      ],
+      [
+        "yellow",
+        "yellow",
+        "yellow"
+      ]
+    ],
+    "destroy": "yellow",
+    "ok": true
+  },
+  {
+    "id": "echo",
+    "ranges": [
+      [
+        "red",
+        "red"
+      ],
+      [
+        "yellow",
+        "red",
+        "red"
+      ],
+      [
+        "yellow",
+        "orange",
+        "red"
+      ]
+    ],
+    "destroy": "yellow",
+    "ok": true
+  },
+  {
+    "id": "jackal",
+    "ranges": [
+      [
+        "yellow",
+        "yellow",
+        "orange",
+        "red"
+      ],
+      [
+        "yellow",
+        "red",
+        "red"
+      ],
+      [
+        "yellow",
+        "yellow",
+        "orange",
+        "red"
+      ]
+    ],
+    "destroy": "orange",
+    "ok": true
+  },
+  {
+    "id": "ying",
+    "ranges": [
+      [
+        "yellow",
+        "red",
+        "red"
+      ],
+      [
+        "yellow",
+        "orange",
+        "red",
+        "red"
+      ],
+      [
+        "red",
+        "red"
+      ]
+    ],
+    "destroy": "yellow",
+    "ok": true
+  },
+  {
+    "id": "zofia",
+    "ranges": [
+      [
+        "yellow",
+        "red",
+        "red"
+      ],
+      [
+        "orange",
+        "orange",
+        "red",
+        "red"
+      ],
+      [
+        "yellow",
+        "yellow",
+        "red"
+      ]
+    ],
+    "destroy": "orange",
+    "ok": true
+  },
+  {
+    "id": "dokkaebi",
+    "ranges": [
+      [
+        "yellow",
+        "red"
+      ],
+      [
+        "yellow",
+        "yellow",
+        "orange",
+        "red"
+      ],
+      [
+        "yellow",
+        "yellow",
+        "red",
+        "red"
+      ]
+    ],
+    "destroy": "yellow",
+    "ok": true
+  },
+  {
+    "id": "mira",
+    "ranges": [
+      [
+        "yellow",
+        "orange",
+        "red"
+      ],
+      [
+        "orange",
+        "red",
+        "red"
+      ],
+      [
+        "orange",
+        "red"
+      ]
+    ],
+    "destroy": "orange",
+    "ok": true
+  },
+  {
+    "id": "lesion",
+    "ranges": [
+      [
+        "yellow",
+        "yellow",
+        "orange",
+        "red"
+      ],
+      [
+        "orange",
+        "orange",
+        "red"
+      ],
+      [
+        "orange",
+        "red"
+      ]
+    ],
+    "destroy": "yellow",
+    "ok": true
+  },
+  {
+    "id": "ela",
+    "ranges": [
+      [
+        "yellow",
+        "yellow",
+        "red",
+        "red"
+      ],
+      [
+        "orange",
+        "red",
+        "red"
+      ],
+      [
+        "yellow",
+        "yellow",
+        "red"
+      ]
+    ],
+    "destroy": "yellow",
+    "ok": true
+  },
+  {
+    "id": "vigil",
+    "ranges": [
+      [
+        "yellow",
+        "yellow",
+        "orange",
+        "red"
+      ],
+      [
+        "yellow",
+        "yellow",
+        "orange",
+        "orange"
+      ],
+      [
+        "yellow",
+        "orange",
+        "orange"
+      ]
+    ],
+    "destroy": "yellow",
+    "ok": true
+  },
+  {
+    "id": "lion",
+    "ranges": [
+      [
+        "yellow",
+        "orange",
+        "orange"
+      ],
+      [
+        "yellow",
+        "yellow",
+        "orange",
+        "red"
+      ],
+      [
+        "yellow",
+        "orange",
+        "red"
+      ]
+    ],
+    "destroy": "yellow",
+    "ok": true
+  },
+  {
+    "id": "finka",
+    "ranges": [
+      [
+        "orange",
+        "red"
+      ],
+      [
+        "orange",
+        "orange",
+        "red",
+        "red"
+      ],
+      [
+        "orange",
+        "orange",
+        "red"
+      ]
+    ],
+    "destroy": "yellow",
+    "ok": true
+  },
+  {
+    "id": "maverick",
+    "ranges": [
+      [
+        "yellow",
+        "red",
+        "red"
+      ],
+      [
+        "orange",
+        "red",
+        "red"
+      ],
+      [
+        "yellow",
+        "red",
+        "red"
+      ]
+    ],
+    "destroy": "orange",
+    "ok": true
+  },
+  {
+    "id": "nomad",
+    "ranges": [
+      [
+        "yellow",
+        "red",
+        "red"
+      ],
+      [
+        "yellow",
+        "orange",
+        "red",
+        "red"
+      ],
+      [
+        "red",
+        "red"
+      ]
+    ],
+    "destroy": "orange",
+    "ok": true
+  },
+  {
+    "id": "maestro",
+    "ranges": [
+      [
+        "yellow",
+        "red",
+        "red"
+      ],
+      [
+        "orange",
+        "red",
+        "red"
+      ],
+      [
+        "orange",
+        "red"
+      ]
+    ],
+    "destroy": "yellow",
+    "ok": true
+  },
+  {
+    "id": "alibi",
+    "ranges": [
+      [
+        "orange",
+        "orange",
+        "red",
+        "red"
+      ],
+      [
+        "yellow",
+        "red",
+        "red"
+      ],
+      [
+        "yellow",
+        "orange",
+        "orange"
+      ]
+    ],
+    "destroy": "orange",
+    "ok": true
+  },
+  {
+    "id": "clash",
+    "ranges": [
+      [
+        "yellow",
+        "yellow",
+        "orange",
+        "orange"
+      ],
+      [
+        "yellow",
+        "yellow",
+        "orange"
+      ],
+      [
+        "yellow",
+        "orange"
+      ]
+    ],
+    "destroy": "yellow",
+    "ok": true
+  },
+  {
+    "id": "kaid",
+    "ranges": [
+      [
+        "yellow",
+        "orange",
+        "red"
+      ],
+      [
+        "yellow",
+        "orange",
+        "orange",
+        "red"
+      ],
+      [
+        "orange",
+        "red"
+      ]
+    ],
+    "destroy": "orange",
+    "ok": true
+  },
+  {
+    "id": "gridlock",
+    "ranges": [
+      [
+        "yellow",
+        "red",
+        "red"
+      ],
+      [
+        "orange",
+        "orange",
+        "red",
+        "red"
+      ],
+      [
+        "yellow",
+        "yellow",
+        "red"
+      ]
+    ],
+    "destroy": "orange",
+    "ok": true
+  },
+  {
+    "id": "nokk",
+    "ranges": [
+      [
+        "orange",
+        "orange",
+        "red"
+      ],
+      [
+        "orange",
+        "orange",
+        "red"
+      ],
+      [
+        "yellow",
+        "yellow",
+        "red"
+      ]
+    ],
+    "destroy": "yellow",
+    "ok": true
+  },
+  {
+    "id": "amaru",
+    "ranges": [
+      [
+        "yellow",
+        "orange",
+        "red",
+        "red"
+      ],
+      [
+        "yellow",
+        "red",
+        "red"
+      ],
+      [
+        "red",
+        "red"
+      ]
+    ],
+    "destroy": "yellow",
+    "ok": true
+  },
+  {
+    "id": "kali",
+    "ranges": [
+      [
+        "yellow",
+        "yellow"
+      ],
+      [
+        "yellow",
+        "yellow",
+        "red",
+        "red"
+      ],
+      [
+        "yellow",
+        "orange",
+        "red",
+        "red"
+      ]
+    ],
+    "destroy": "orange",
+    "ok": true
+  }
+]
